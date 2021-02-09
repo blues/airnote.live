@@ -20,7 +20,7 @@
         <Row>
           <Col>
             Cloud-connected by <br/>
-            <a target='_blank' href='https://blues.io/products'>Notecard</a>
+            <a target='_blank' href='https://blues.io/products'>Notecard!</a>
           </Col>
         </Row>
         <br/>
