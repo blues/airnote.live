@@ -12,6 +12,8 @@
     - type: rewrite # Because we're a Single Page App (i.e. uses Client-Side Routing)
       source: /* # every page on the site...
       destination: /index.html # is handled by index.html
+
+# start.airnote.live is just a simple redirect to the airnote.live quickstart.
 - type: web
   name: start.airnote.live
   env: static
