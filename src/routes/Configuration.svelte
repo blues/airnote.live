@@ -55,7 +55,7 @@
 			<p>
 				<i>
 					For help setting-up your Airnote, visit
-					<a href='https://start.airnote.live'>start.airnote.live</a>.
+					<a href='https://start.airnote.live'>start.airnote.live</a>
 				</i>
 			</p>
 		</Jumbotron>
