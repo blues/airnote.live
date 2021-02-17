@@ -1,25 +1,26 @@
 # Infrastructure as Code
-- type: web
-  name: airnote.live
-  env: static
-  domains:
-    - airnote.live # see https://render.com/docs/custom-domains
-  autoDeploy: true
-  buildCommand: npm run build
-  staticPublishPath: public
-  pullRequestPreviewsEnabled: true
-  routes:
-    - type: rewrite # Because we're a Single Page App (i.e. uses Client-Side Routing)
-      source: /* # every page on the site...
-      destination: /index.html # is handled by index.html
+services:
+  - type: web
+    name: airnote.live
+    env: static
+    domains:
+      - airnote.live # see https://render.com/docs/custom-domains
+    autoDeploy: true
+    buildCommand: npm run build
+    staticPublishPath: public
+    pullRequestPreviewsEnabled: true
+    routes:
+      - type: rewrite # Because we're a Single Page App (i.e. uses Client-Side Routing)
+        source: /* # every page on the site...
+        destination: /index.html # is handled by index.html
 
-# start.airnote.live is just a simple redirect to the airnote.live quickstart.
-- type: web
-  name: start.airnote.live
-  env: static
-  domains:
-    - start.airnote.live # see https://render.com/docs/custom-domains
-  autoDeploy: true
-  buildCommand: "true" # no build needed to serve files verbatim
-  staticPublishPath: ./start.airnote.live
-  pullRequestPreviewsEnabled: true
+  # start.airnote.live is just a simple redirect to the airnote.live quickstart.
+  - type: web
+    name: start.airnote.live
+    env: static
+    domains:
+      - start.airnote.live # see https://render.com/docs/custom-domains
+    autoDeploy: true
+    buildCommand: "true" # no build needed to serve files verbatim
+    staticPublishPath: ./start.airnote.live
+    pullRequestPreviewsEnabled: true
