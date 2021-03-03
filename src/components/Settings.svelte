@@ -10,8 +10,8 @@
     Label
   } from 'sveltestrap';
 
-  let currentFrequency = 360;
-  export let pin;
+  export let enableFields;
+  export let settings;
 </script>
 
 <Row>
@@ -22,37 +22,41 @@
   <FormGroup>
     <Label for="deviceName">Device name</Label>
     <Input
-      disabled={pin === ''? 'disabled' : ''}
+      disabled={!enableFields ? 'disabled' : ''}
       type="text"
       name="name"
       id="deviceName"
+      bind:value={settings["_sn"]}
       placeholder="my-airnote-name" />
   </FormGroup>
   <FormGroup>
     <Label for="displayValue">LCD display value</Label>
-    <Input disabled={pin === ''? 'disabled' : ''}
+    <Input disabled={!enableFields ? 'disabled' : ''}
+      bind:value={settings["_air_status"]}
       type="select" name="display" id="displayValue">
-      <option>PM2.5 (default)</option>
-      <option>Temp (&deg;C)</option>
-      <option>Temp (&deg;F)</option>
-      <option>Humidity</option>
-      <option>Barometric Pressure</option>
-      <option>PM1</option>
-      <option>PM10</option>
+      <option value="pm2.5">PM2.5 (default)</option>
+      <option value="tempc">Temp (&deg;C)</option>
+      <option value="tempf">Temp (&deg;F)</option>
+      <option value="humid">Humidity</option>
+      <option value="press">Barometric Pressure</option>
+      <option value="pm1.0">PM1.0</option>
+      <option value="pm10.0">PM10.0</option>
+      <option value="cpm">Condensible Particulate Matter (CPM)</option>
     </Input>
   </FormGroup>
   <FormGroup>
     <Label for="sampleFrequency">Sample frequency</Label>
-    <Slider pin={pin} frequency={currentFrequency} />
+    <Slider enableFields={enableFields} frequency={settings["_air_sample_secs"]} />
   </FormGroup>
 </Form>
 
+{#if enableFields}
 <Row>
   <Col>
-    <Button disabled={pin === ''? 'disabled' : ''}
-      color="primary">Update Device Settings</Button>
+    <Button color="primary">Update Device Settings</Button>
   </Col>
 </Row>
+{/if}
 
 <style>
   :global(.form-group) {

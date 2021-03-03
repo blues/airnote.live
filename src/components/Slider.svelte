@@ -3,7 +3,7 @@
 
   import { Input } from 'sveltestrap';
   export let frequency;
-  export let pin;
+  export let enableFields;
 
   const setPopup = (frequency, popup) => {
     const val = frequency.value;
@@ -31,7 +31,7 @@
 
 <div class="frequency-wrap">
   <Input type="range" name="frequency" id="sampleFrequency"
-    disabled={pin === ''? 'disabled' : ''}
+    disabled={!enableFields ? 'disabled' : ''}
     min="60" max="6000" bind:value={frequency} step="15" />
   <output class="frequencyPopup"></output>
 </div>
