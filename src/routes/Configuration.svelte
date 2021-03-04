@@ -4,38 +4,74 @@
 		Alert,
 		Jumbotron,
 		Col,
-		Row } from 'sveltestrap';
-	import queryString from "query-string";
+		Row
+	} from 'sveltestrap';
+	import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
+	import queryString from 'query-string';
 	import Settings from '../components/Settings.svelte';
 	import Owner from '../components/Owner.svelte';
 	import { airnoteProductUID, notehubAPIBase } from '../constants';
+	import {
+		deviceName,
+		airSampleSecs,
+		displayValue,
+		contactName,
+		contactEmail,
+		contactAffiliation
+	} from '../settingsStore';
 
 	let pin;
 	let fetchError = false;
+	let saveError = false;
+	let notify;
 
 	export let deviceUID;
 	export let enableFields = true;
-	export let deviceSettings = {
-		"_sn": "", // Device Name
-		"_air_status": "pm2.5", //LCD Display Value
-		"_air_sample_secs": 60 // Air Sample Seconds
-	};
-	export let ownerSettings = {
-		"_contact_name": "",
-		"_contact_email": "",
-		"_contact_affiliation": ""
-	};
 
 	if (typeof window != 'undefined') {
 		const query = queryString.parse(window.location.search);
 		pin = query["pin"] ? query["pin"] : '';
 	}
 
-	const updateEnvVarsObject = (source, obj) => {
-		for (const [key] of Object.entries(obj)) {
-			if (source[key]) {
-				obj[key] = source[key];
+	const createBodyFromStore = () => {
+		return {
+			"environment_variables": {
+				"_sn": $deviceName,
+				"_air_sample_secs": $airSampleSecs.toString(),
+				"_air_status": $displayValue,
+				"_contact_name": $contactName,
+				"_contact_email": $contactEmail,
+				"_contact_affiliation": $contactAffiliation,
 			}
+		};
+	};
+
+	const updateSettingsFromEnvVars = (data) => {
+		if (data["_sn"]) $deviceName = data["_sn"];
+		if (data["_air_sample_secs"]) $airSampleSecs = data["_air_sample_secs"];
+		if (data["_air_status"]) $displayValue = data["_air_status"];
+		if (data["_contact_name"]) $contactName = data["_contact_name"];
+		if (data["_contact_email"]) $contactEmail = data["_contact_email"];
+		if (data["_contact_affiliation"]) $contactAffiliation = data["_contact_affiliation"];
+	}
+
+	const handleSettingsSave = async () => {
+		const varsBody = createBodyFromStore();
+		const url = `${notehubAPIBase}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
+		const headers = {
+			'Content-Type': 'application/json',
+			'X-Auth-Token': pin
+		};
+
+		const response = await fetch(url, {
+			method: 'PUT',
+			headers: headers,
+			body: JSON.stringify(varsBody)
+		});
+		if (response.status !== 200) {
+			saveError = true;
+		} else {
+			notifier.success('Settings saved.');
 		}
 	}
 
@@ -55,9 +91,7 @@
 			// Get current Env Vars from response
 			const envVars = data["env"];
 			// Populate settings object
-			updateEnvVarsObject(envVars, deviceSettings);
-			// Populate owner object
-			updateEnvVarsObject(envVars, ownerSettings);
+			updateSettingsFromEnvVars(envVars);
 
 		} else { // If Pin, Get Env Vars using new V1 API
 			const envVarsReadWriteUrl = `${notehubAPIBase}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
@@ -76,12 +110,9 @@
 					// Get current Env Vars from response
 					const envVars = data["environment_variables"];
 					// Populate settings object
-					updateEnvVarsObject(envVars, deviceSettings);
-					// Populate owner object
-					updateEnvVarsObject(envVars, ownerSettings);
+					updateSettingsFromEnvVars(envVars);
 				}
 			} catch (error) {
-				console.log(error);
 				fetchError = true;
 				enableFields = false;
 			}
@@ -100,6 +131,12 @@
 	<Alert color="danger" isOpen={true}>
 		<h4 class="alert-heading text-capitalize">Unable to fetch device details.</h4>
 		Please check the DeviceID and Pin provided.
+	</Alert>
+{/if}
+{#if saveError}
+	<Alert color="danger" isOpen={true}>
+		<h4 class="alert-heading text-capitalize">Unable to safe configuration
+			settings. Please try again later.
 	</Alert>
 {/if}
 <Jumbotron class='no-bg'>
@@ -136,9 +173,16 @@
 	</p>
 </Jumbotron>
 
-<Settings enableFields={enableFields} settings={deviceSettings} />
+<NotificationDisplay bind:this={notify} />
+<Settings
+	enableFields={enableFields}
+	on:submit={handleSettingsSave}
+/>
 <hr class='my-4' />
-<Owner enableFields={enableFields} settings={ownerSettings} />
+<Owner
+	enableFields={enableFields}
+	on:submit={handleSettingsSave}
+/>
 
 <hr class='my-4' />
 <Row>
@@ -193,5 +237,9 @@
 	:global(.jumbotron) {
 		margin-bottom: 0;
 		padding: 0;
+	}
+
+	:global(.toast) {
+		opacity: unset;
 	}
 </style>

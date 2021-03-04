@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
   import Slider from './Slider.svelte';
   import {
     Button,
@@ -9,9 +10,16 @@
     Input,
     Label
   } from 'sveltestrap';
+  import {
+		deviceName,
+		displayValue
+	} from '../settingsStore';
+
+  const dispatch = createEventDispatcher();
 
   export let enableFields;
-  export let settings;
+
+  const save = () => dispatch('submit');
 </script>
 
 <Row>
@@ -26,13 +34,13 @@
       type="text"
       name="name"
       id="deviceName"
-      bind:value={settings["_sn"]}
+      bind:value={$deviceName}
       placeholder="my-airnote-name" />
   </FormGroup>
   <FormGroup>
     <Label for="displayValue">LCD display value</Label>
     <Input disabled={!enableFields ? 'disabled' : ''}
-      bind:value={settings["_air_status"]}
+      bind:value={$displayValue}
       type="select" name="display" id="displayValue">
       <option value="pm2.5">PM2.5 (default)</option>
       <option value="tempc">Temp (&deg;C)</option>
@@ -46,14 +54,14 @@
   </FormGroup>
   <FormGroup>
     <Label for="sampleFrequency">Sample frequency</Label>
-    <Slider enableFields={enableFields} frequency={settings["_air_sample_secs"]} />
+    <Slider enableFields={enableFields} />
   </FormGroup>
 </Form>
 
 {#if enableFields}
 <Row>
   <Col>
-    <Button color="primary">Update Device Settings</Button>
+    <Button color="primary" on:click={save}>Update Device Settings</Button>
   </Col>
 </Row>
 {/if}
