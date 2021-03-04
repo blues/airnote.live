@@ -38,11 +38,11 @@
 	];
 
 	if (productUID === "product:org.airnote.solar.rad.v1") {
-		$displayValue = "cpm";
+		$displayValue = "usv";
 
-		displayOptions.splice(0, 0, {value: "cpm", text: "LND712 Counts Per Minute (default)"});
+		displayOptions.splice(0, 0, {value: "usv", text: "Microsieverts per Hour (default)"});
 		displayOptions.push({value: "mrem", text: "Milirem per Hour"});
-		displayOptions.push({value: "usv", text: "Microsieverts per Hour"});
+		displayOptions.push({value: "cpm", text: "LND712 Counts Per Minute"});
 	} else {
 		$displayValue = "pm2.5";
 
