@@ -48,7 +48,7 @@
   <output class="frequencyPopup"></output>
 </div>
 <div class="min-val">15 min</div>
-<div class="max-val">1440 sec</div>
+<div class="max-val">1440 min</div>
 
 <style>
   :global(#sampleFrequency) {
