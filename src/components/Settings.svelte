@@ -18,6 +18,7 @@
   const dispatch = createEventDispatcher();
 
   export let enableFields;
+  export let displayOptions;
 
   const save = () => dispatch('submit');
 </script>
@@ -42,14 +43,9 @@
     <Input disabled={!enableFields ? 'disabled' : ''}
       bind:value={$displayValue}
       type="select" name="display" id="displayValue">
-      <option value="pm2.5">PM2.5 (default)</option>
-      <option value="tempc">Temp (&deg;C)</option>
-      <option value="tempf">Temp (&deg;F)</option>
-      <option value="humid">Humidity</option>
-      <option value="press">Barometric Pressure</option>
-      <option value="pm1.0">PM1.0</option>
-      <option value="pm10.0">PM10.0</option>
-      <option value="cpm">Condensible Particulate Matter (CPM)</option>
+      {#each displayOptions as option}
+        <option value="{option["value"]}">{option["text"]}</option>
+      {/each}
     </Input>
   </FormGroup>
   <FormGroup>
