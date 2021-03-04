@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
   import {
     Button,
     Col,
@@ -8,9 +9,17 @@
     Label,
     Row
   } from 'sveltestrap';
+  import {
+		contactName,
+		contactEmail,
+		contactAffiliation
+	} from '../settingsStore';
+
+  const dispatch = createEventDispatcher();
 
   export let enableFields;
-  export let settings;
+
+  const save = () => dispatch('submit');
 </script>
 
 <Row>
@@ -24,7 +33,7 @@
       disabled={!enableFields ? 'disabled' : ''}
       type="text"
       name="ownerName"
-      bind:value={settings["_contact_name"]}
+      bind:value={$contactName}
       id="ownerName"
       placeholder="Ada Lovelace" />
   </FormGroup>
@@ -34,7 +43,7 @@
       disabled={!enableFields ? 'disabled' : ''}
       type="text"
       name="companyName"
-      bind:value={settings["_contact_affiliation"]}
+      bind:value={$contactAffiliation}
       id="companyName"
       placeholder="Blues Inc." />
   </FormGroup>
@@ -44,7 +53,7 @@
       disabled={!enableFields ? 'disabled' : ''}
       type="email"
       name="ownerEmail"
-      bind:value={settings["_contact_email"]}
+      bind:value={$contactEmail}
       id="ownerEmail"
       placeholder="ada@blues.com" />
   </FormGroup>
@@ -53,7 +62,7 @@
 {#if enableFields}
 <Row>
   <Col>
-    <Button color="primary">Update Device Owner</Button>
+    <Button color="primary" on:click={save}>Update Device Owner</Button>
   </Col>
 </Row>
 {/if}

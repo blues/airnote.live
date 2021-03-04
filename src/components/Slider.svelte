@@ -1,12 +1,22 @@
 <script>
   import { onMount } from 'svelte';
-
   import { Input } from 'sveltestrap';
-  export let frequency;
+  import { airSampleSecs } from '../settingsStore';
+
   export let enableFields;
 
-  const setPopup = (frequency, popup) => {
-    const val = frequency.value;
+  airSampleSecs.subscribe(value => {
+    const allRanges = document.querySelectorAll(".frequency-wrap");
+    if (allRanges.length > 0) {
+      const frequency = allRanges[0].querySelector("#sampleFrequency");
+      const popup = allRanges[0].querySelector(".frequencyPopup");
+
+      setPopup(frequency, popup, value);
+    }
+  });
+
+  const setPopup = (frequency, popup, value) => {
+    const val = value ? value : frequency.value;
     const min = frequency.min ? frequency.min : 0;
     const max = frequency.max ? frequency.max : 100;
     const newVal = Number(((val - min) * 100) / (max - min));
@@ -32,7 +42,9 @@
 <div class="frequency-wrap">
   <Input type="range" name="frequency" id="sampleFrequency"
     disabled={!enableFields ? 'disabled' : ''}
-    min="60" max="6000" bind:value={frequency} step="15" />
+    min="60" max="6000"
+    bind:value={$airSampleSecs}
+    step="15" />
   <output class="frequencyPopup"></output>
 </div>
 <div class="min-val">60 sec</div>
