@@ -39,7 +39,7 @@
       placeholder="my-airnote-name" />
   </FormGroup>
   <FormGroup>
-    <Label for="displayValue">LCD display value</Label>
+    <Label for="displayValue">Airnote screen display value</Label>
     <Input disabled={!enableFields ? 'disabled' : ''}
       bind:value={$displayValue}
       type="select" name="display" id="displayValue">
@@ -49,7 +49,7 @@
     </Input>
   </FormGroup>
   <FormGroup>
-    <Label for="sampleFrequency">Sample frequency</Label>
+    <Label for="sampleFrequency">Sample frequency (minutes)</Label>
     <Slider enableFields={enableFields} />
   </FormGroup>
 </Form>
