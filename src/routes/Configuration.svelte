@@ -21,6 +21,7 @@
 	} from '../settingsStore';
 
 	let pin;
+	let productUID;
 	let fetchError = false;
 	let saveError = false;
 	let notify;
@@ -31,6 +32,28 @@
 	if (typeof window != 'undefined') {
 		const query = queryString.parse(window.location.search);
 		pin = query["pin"] ? query["pin"] : '';
+		productUID = query["product"] ? query["product"] : airnoteProductUID;
+	}
+
+	const displayOptions = [
+		{value: "tempc", text: "Temp (°C)"},
+    {value: "tempf", text: "Temp (°F)"},
+    {value: "humid", text:"Humidity"},
+		{value: "press", text: "Barometric Pressue"},
+	];
+
+	if (productUID === "org.airnote.solar.rad.v1") {
+		$displayValue = "cpm";
+
+		displayOptions.splice(0, 0, {value: "cpm", text: "LND712 Counts Per Minute (default)"});
+		displayOptions.push({value: "mrem", text: "Milirem per Hour"});
+		displayOptions.push({value: "usv", text: "Microsieverts per Hour"});
+	} else {
+		$displayValue = "pm2.5";
+
+		displayOptions.splice(0, 0, {value: "pm2.5", text: "PM2.5 (default)"});
+		displayOptions.push({value: "pm1.0", text: "PM1.0"});
+		displayOptions.push({value: "pm10.0", text: "PM10.0"});
 	}
 
 	const createBodyFromStore = () => {
@@ -176,6 +199,7 @@
 <NotificationDisplay bind:this={notify} />
 <Settings
 	enableFields={enableFields}
+	displayOptions={displayOptions}
 	on:submit={handleSettingsSave}
 />
 <hr class='my-4' />
