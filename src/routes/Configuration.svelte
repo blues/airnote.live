@@ -37,7 +37,7 @@
 		{value: "press", text: "Barometric Pressue"},
 	];
 
-	if (productUID === "org.airnote.solar.rad.v1") {
+	if (productUID === "product:org.airnote.solar.rad.v1") {
 		$displayValue = "cpm";
 
 		displayOptions.splice(0, 0, {value: "cpm", text: "LND712 Counts Per Minute (default)"});
