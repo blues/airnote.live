@@ -2,15 +2,15 @@
 	import { onMount } from 'svelte';
   import {
 		Alert,
+		Button,
 		Jumbotron,
 		Col,
 		Row
 	} from 'sveltestrap';
 	import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
-	import queryString from 'query-string';
 	import Settings from '../components/Settings.svelte';
 	import Owner from '../components/Owner.svelte';
-	import { airnoteProductUID, notehubAPIBase } from '../constants';
+	import { airnoteProductUID, notehubAPIBase, appUID } from '../constants';
 	import {
 		deviceName,
 		airSampleSecs,
@@ -20,20 +20,15 @@
 		contactAffiliation
 	} from '../settingsStore';
 
-	let pin;
-	let productUID;
+	export let pin;
+	export let productUID;
 	let fetchError = false;
 	let saveError = false;
 	let notify;
 
 	export let deviceUID;
 	export let enableFields = true;
-
-	if (typeof window != 'undefined') {
-		const query = queryString.parse(window.location.search);
-		pin = query["pin"] ? query["pin"] : '';
-		productUID = query["product"] ? query["product"] : airnoteProductUID;
-	}
+	let eventsUrl = `https://notehub.io/project/${appUID}/events?queryMode=devices&queryDevices=dev:${deviceUID}`;
 
 	const displayOptions = [
 		{value: "tempc", text: "Temp (°C)"},
@@ -95,6 +90,32 @@
 			saveError = true;
 		} else {
 			notifier.success('Settings saved.');
+		}
+	}
+
+	const shareDevice = () => {
+		if (navigator.share) { // Share Device URL with Web Share API
+			navigator.share({
+				title: 'Device Dashboard',
+				url: `https://airnote.live/${deviceUID}`
+			}).then(() => {
+				notifier.success('Thanks for sharing!');
+			})
+			.catch(console.error);
+		} else {
+			// Fallback to copying text to the users clipboard with a
+			// hacky cross-browser approach.
+			const el = document.createElement('textarea');
+			el.value = `https://airnote.live/${deviceUID}`;
+			el.setAttribute('readonly', '');
+			el.style.position = 'absolute';
+			el.style.left = '-9999px';
+			document.body.appendChild(el);
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
+
+			notifier.success('Dashboard URL Copied to clipboard!');
 		}
 	}
 
@@ -180,11 +201,16 @@
 	</Row>
 	<Row class="links">
 		<Col>
-			<a href='http://tt.safecast.org/id/note:dev:{deviceUID}'>Device Charts</a>
+			<a href='http://tt.safecast.org/id/note:dev:{deviceUID}'>Dashboard</a>
 		</Col>
 		<div class='separator'>|</div>
 		<Col>
 			<a href='http://tt.safecast.org/map/note:dev:{deviceUID}'>Global Map</a>
+		</Col>
+	</Row>
+	<Row class="share">
+		<Col>
+				<Button color="primary" on:click={shareDevice}>Share my Device Dashboard</Button>
 		</Col>
 	</Row>
 	<hr class='my-4' />
@@ -207,7 +233,14 @@
 	enableFields={enableFields}
 	on:submit={handleSettingsSave}
 />
-
+<hr class='my-4' />
+<Row>
+	<Col>
+		<a href={eventsUrl} target="_new">
+			View live Airnote events on Notehub.io
+		</a>
+	</Col>
+</Row>
 <hr class='my-4' />
 <Row>
 	<Col>
@@ -244,6 +277,10 @@
 	.separator {
 		font-size: 1.5rem;
 		color: #CED9E1;
+	}
+
+	:global(.share) {
+		margin-top: 10px;
 	}
 
 	:global(a) {

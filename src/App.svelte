@@ -1,10 +1,26 @@
 <script>
-  import { Router, Route } from "svelte-routing";
+  import { Router, Route, navigate } from "svelte-routing";
+  import queryString from 'query-string';
   import { Container, Row, Col } from "sveltestrap";
   import Configuration from "./routes/Configuration.svelte";
   import Home from "./routes/Home.svelte";
+	import { airnoteProductUID } from './constants';
 
   export let url = "";
+  export let pin;
+  export let productUID;
+  export let deviceUID;
+
+  if (typeof window != 'undefined') {
+		const query = queryString.parse(window.location.search);
+		pin = query["pin"] ? query["pin"] : '';
+		productUID = query["product"] ? query["product"] : airnoteProductUID;
+    deviceUID = window.location.pathname.replace('/','');
+	}
+
+  if (pin === "" && deviceUID !== "") {
+    navigate(`http://tt.safecast.org/id/note:dev:${deviceUID}`, { replace: true });
+  }
 </script>
 
 <Router url="{url}">
@@ -14,7 +30,11 @@
     </div>
     <main>
       <Container>
-        <Route path="/:deviceUID" component="{Configuration}" />
+        <Route path="/:deviceUID"
+          component="{Configuration}"
+          pin="{pin}"
+          productUID="{productUID}"
+        />
         <Route path="/"><Home /></Route>
         <hr class='my-4' />
         <Row>
