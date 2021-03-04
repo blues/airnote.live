@@ -28,7 +28,7 @@
 
 	export let deviceUID;
 	export let enableFields = true;
-	let eventsUrl = `https://notehub.io/project/${appUID}/events?queryMode=devices&queryDevices=dev:${deviceUID}`;
+	let eventsUrl = `https://notehub.io/project/${appUID}/events?queryMode=devices&queryDevices=${deviceUID}`;
 
 	const displayOptions = [
 		{value: "tempc", text: "Temp (°C)"},
@@ -194,18 +194,18 @@
 	</p>
 	<hr class='my-4' />
 	<Row>
-		<Col><i>dev:{deviceUID}</i></Col>
+		<Col><i>{deviceUID}</i></Col>
 	</Row>
 	<Row>
 		<Col><h4>Safecast</h4></Col>
 	</Row>
 	<Row class="links">
 		<Col>
-			<a href='http://tt.safecast.org/id/note:dev:{deviceUID}'>Dashboard</a>
+			<a href='http://tt.safecast.org/id/note:{deviceUID}'>Dashboard</a>
 		</Col>
 		<div class='separator'>|</div>
 		<Col>
-			<a href='http://tt.safecast.org/map/note:dev:{deviceUID}'>Global Map</a>
+			<a href='http://tt.safecast.org/map/note:{deviceUID}'>Global Map</a>
 		</Col>
 	</Row>
 	<Row class="share">
