@@ -37,14 +37,11 @@
         />
         <Route path="/"><Home /></Route>
         <hr class='my-4' />
-        <Row>
+        <Row class="footer">
           <Col>
             Cloud-connected by <br/>
             <a target='_blank' href='https://blues.io/products'>Notecard</a>
           </Col>
-        </Row>
-        <br/>
-        <Row>
           <Col>
             Developed by <br/>
             <a target='_blank' href='https://blues.io'>Blues Inc.</a>
@@ -71,6 +68,7 @@
 		padding: 1em;
 		margin: 0 auto;
 	}
+
   :global(.logo) {
 		background-color: #1B3A52;
 		width: 100%;
@@ -86,6 +84,11 @@
 
   :global(.btn) {
     color: #f4f4f4;
+  }
+
+  :global(div.footer div.col) {
+    padding-left: 0;
+    padding-right: 0;
   }
 
 	@media (min-width: 640px) {
