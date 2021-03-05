@@ -95,7 +95,6 @@
 
   const handleSettingsSave = async () => {
     const varsBody = createBodyFromStore();
-    console.log(varsBody);
 
 		const url = `${notehubAPIBase}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
     const headers = {
