@@ -195,7 +195,10 @@
 {#if fetchError}
   <Alert color="danger" isOpen={true}>
     <h4 class="alert-heading text-capitalize">Unable to fetch device details.</h4>
-    Please check the DeviceID and Pin provided.
+    Please make sure your Airnote is
+    <a href="{eventsUrl}" target="_new">online and connected to Notehub.io</a>
+    before visiting this page. For help getting started, visit
+    <a href="https://start.airnote.live" target="_new">start.airnote.live</a>.
   </Alert>
 {/if}
 {#if saveError}
