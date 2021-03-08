@@ -209,7 +209,7 @@
 {/if}
 <Jumbotron class='no-bg'>
   <h5>
-    Thank you for joining the global Airnote network!
+    Welcome to Airnote!
   </h5>
   <p>You're now part of a community of citizens helping to
     monitor the air we breathe.</p><p>Use the fields below to
