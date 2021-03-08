@@ -8,7 +8,7 @@
 
 <Jumbotron class='no-bg'>
   <h5>
-    Welcome to the global Airnote network!
+    Welcome to Airnote!
   </h5>
   <p>The Airnote network is a community of citizens helping to
     monitor the air we breathe.
