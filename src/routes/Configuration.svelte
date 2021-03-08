@@ -221,7 +221,7 @@
     <Col><i>{deviceUID}</i></Col>
   </Row>
   <Row>
-    <Col><h4>Safecast</h4></Col>
+    <Col><h4><a href="https://safecast.org" target="_new">Safecast</a></h4></Col>
   </Row>
   <Row class="links">
     <Col>
