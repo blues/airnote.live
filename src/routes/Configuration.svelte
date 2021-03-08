@@ -225,7 +225,7 @@
   </Row>
   <Row class="links">
     <Col>
-      <a href='http://tt.safecast.org/id/note:{deviceUID}'>Dashboard</a>
+      <a href='http://tt.safecast.org/dashboard/note:{deviceUID}'>Dashboard</a>
     </Col>
     <div class='separator'>|</div>
     <Col>
