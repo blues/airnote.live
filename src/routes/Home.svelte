@@ -10,8 +10,10 @@
   <h5>
     Welcome to Airnote!
   </h5>
-  <p>The Airnote network is a community of citizens helping to
-    monitor the air we breathe.
+  <p>A global partnership between
+    <a href="https://safecast.org" target="_new">Safecast</a> &amp;
+    <a href="https://blues.io" target="_net">Blues Wireless</a>.
+    Powered by a community of citizens monitoring the air we breathe.
   </p>
   <p>
     To get started with your Airnote, visit the
