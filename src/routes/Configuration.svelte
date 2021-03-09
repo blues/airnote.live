@@ -214,12 +214,10 @@
   <p>You're now part of a community of citizens helping to
     monitor the air we breathe.</p><p>Use the fields below to
     personalize your device, or click the links to
-    view charts for your device and the global Safecast map.
+    view charts for your device and the global
+    <a href="https://safecast.org" target="_new">Safecast</a> map.
   </p>
   <hr class='my-4' />
-  <Row>
-    <Col><i>{deviceUID}</i></Col>
-  </Row>
   <Row>
     <Col><h4><a href="https://safecast.org" target="_new">Safecast</a></h4></Col>
   </Row>
@@ -247,6 +245,9 @@
 </Jumbotron>
 
 <NotificationDisplay bind:this={notify} />
+<Row>
+  <Col><i>{deviceUID}</i></Col>
+</Row>
 <Settings
   enableFields={enableFields}
   displayOptions={displayOptions}

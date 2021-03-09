@@ -46,6 +46,10 @@
             Developed by <br/>
             <a target='_blank' href='https://blues.io'>Blues Inc.</a>
           </Col>
+          <Col>
+            In Partnership with <br/>
+            <a target='_blank' href='https://safecast.org'>Safecast</a>
+          </Col>
         </Row>
       </Container>
     </main>
@@ -87,8 +91,8 @@
   }
 
   :global(div.footer div.col) {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
 	@media (min-width: 640px) {
@@ -96,4 +100,15 @@
 			max-width: none;
 		}
 	}
+
+  @media (max-width: 640px) {
+    :global(div.footer div.col) {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    :global(div.footer div.col:last-of-type) {
+      padding-top: 20px;
+    }
+  }
 </style>
