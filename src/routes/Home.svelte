@@ -37,7 +37,7 @@
   </Row>
   <Row>
     <Col>
-        <Button color="primary" href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes?orgId=1">View the Airnote Global Map</Button>
+        <Button color="primary" href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes?orgId=1">View the Safecast Global Map</Button>
     </Col>
   </Row>
 </Jumbotron>
