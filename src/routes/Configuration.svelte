@@ -212,10 +212,11 @@
     Welcome to Airnote!
   </h5>
   <p>You're now part of a community of citizens helping to
-    monitor the air we breathe.</p><p>Use the fields below to
-    personalize your device, or click the links to
-    view charts for your device and the global
-    <a href="https://safecast.org" target="_new">Safecast</a> map.
+    monitor the air we breathe.</p>
+    <p>Click the links to
+      view charts for your device, the global
+      <a href="https://safecast.org" target="_new">Safecast</a> map, or to share
+      a link to your device dashboard.
   </p>
   <hr class='my-4' />
   <Row>
@@ -237,6 +238,7 @@
   </Row>
   <hr class='my-4' />
   <p>
+    Use the fields below to personalize your device.
     <i>
       For help setting-up your Airnote, visit
       <a href='https://start.airnote.live'>start.airnote.live</a>
@@ -245,9 +247,6 @@
 </Jumbotron>
 
 <NotificationDisplay bind:this={notify} />
-<Row>
-  <Col><i>{deviceUID}</i></Col>
-</Row>
 <Settings
   enableFields={enableFields}
   displayOptions={displayOptions}
