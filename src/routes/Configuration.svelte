@@ -185,13 +185,6 @@
   });
 </script>
 
-{#if pin === ''}
-  <Alert color="warning" isOpen={true}>
-    <h4 class="alert-heading text-capitalize">No PIN provided</h4>
-    You can view this page in read-only mode, but cannot edit device
-    configuration settings.
-  </Alert>
-{/if}
 {#if fetchError}
   <Alert color="danger" isOpen={true}>
     <h4 class="alert-heading text-capitalize">Unable to fetch device details.</h4>

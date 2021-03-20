@@ -19,7 +19,7 @@
 	}
 
   if (pin === "" && deviceUID !== "") {
-    navigate(`http://tt.safecast.org/id/note:${deviceUID}`, { replace: true });
+    navigate(`http://tt.safecast.org/dashboard/note:${deviceUID}`, { replace: true });
   }
 </script>
 
