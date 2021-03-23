@@ -12,7 +12,8 @@
   } from 'sveltestrap';
   import {
 		deviceName,
-		displayValue
+		displayValue,
+    indoorDevice
 	} from '../settingsStore';
 
   const dispatch = createEventDispatcher();
@@ -52,6 +53,16 @@
     <Label for="sampleFrequency">Sample frequency (minutes)</Label>
     <Slider enableFields={enableFields} />
   </FormGroup>
+  <FormGroup class="checkbox-group">
+    <Label for="sampleFrequency">
+      <Input disabled={!enableFields ? 'disabled' : ''}
+        bind:checked={$indoorDevice}
+        type="checkbox" name="indoor" id="indoorDevice"
+      />
+      Indoor device (Will not be visible on the
+      Safecast global map)
+    </Label>
+  </FormGroup>
 </Form>
 
 {#if enableFields}
@@ -77,5 +88,13 @@
 
   :global(.form-control::placeholder) {
     color: #A0AFB9;
+  }
+
+  :global(.checkbox-group) {
+    margin-left: 25px;
+  }
+
+  :global(.form-check-input) {
+    margin-top: .5rem;
   }
 </style>

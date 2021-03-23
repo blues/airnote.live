@@ -14,6 +14,7 @@
   import {
     deviceName,
     displayValue,
+    indoorDevice,
     sampleFrequencyUSB,
     sampleFrequencyFull,
     sampleFrequencyLow,
@@ -58,6 +59,7 @@
       "environment_variables": {
         "_sn": $deviceName,
         "_air_mins": `usb:${$sampleFrequencyUSB};high:${$sampleFrequencyFull};normal:${$sampleFrequencyFull};low:${$sampleFrequencyLow};0`,
+        "_air_indoors": !!$indoorDevice ? "1" : "0",
         "_air_status": $displayValue,
         "_contact_name": $contactName,
         "_contact_email": $contactEmail,
@@ -87,6 +89,7 @@
         }
       }
     }
+    if (data["_air_indoors"]) $indoorDevice = data["_air_indoors"] === "0" ? false : true;
     if (data["_air_status"]) $displayValue = data["_air_status"];
     if (data["_contact_name"]) $contactName = data["_contact_name"];
     if (data["_contact_email"]) $contactEmail = data["_contact_email"];
