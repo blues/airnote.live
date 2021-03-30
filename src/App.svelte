@@ -23,38 +23,42 @@
   }
 </script>
 
-<Router url="{url}">
-  <div>
-    <div class='logo'>
-      <img src='./images/airnote.svg' alt="Airnote Logo" />
+{#if pin === "" && deviceUID !== ""}
+  <div class="redirect">Redirecting to Airnote dashboard...</div>
+{:else}
+  <Router url="{url}">
+    <div>
+      <div class='logo'>
+        <img src='./images/airnote.svg' alt="Airnote Logo" />
+      </div>
+      <main>
+        <Container>
+          <Route path="/:deviceUID"
+            component="{Configuration}"
+            pin="{pin}"
+            productUID="{productUID}"
+          />
+          <Route path="/"><Home /></Route>
+          <hr class='my-4' />
+          <Row class="footer">
+            <Col>
+              Cloud-connected by <br/>
+              <a target='_blank' href='https://blues.io/products'>Notecard</a>
+            </Col>
+            <Col>
+              Developed by <br/>
+              <a target='_blank' href='https://blues.io'>Blues Inc.</a>
+            </Col>
+            <Col>
+              In Partnership with <br/>
+              <a target='_blank' href='https://safecast.org'>Safecast</a>
+            </Col>
+          </Row>
+        </Container>
+      </main>
     </div>
-    <main>
-      <Container>
-        <Route path="/:deviceUID"
-          component="{Configuration}"
-          pin="{pin}"
-          productUID="{productUID}"
-        />
-        <Route path="/"><Home /></Route>
-        <hr class='my-4' />
-        <Row class="footer">
-          <Col>
-            Cloud-connected by <br/>
-            <a target='_blank' href='https://blues.io/products'>Notecard</a>
-          </Col>
-          <Col>
-            Developed by <br/>
-            <a target='_blank' href='https://blues.io'>Blues Inc.</a>
-          </Col>
-          <Col>
-            In Partnership with <br/>
-            <a target='_blank' href='https://safecast.org'>Safecast</a>
-          </Col>
-        </Row>
-      </Container>
-    </main>
-  </div>
-</Router>
+  </Router>
+{/if}
 
 <style>
 	@import 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css';
@@ -66,6 +70,10 @@
 		font-size: 18px;
 		color: #1B3A52;
 	}
+
+  .redirect {
+    margin: 10px;
+  }
 
 	main {
 		text-align: center;
