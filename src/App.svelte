@@ -3,8 +3,9 @@
   import queryString from 'query-string';
   import { Container, Row, Col } from "sveltestrap";
   import Configuration from "./routes/Configuration.svelte";
+  import Dashboard from "./routes/Dashboard.svelte";
   import Home from "./routes/Home.svelte";
-	import { airnoteProductUID } from './constants';
+  import { airnoteProductUID } from './constants';
 
   export let url = "";
   export let pin;
@@ -12,87 +13,90 @@
   export let deviceUID;
 
   if (typeof window != 'undefined') {
-		const query = queryString.parse(window.location.search);
-		pin = query["pin"] ? query["pin"] : '';
-		productUID = query["product"] ? query["product"] : airnoteProductUID;
+    const query = queryString.parse(window.location.search);
+    pin = query["pin"] ? query["pin"] : '';
+    productUID = query["product"] ? query["product"] : airnoteProductUID;
     deviceUID = window.location.pathname.replace('/','');
-	}
+  }
 
-  if (pin === "" && deviceUID !== "") {
-    navigate(`http://tt.safecast.org/dashboard/note:${deviceUID}`, { replace: true });
+  if (pin === "" && deviceUID !== "" && window.location.pathname.indexOf("dashboard") == -1) {
+    // Temporary. Need to figure out the best URL structure at some point.
+    navigate(`dashboard/${deviceUID}`);
+    // navigate(`http://tt.safecast.org/dashboard/note:${deviceUID}`, { replace: true });
   }
 </script>
 
-{#if pin === "" && deviceUID !== ""}
-  <div class="redirect">Redirecting to Airnote dashboard...</div>
-{:else}
-  <Router url="{url}">
-    <div>
-      <div class='logo'>
-        <img src='./images/airnote.svg' alt="Airnote Logo" />
-      </div>
-      <main>
-        <Container>
-          <Route path="/:deviceUID"
-            component="{Configuration}"
-            pin="{pin}"
-            productUID="{productUID}"
-          />
-          <Route path="/"><Home /></Route>
-          <hr class='my-4' />
-          <Row class="footer">
-            <Col>
-              Cloud-connected by <br/>
-              <a target='_blank' href='https://blues.io/products'>Notecard</a>
-            </Col>
-            <Col>
-              Developed by <br/>
-              <a target='_blank' href='https://blues.io'>Blues Inc.</a>
-            </Col>
-            <Col>
-              In Partnership with <br/>
-              <a target='_blank' href='https://safecast.org'>Safecast</a>
-            </Col>
-          </Row>
-        </Container>
-      </main>
+<Router url="{url}">
+  <div>
+    <div class='logo'>
+      <img src='/images/airnote.svg' alt="Airnote Logo" />
     </div>
-  </Router>
-{/if}
+    <main>
+      <Container>
+        <Route
+          path="/:deviceUID"
+          component="{Configuration}"
+          pin="{pin}"
+          productUID="{productUID}"
+        />
+        <Route
+          path="/dashboard/:deviceUID"
+          component="{Dashboard}"
+        />
+        <Route path="/">
+          <Home />
+        </Route>
+
+        <hr class='my-4' />
+
+        <Row class="footer">
+          <Col>
+            Cloud-connected by <br/>
+            <a target='_blank' href='https://blues.io/products'>Notecard</a>
+          </Col>
+          <Col>
+            Developed by <br/>
+            <a target='_blank' href='https://blues.io'>Blues Inc.</a>
+          </Col>
+          <Col>
+            In Partnership with <br/>
+            <a target='_blank' href='https://safecast.org'>Safecast</a>
+          </Col>
+        </Row>
+      </Container>
+    </main>
+  </div>
+</Router>
 
 <style>
-	@import 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css';
+  @import 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css';
 
-	:global(body) {
-		font-family: 'Barlow', sans-serif;
-		font-style: normal;
-		font-weight: normal;
-		font-size: 18px;
-		color: #1B3A52;
-	}
-
-  .redirect {
-    margin: 10px;
+  :global(body) {
+    font-family: 'Barlow', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    color: #1B3A52;
   }
 
-	main {
-		text-align: center;
-		padding: 1em;
-		margin: 0 auto;
-	}
+  main {
+    text-align: center;
+    padding: 1em;
+    margin: 0 auto;
+  }
 
   :global(.logo) {
-		background-color: #1B3A52;
-		width: 100%;
-		height: 200px;
-		padding: 0;
-		margin: 0;
-		text-align: center;
-	}
+    background-color: #1B3A52;
+    width: 100%;
+    height: 200px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
 
-	:global(.logo img) {
-		margin-top: 80px;
-	}
+  :global(.logo img) {
+    margin-top: 80px;
+  }
 
   :global(.btn) {
     color: #f4f4f4;
@@ -103,11 +107,16 @@
     padding-right: 0px;
   }
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+  :global(.spinner-border) {
+    height: 5rem;
+    width: 5rem;
+  }
+
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
 
   @media (max-width: 640px) {
     :global(div.footer div.col) {

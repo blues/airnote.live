@@ -1,9 +1,10 @@
 <script>
   import {
-		Jumbotron,
-		Button,
+    Jumbotron,
+    Button,
     Col,
-		Row } from 'sveltestrap';
+    Row,
+  } from 'sveltestrap';
 </script>
 
 <Jumbotron class='no-bg'>
@@ -22,7 +23,7 @@
   </p>
   <Row>
     <Col>
-        <Button color="primary" href="https://start.airnote.live">Set up my Airnote</Button>
+      <Button color="primary" href="https://start.airnote.live">Set up my Airnote</Button>
     </Col>
   </Row>
   <p>
@@ -32,12 +33,12 @@
   </p>
   <Row>
     <Col>
-        <Button color="primary" href="https://shop.blues.io/products/airnote">Buy an Airnote</Button>
+      <Button color="primary" href="https://shop.blues.io/products/airnote">Buy an Airnote</Button>
     </Col>
   </Row>
   <Row>
     <Col>
-        <Button color="primary" href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes?orgId=1">View the Safecast Global Map</Button>
+      <Button color="primary" href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes?orgId=1">View the Safecast Global Map</Button>
     </Col>
   </Row>
 </Jumbotron>
