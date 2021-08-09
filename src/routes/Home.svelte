@@ -1,16 +1,8 @@
-<script>
-  import {
-    Jumbotron,
-    Button,
-    Col,
-    Row,
-  } from 'sveltestrap';
-</script>
+<h1>
+  Welcome to Airnote!
+</h1>
 
-<Jumbotron class='no-bg'>
-  <h5>
-    Welcome to Airnote!
-  </h5>
+<section>
   <p>A global partnership between
     <a href="https://safecast.org" target="_new">Safecast</a> &amp;
     <a href="https://blues.io" target="_net">Blues Wireless</a>.
@@ -21,35 +13,29 @@
     <a href="https://start.airnote.live" target="new">guide
     at start.airnote.live</a>.
   </p>
-  <Row>
-    <Col>
-      <Button color="primary" href="https://start.airnote.live">Set up my Airnote</Button>
-    </Col>
-  </Row>
+
+  <a href="https://start.airnote.live" class="btn">Set up my Airnote</a>
+</section>
+
+<section>
   <p>
     To join the network, visit the
     <a href="https://shop.blues.io/products/airnote" target="new">Blues Wireless shop</a> to purchase
     your own cellular-powered air quality monitoring device.
   </p>
-  <Row>
-    <Col>
-      <Button color="primary" href="https://shop.blues.io/products/airnote">Buy an Airnote</Button>
-    </Col>
-  </Row>
-  <Row>
-    <Col>
-      <Button color="primary" href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes?orgId=1">View the Safecast Global Map</Button>
-    </Col>
-  </Row>
-</Jumbotron>
+
+  <a href="https://shop.blues.io/products/airnote" class="btn">Buy an Airnote</a>
+  <a href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes?orgId=1" class="btn">View the Safecast Global Map</a>
+</section>
 
 <style>
-  :global(div.row) {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  section {
+    margin: 20px 0;
   }
-
-  :global(div.row a.btn-primary:visited) {
-    color: #f4f4f4;;
+  .btn {
+    display: inline-block;
+  }
+  .btn + .btn {
+    margin-left: 10px;
   }
 </style>

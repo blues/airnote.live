@@ -3,7 +3,6 @@
   import {
     Alert,
     Button,
-    Jumbotron,
     Col,
     Row
   } from 'sveltestrap';
@@ -198,50 +197,52 @@
     <a href="https://start.airnote.live" target="_new">start.airnote.live</a>.
   </Alert>
 {/if}
+
 {#if saveError}
   <Alert color="danger" isOpen={true}>
     <h4 class="alert-heading text-capitalize">Unable to safe configuration
       settings. Please try again later.
   </Alert>
 {/if}
-<Jumbotron class='no-bg'>
-  <h5>
-    Welcome to Airnote!
-  </h5>
-  <p>You're now part of a community of citizens helping to
-    monitor the air we breathe.</p>
-    <p>Click the links to
-      view charts for your device, the global
-      <a href="https://safecast.org" target="_new">Safecast</a> map, or to share
-      a link to your device dashboard.
-  </p>
-  <hr class='my-4' />
-  <Row>
-    <Col><h4><a href="https://safecast.org" target="_new">Safecast</a></h4></Col>
-  </Row>
-  <Row class="links">
-    <Col>
-      <a href='http://tt.safecast.org/dashboard/note:{deviceUID}'>Dashboard</a>
-    </Col>
-    <div class='separator'>|</div>
-    <Col>
-      <a href='http://tt.safecast.org/map/note:{deviceUID}'>Global Map</a>
-    </Col>
-  </Row>
-  <Row class="share">
-    <Col>
-        <Button color="primary" on:click={shareDevice}>Share my Device Dashboard</Button>
-    </Col>
-  </Row>
-  <hr class='my-4' />
-  <p>
-    Use the fields below to personalize your device.
-    <i>
-      For help setting-up your Airnote, visit
-      <a href='https://start.airnote.live'>start.airnote.live</a>
-    </i>
-  </p>
-</Jumbotron>
+
+
+<h1>
+  Welcome to Airnote!
+</h1>
+<p>You're now part of a community of citizens helping to
+  monitor the air we breathe.</p>
+  <p>Click the links to
+    view charts for your device, the global
+    <a href="https://safecast.org" target="_new">Safecast</a> map, or to share
+    a link to your device dashboard.
+</p>
+<hr />
+<div>
+  <h4><a href="https://safecast.org" target="_new">Safecast</a></h4>
+</div>
+<div class="links">
+  <Col>
+    <a href='http://tt.safecast.org/dashboard/note:{deviceUID}'>Dashboard</a>
+  </Col>
+  <div class='separator'>|</div>
+  <Col>
+    <a href='http://tt.safecast.org/map/note:{deviceUID}'>Global Map</a>
+  </Col>
+</div>
+<div class="share">
+  <Col>
+      <Button color="primary" on:click={shareDevice}>Share my Device Dashboard</Button>
+  </Col>
+</div>
+<hr />
+<p>
+  Use the fields below to personalize your device.
+  <i>
+    For help setting-up your Airnote, visit
+    <a href='https://start.airnote.live'>start.airnote.live</a>
+  </i>
+</p>
+
 
 <NotificationDisplay bind:this={notify} />
 <Settings
@@ -249,12 +250,12 @@
   displayOptions={displayOptions}
   on:submit={handleSettingsSave}
 />
-<hr class='my-4' />
+<hr />
 <Owner
   enableFields={enableFields}
   on:submit={handleSettingsSave}
 />
-<hr class='my-4' />
+<hr />
 <Row>
   <Col>
     <a href={eventsUrl} target="_new">
@@ -262,7 +263,7 @@
     </a>
   </Col>
 </Row>
-<hr class='my-4' />
+<hr />
 <Row>
   <Col>
     <i>
@@ -275,24 +276,11 @@
 </Row>
 
 <style>
-
-  :global(h4) {
-    font-weight: bold;
-    font-size: 20px;
-    line-height: 28px;
-    text-align: center;
-    letter-spacing: 0.01em;
-    color: #050607;
-  }
-
-  :global(.links) {
+  .links {
+    display: flex;
+    justify-content: space-evenly;
     text-align: center;
     line-height: 38px;
-  }
-
-
-  :global(.no-bg) {
-    background-color: #fff;
   }
 
   .separator {
@@ -300,25 +288,8 @@
     color: #CED9E1;
   }
 
-  :global(.share) {
+  .share {
     margin-top: 10px;
-  }
-
-  :global(a) {
-    font-size: 18px;
-    line-height: 22px;
-    text-align: center;
-    color: #00B9FF;
-  }
-
-  :global(.btn) {
-    background-color: #00B9FF;
-    border-color: #00B9FF;
-  }
-
-  :global(.jumbotron) {
-    margin-bottom: 0;
-    padding: 0;
   }
 
   :global(.toast) {

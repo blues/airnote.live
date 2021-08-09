@@ -1,7 +1,7 @@
 <script>
   import { Router, Route, navigate } from "svelte-routing";
   import queryString from 'query-string';
-  import { Container, Row, Col } from "sveltestrap";
+
   import Configuration from "./routes/Configuration.svelte";
   import Dashboard from "./routes/Dashboard.svelte";
   import Home from "./routes/Home.svelte";
@@ -27,105 +27,45 @@
 </script>
 
 <Router url="{url}">
-  <div>
-    <div class='logo'>
-      <img src='/images/airnote.svg' alt="Airnote Logo" />
+  <header>
+    <img alt="Blues Wireless" src="/images/logo-white.svg">
+  </header>
+  <main>
+    <div class="container">
+      <Route
+        path="/:deviceUID"
+        component="{Configuration}"
+        pin="{pin}"
+        productUID="{productUID}"
+      />
+      <Route
+        path="/dashboard/:deviceUID"
+        component="{Dashboard}"
+      />
+      <Route path="/">
+        <Home />
+      </Route>
+
+      <hr />
+
+      <footer>
+        <div>
+          Cloud-connected by <br/>
+          <a target='_blank' href='https://blues.io/products'>Notecard</a>
+        </div>
+        <div>
+          Developed by <br/>
+          <a target='_blank' href='https://blues.io'>Blues Inc.</a>
+        </div>
+        <div>
+          In Partnership with <br/>
+          <a target='_blank' href='https://safecast.org'>Safecast</a>
+        </div>
+      </footer>
     </div>
-    <main>
-      <Container>
-        <Route
-          path="/:deviceUID"
-          component="{Configuration}"
-          pin="{pin}"
-          productUID="{productUID}"
-        />
-        <Route
-          path="/dashboard/:deviceUID"
-          component="{Dashboard}"
-        />
-        <Route path="/">
-          <Home />
-        </Route>
-
-        <hr class='my-4' />
-
-        <Row class="footer">
-          <Col>
-            Cloud-connected by <br/>
-            <a target='_blank' href='https://blues.io/products'>Notecard</a>
-          </Col>
-          <Col>
-            Developed by <br/>
-            <a target='_blank' href='https://blues.io'>Blues Inc.</a>
-          </Col>
-          <Col>
-            In Partnership with <br/>
-            <a target='_blank' href='https://safecast.org'>Safecast</a>
-          </Col>
-        </Row>
-      </Container>
-    </main>
-  </div>
+  </main>
 </Router>
 
 <style>
-  @import 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css';
 
-  :global(body) {
-    font-family: 'Barlow', sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    color: #1B3A52;
-  }
-
-  main {
-    text-align: center;
-    padding: 1em;
-    margin: 0 auto;
-  }
-
-  :global(.logo) {
-    background-color: #1B3A52;
-    width: 100%;
-    height: 200px;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-  }
-
-  :global(.logo img) {
-    margin-top: 80px;
-  }
-
-  :global(.btn) {
-    color: #f4f4f4;
-  }
-
-  :global(div.footer div.col) {
-    padding-left: 0px;
-    padding-right: 0px;
-  }
-
-  :global(.spinner-border) {
-    height: 5rem;
-    width: 5rem;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
-  }
-
-  @media (max-width: 640px) {
-    :global(div.footer div.col) {
-      padding-left: 15px;
-      padding-right: 15px;
-    }
-
-    :global(div.footer div.col:last-of-type) {
-      padding-top: 20px;
-    }
-  }
 </style>

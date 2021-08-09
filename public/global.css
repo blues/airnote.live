@@ -1,67 +1,95 @@
 html, body {
-	position: relative;
-	width: 100%;
-	height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 body {
-	color: #333;
-	margin: 0;
-	box-sizing: border-box;
-	font-family: 'Barlow', sans-serif;
+  color: #1B3A52;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Barlow', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 1.5;
 }
 
 main {
-	padding: 8px;
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+h4 {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 28px;
+  text-align: center;
+  letter-spacing: 0.01em;
+  color: #050607;
 }
 
 a {
-	color: rgb(0,100,200);
-	text-decoration: none;
+  color: rgb(0, 185, 255);
+  text-decoration: none;
 }
-
 a:hover {
-	text-decoration: underline;
-}
-
-a:visited {
-	color: rgb(0,80,160);
+  text-decoration: underline;
 }
 
 label {
-	display: block;
+  display: block;
 }
 
 input, button, select, textarea {
-	font-family: inherit;
-	font-size: inherit;
-	-webkit-padding: 0.4em 0;
-	padding: 0.4em;
-	margin: 0 0 0.5em 0;
-	box-sizing: border-box;
-	border: 1px solid #ccc;
-	border-radius: 2px;
+  font-family: inherit;
+  font-size: inherit;
+  -webkit-padding: 0.4em 0;
+  padding: 0.4em;
+  margin: 0 0 0.5em 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
 }
-
 input:disabled {
-	color: #ccc;
+  color: #ccc;
 }
 
-button {
-	color: #333;
-	background-color: #f4f4f4;
-	outline: none;
+button, .btn {
+  background: rgb(0, 185, 255);
+  color: white;
+  border-radius: 0.3rem;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
+}
+button:hover, .btn:hover {
+  text-decoration: none;
+  background: rgb(0, 105, 217);
 }
 
-button:disabled {
-	color: #999;
+header {
+  background: #1b3a52;
+}
+header img {
+  width: 190px;
+  padding: 1rem 0.75rem;
 }
 
-button:not(:disabled):active {
-	background-color: #ddd;
+hr {
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, .1);
 }
 
-button:focus {
-	border-color: #666;
+footer {
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
 }
-

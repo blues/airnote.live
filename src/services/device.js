@@ -16,6 +16,7 @@ export function getReadings(deviceUID) {
         air: [],
       };
       data.events.forEach(event => {
+        console.log(event);
         if (event.file.startsWith('aq')) {
           returnData.aq.push(event.body);
         }

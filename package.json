@@ -7,11 +7,11 @@
     "start": "sirv public -s"
   },
   "devDependencies": {
-    "@beyonk/svelte-notifications": "^3.1.0",
-    "@fouita/slider": "0.0.3",
+    "@beyonk/svelte-notifications": "^4.1.0",
+    "@fouita/slider": "0.0.4",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
-    "query-string": "^6.13.8",
+    "query-string": "^7.0.0",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "sirv-cli": "^1.0.0",
-    "svelte-routing": "^1.5.0",
-    "sveltestrap": "^3.13.0"
+    "svelte-routing": "^1.6.0",
+    "sveltestrap": "^5.5.0"
   }
 }

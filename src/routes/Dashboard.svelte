@@ -1,12 +1,11 @@
 <script>
   import { getReadings } from '../services/device';
-  import { Spinner } from 'sveltestrap';
 
-  export let location;
   export let deviceUID;
 
   let air;
   let aq;
+  let lastUpdate;
 
   getReadings(deviceUID)
     .then(data => {
@@ -16,10 +15,19 @@
 </script>
 
 {#if !air}
-  <Spinner />
+  <!--<Spinner />-->
 {/if}
 
+<h2>Welcome back!</h2>
+
+<p class="fun-fact">
+  Fun fact: I have absolutely no idea what to put in this box! 
+  <a href="https://blues.io">Read more</a>.
+</p>
+
+<h2 class="air-quality-heading">Your Air Quality</h2>
 {#if air}
+  <p class="last-update">Last Update: <span>{lastUpdate}</span></p>
   <ul>
     <li>Humidity: {air.humid}</li>
     <li>Air Pressure: {air.press}</li>
@@ -31,5 +39,23 @@
 {/if}
 
 <style>
+  .fun-fact {
+    background: rgb(215, 229, 241);
+    padding: 0.75rem 0.75rem;
+    border-radius: 0.25rem;
+  }
+  .air-quality-heading {
+    margin-bottom: 0;
+  }
+  .last-update {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    color: rgb(70, 124, 162);
+    font-weight: 500;
+  }
+  .last-update span {
+    color: rgb(166, 188, 207);
+    font-weight: normal;
+  }
 
 </style>
