@@ -12,16 +12,19 @@ export function getReadings(deviceUID) {
     .then(response => response.json())
     .then(data => {
       var returnData = {
-        aq: [],
-        air: [],
+        aqReadings: [],
+        airReadings: [],
+        lastUpdated: new Date(0),
       };
       data.events.forEach(event => {
-        console.log(event);
         if (event.file.startsWith('aq')) {
-          returnData.aq.push(event.body);
+          returnData.aqReadings.push(event.body);
+          if (new Date(event.captured) > returnData.lastUpdated) {
+            returnData.lastUpdated = new Date(event.captured);
+          }
         }
         if (event.file.startsWith('air')) {
-          returnData.air.push(event.body);
+          returnData.airReadings.push(event.body);
         }
       });
       return returnData;

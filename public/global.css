@@ -6,13 +6,18 @@ html, body {
 
 body {
   color: #1B3A52;
+  background: rgb(247, 249, 251);
   margin: 0;
   box-sizing: border-box;
   font-family: 'Barlow', sans-serif;
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.5;
+}
+
+header {
+  display: flex;
 }
 
 main {
