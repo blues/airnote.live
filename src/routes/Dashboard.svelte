@@ -1,7 +1,8 @@
 <script>
-  import { format } from 'date-fns';
-  import { getReadings } from '../services/device';
-  import Spinner from '../util/Spinner.svelte';
+  import { format } from "date-fns";
+  import { fade } from "svelte/transition";
+
+  import { getReadings } from "../services/device";
 
   export let deviceUID;
 
@@ -10,20 +11,19 @@
   let lastUpdated;
   // Hardcoded for now
   let aqi = 50;
-  let aqiDescription = 'Moderate';
+  let aqiDescription = "Moderate";
 
-  getReadings(deviceUID)
-    .then(data => {
-      lastAirReading = data.airReadings[0];
-      lastAqReading = data.aqReadings[0];
-      lastUpdated = data.lastUpdated;
-    });
+  getReadings(deviceUID).then((data) => {
+    lastAirReading = data.airReadings[0];
+    lastAqReading = data.aqReadings[0];
+    lastUpdated = data.lastUpdated;
+  });
 </script>
 
 <h2>Welcome back!</h2>
 
 <p class="fun-fact">
-  Fun fact: I have absolutely no idea what to put in this box! 
+  Fun fact: I have absolutely no idea what to put in this box!
   <a href="https://blues.io">Read more</a>.
 </p>
 
@@ -31,16 +31,16 @@
 
 <div class="dashboard">
   {#if !lastUpdated || lastUpdated}
-    <Spinner />
+    <div class="loading" out:fade></div>
   {/if}
 
-  <div class="dashboard-content">
-    {#if lastUpdated}
+  {#if lastUpdated}
+    <div class="dashboard-content" in:fade>
       <p class="last-update">
-        Last Update: 
+        Last Update:
         <span>
-          {format(lastUpdated, 'MMMM dd yyyy')} at 
-          {format(lastUpdated, 'h:mm aaa')}
+          {format(lastUpdated, "MMMM dd yyyy")} at
+          {format(lastUpdated, "h:mm aaa")}
         </span>
       </p>
 
@@ -50,7 +50,7 @@
           <div class="aqi-value">{aqi}</div>
           <div class="aqi-description">{aqiDescription}</div>
         </div>
-    
+
         <div class="measurement-box">
           <div class="measurement-pm">
             <div>
@@ -79,15 +79,21 @@
           </div>
         </div>
       </div>
-    {/if}
-  </div>
+    </div>
+  {/if}
 </div>
 
 <style>
+  .dashboard {
+    min-height: 200px;
+  }
   .fun-fact {
     background: rgb(215, 229, 241);
     padding: 0.75rem 0.75rem;
     border-radius: 0.25rem;
+  }
+  .dashboard-content {
+    position: relative;
   }
   .air-quality-heading {
     margin-bottom: 0;
@@ -105,7 +111,8 @@
   .all-measurements {
     display: flex;
   }
-  .aqi-box, .measurement-box {
+  .aqi-box,
+  .measurement-box {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 5px;
   }
@@ -158,5 +165,25 @@
   .measurement-air strong {
     display: block;
     font-size: 1.4rem;
+  }
+
+  .loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgb(70, 124, 162);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+
+  @keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+  }
+  @-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
   }
 </style>
