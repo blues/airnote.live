@@ -2,7 +2,7 @@
   import { format } from 'date-fns';
   import { fade } from 'svelte/transition';
 
-  import { getPM2_5QualityLevel } from '../services/air'
+  import { getAQIDisplay } from '../services/air'
   import { getReadings } from '../services/device';
 
   export let deviceUID;
@@ -10,17 +10,14 @@
   let lastAirReading;
   let lastAqReading;
   let lastUpdated;
-  let pm2_5Quality;
 
   // Hardcoded for now
   let aqi = 50;
-  let aqiDescription = "Moderate";
 
   getReadings(deviceUID).then((data) => {
     lastAirReading = data.airReadings[0];
     lastAqReading = data.aqReadings[0];
     lastUpdated = data.lastUpdated;
-    pm2_5Quality = getPM2_5QualityLevel(lastAqReading.pm02_5);
   });
 </script>
 
@@ -48,10 +45,13 @@
     </p>
 
     <div class="all-measurements" in:fade>
-      <div class="aqi-box">
+      <div class="aqi-box"
+        style="background-color: {getAQIDisplay(aqi).color}">
         <div>Air Quality Index</div>
         <div class="aqi-value">{aqi}</div>
-        <div class="aqi-description">{aqiDescription}</div>
+        <div class="aqi-description">
+          {getAQIDisplay(aqi).text}
+        </div>
       </div>
 
       <div class="box measurement-box">
@@ -88,51 +88,58 @@
       <div class="aqi-history">
         <div class="day-1">
           <span>Thursday<br>August 12th</span>
-          <div class="aqi-box">
+          <div class="aqi-box"
+            style="background-color: {getAQIDisplay(54).color}">
             <div class="aqi-value">54</div>
-            <div class="aqi-description">Moderate</div>
+            <div class="aqi-description">{getAQIDisplay(54).text}</div>
           </div>
         </div>
         <div class="day-2">
           <span>Wednesday<br>August 11th</span>
-          <div class="aqi-box">
-            <div class="aqi-value">86</div>
-            <div class="aqi-description">Good</div>
+          <div class="aqi-box"
+            style="background-color: {getAQIDisplay(20).color}">
+            <div class="aqi-value">20</div>
+            <div class="aqi-description">{getAQIDisplay(20).text}</div>
           </div>
         </div>
         <div class="day-3">
           <span>Tuesday<br>August 10th</span>
-          <div class="aqi-box">
-            <div class="aqi-value">76</div>
-            <div class="aqi-description">Moderate</div>
+          <div class="aqi-box"
+            style="background-color: {getAQIDisplay(120).color}">
+            <div class="aqi-value">120</div>
+            <div class="aqi-description">{getAQIDisplay(120).text}</div>
           </div>
         </div>
         <div class="day-4">
           <span>Monday<br>August 9th</span>
-          <div class="aqi-box">
-            <div class="aqi-value">51</div>
-            <div class="aqi-description">Moderate</div>
+          <div class="aqi-box"
+            style="background-color: {getAQIDisplay(157).color}">
+            <div class="aqi-value">157</div>
+            <div class="aqi-description">{getAQIDisplay(157).text}</div>
           </div>
         </div>
         <div class="day-5">
           <span>Sunday<br>August 8th</span>
-          <div class="aqi-box">
-            <div class="aqi-value">43</div>
-            <div class="aqi-description">Unhealthy</div>
+          <div class="aqi-box"
+            style="background-color: {getAQIDisplay(207).color}">
+            <div class="aqi-value">207</div>
+            <div class="aqi-description">{getAQIDisplay(207).text}</div>
           </div>
         </div>
         <div class="day-6">
           <span>Saturday<br>August 7th</span>
-          <div class="aqi-box">
-            <div class="aqi-value">62</div>
-            <div class="aqi-description">Moderate</div>
+          <div class="aqi-box"
+            style="background-color: {getAQIDisplay(398).color}">
+            <div class="aqi-value">398</div>
+            <div class="aqi-description">{getAQIDisplay(398).text}</div>
           </div>
         </div>
         <div class="day-7">
           <span>Friday<br>August 6th</span>
-          <div class="aqi-box">
-            <div class="aqi-value">80</div>
-            <div class="aqi-description">Good</div>
+          <div class="aqi-box"
+            style="background-color: {getAQIDisplay(22).color}">
+            <div class="aqi-value">22</div>
+            <div class="aqi-description">{getAQIDisplay(22).text}</div>
           </div>
         </div>
       </div>
@@ -185,7 +192,6 @@
     margin-top: 0;
   }
   .aqi-box {
-    background: rgb(248, 181, 42);
     color: white;
     text-align: center;
     padding: 2em;
@@ -248,7 +254,7 @@
   }
   .aqi-history .aqi-box {
     padding: 0 0 0.25rem 0;
-    margin: 0.5em 1.5em 0 1.5em;
+    margin: 0.75em 1.5em 0 1.5em;
     width: auto;
   }
   .aqi-history .aqi-value {
