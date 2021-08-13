@@ -18,9 +18,6 @@ export function getReadings(deviceUID) {
         lastUpdated: new Date(0),
       };
       data.events.forEach(event => {
-        console.log(
-          format(new Date(event.captured), "MMMM dd yyyy h:mm aaa")
-        );
         if (event.file.startsWith('aq')) {
           returnData.aqReadings.push(event.body);
           if (new Date(event.captured) > returnData.lastUpdated) {
