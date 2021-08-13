@@ -1,14 +1,17 @@
 <script>
-  import { format } from "date-fns";
-  import { fade } from "svelte/transition";
+  import { format } from 'date-fns';
+  import { fade } from 'svelte/transition';
 
-  import { getReadings } from "../services/device";
+  import { getPM2_5QualityLevel } from '../services/air'
+  import { getReadings } from '../services/device';
 
   export let deviceUID;
 
   let lastAirReading;
   let lastAqReading;
   let lastUpdated;
+  let pm2_5Quality;
+
   // Hardcoded for now
   let aqi = 50;
   let aqiDescription = "Moderate";
@@ -17,6 +20,7 @@
     lastAirReading = data.airReadings[0];
     lastAqReading = data.aqReadings[0];
     lastUpdated = data.lastUpdated;
+    pm2_5Quality = getPM2_5QualityLevel(lastAqReading.pm02_5);
   });
 </script>
 
@@ -30,55 +34,116 @@
 <h2 class="air-quality-heading">Your Air Quality</h2>
 
 <div class="dashboard">
-  {#if !lastUpdated || lastUpdated}
-    <div class="loading" out:fade></div>
+  {#if !lastUpdated}
+    <div class="loading"></div>
   {/if}
 
   {#if lastUpdated}
-    <div class="dashboard-content" in:fade>
-      <p class="last-update">
-        Last Update:
-        <span>
-          {format(lastUpdated, "MMMM dd yyyy")} at
-          {format(lastUpdated, "h:mm aaa")}
-        </span>
-      </p>
+    <p class="last-update" in:fade>
+      Last Update:
+      <span>
+        {format(lastUpdated, "MMMM dd yyyy")} at
+        {format(lastUpdated, "h:mm aaa")}
+      </span>
+    </p>
 
-      <div class="all-measurements">
-        <div class="aqi-box">
-          <div>Air Quality Index</div>
-          <div class="aqi-value">{aqi}</div>
-          <div class="aqi-description">{aqiDescription}</div>
+    <div class="all-measurements" in:fade>
+      <div class="aqi-box">
+        <div>Air Quality Index</div>
+        <div class="aqi-value">{aqi}</div>
+        <div class="aqi-description">{aqiDescription}</div>
+      </div>
+
+      <div class="box measurement-box">
+        <div class="measurement-pm">
+          <div>
+            <span>PM2.5</span>
+            <span>{lastAqReading.pm02_5}</span>
+          </div>
+          <div>
+            <span>PM10</span>
+            <span>{lastAqReading.pm10_0}</span>
+          </div>
         </div>
 
-        <div class="measurement-box">
-          <div class="measurement-pm">
-            <div>
-              <span>PM2.5</span>
-              <span>{lastAqReading.pm02_5}</span>
-            </div>
-            <div>
-              <span>PM10</span>
-              <span>{lastAqReading.pm10_0}</span>
-            </div>
+        <div class="measurement-air">
+          <div>
+            Temperature
+            <strong>{lastAirReading.temp}°C</strong>
           </div>
-
-          <div class="measurement-air">
-            <div>
-              Temperature
-              <strong>{lastAirReading.temp}°C</strong>
-            </div>
-            <div>
-              Humidity
-              <strong>{lastAirReading.humid}%</strong>
-            </div>
-            <div>
-              Air Pressure
-              <strong>{lastAirReading.press}</strong>
-            </div>
+          <div>
+            Humidity
+            <strong>{lastAirReading.humid}%</strong>
+          </div>
+          <div>
+            Air Pressure
+            <strong>{lastAirReading.press}</strong>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="box" in:fade>
+      <h3>Air Quality Index (Last 7 Days)</h3>
+      <div class="aqi-history">
+        <div class="day-1">
+          <span>Thursday<br>August 12th</span>
+          <div class="aqi-box">
+            <div class="aqi-value">54</div>
+            <div class="aqi-description">Moderate</div>
+          </div>
+        </div>
+        <div class="day-2">
+          <span>Wednesday<br>August 11th</span>
+          <div class="aqi-box">
+            <div class="aqi-value">86</div>
+            <div class="aqi-description">Good</div>
+          </div>
+        </div>
+        <div class="day-3">
+          <span>Tuesday<br>August 10th</span>
+          <div class="aqi-box">
+            <div class="aqi-value">76</div>
+            <div class="aqi-description">Moderate</div>
+          </div>
+        </div>
+        <div class="day-4">
+          <span>Monday<br>August 9th</span>
+          <div class="aqi-box">
+            <div class="aqi-value">51</div>
+            <div class="aqi-description">Moderate</div>
+          </div>
+        </div>
+        <div class="day-5">
+          <span>Sunday<br>August 8th</span>
+          <div class="aqi-box">
+            <div class="aqi-value">43</div>
+            <div class="aqi-description">Unhealthy</div>
+          </div>
+        </div>
+        <div class="day-6">
+          <span>Saturday<br>August 7th</span>
+          <div class="aqi-box">
+            <div class="aqi-value">62</div>
+            <div class="aqi-description">Moderate</div>
+          </div>
+        </div>
+        <div class="day-7">
+          <span>Friday<br>August 6th</span>
+          <div class="aqi-box">
+            <div class="aqi-value">80</div>
+            <div class="aqi-description">Good</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box" in:fade>
+      <h3>Health Recommendations</h3>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+      <a href="https://blues.io">Learn more</a>
     </div>
   {/if}
 </div>
@@ -86,14 +151,12 @@
 <style>
   .dashboard {
     min-height: 200px;
+    position: relative;
   }
   .fun-fact {
     background: rgb(215, 229, 241);
     padding: 0.75rem 0.75rem;
     border-radius: 0.25rem;
-  }
-  .dashboard-content {
-    position: relative;
   }
   .air-quality-heading {
     margin-bottom: 0;
@@ -111,31 +174,38 @@
   .all-measurements {
     display: flex;
   }
-  .aqi-box,
-  .measurement-box {
+  .box {
     border: 1px solid rgba(0, 0, 0, 0.1);
+    background: white;
     border-radius: 5px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  .box h3 {
+    margin-top: 0;
   }
   .aqi-box {
     background: rgb(248, 181, 42);
     color: white;
     text-align: center;
-    padding: 2rem;
+    padding: 2em;
     margin-right: 1rem;
     width: 8rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border-radius: 5px;
   }
   .aqi-value {
-    font-size: 3rem;
+    font-size: 3em;
     letter-spacing: 0.1rem;
     font-weight: bold;
   }
   .measurement-box {
-    background: white;
     flex-grow: 1;
     display: flex;
+    padding: 0;
+    margin: 0;
     flex-direction: column;
   }
   .measurement-pm {
@@ -167,6 +237,28 @@
     font-size: 1.4rem;
   }
 
+  .aqi-history {
+    display: flex;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  .aqi-history > div {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+  .aqi-history .aqi-box {
+    padding: 0 0 0.25rem 0;
+    margin: 0.5em 1.5em 0 1.5em;
+    width: auto;
+  }
+  .aqi-history .aqi-value {
+    font-weight: 500;
+    font-size: 2em;
+  }
+  .aqi-history .aqi-description {
+    font-size: 0.8rem;
+  }
+
   .loading {
     display: inline-block;
     width: 50px;
@@ -181,9 +273,8 @@
   }
 
   @keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
-  }
-  @-webkit-keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
+    to {
+      -webkit-transform: rotate(360deg);
+    }
   }
 </style>

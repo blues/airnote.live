@@ -1,4 +1,5 @@
 import { appUID, notehubAPIBase, SESSION_TOKEN } from '../constants';
+import { format } from "date-fns";
 
 export function getReadings(deviceUID) {
   const url = `${notehubAPIBase}/v1/projects/${appUID}/events?deviceUIDs=${deviceUID}`;
@@ -17,6 +18,9 @@ export function getReadings(deviceUID) {
         lastUpdated: new Date(0),
       };
       data.events.forEach(event => {
+        console.log(
+          format(new Date(event.captured), "MMMM dd yyyy h:mm aaa")
+        );
         if (event.file.startsWith('aq')) {
           returnData.aqReadings.push(event.body);
           if (new Date(event.captured) > returnData.lastUpdated) {
