@@ -1,14 +1,15 @@
 <script>
-  import { format } from "date-fns";
-  import { fade } from "svelte/transition";
+  import { format } from 'date-fns';
+  import { fade } from 'svelte/transition';
+  import Speedometer from 'svelte-speedometer';
 
   import Recommendation from '../components/Recommendation.svelte';
   import {
     getAQIDisplay,
     getPM2_5Display,
     getPM10Display,
-  } from "../services/air";
-  import { getReadings } from "../services/device";
+  } from '../services/air';
+  import { getReadings } from '../services/device';
 
   export let deviceUID;
 
@@ -17,7 +18,7 @@
   let lastUpdated;
 
   // Hardcoded for now
-  let aqi = 50;
+  let aqi = 55;
 
   getReadings(deviceUID).then((data) => {
     lastAirReading = data.airReadings[0];
@@ -48,6 +49,24 @@
     </p>
 
     <div class="all-measurements" in:fade>
+      <div class="box speedometer-box">
+        <h5>Air Quality Index</h5>
+        <Speedometer
+          height={180}
+          currentValueText=""
+          needleHeightRatio={0.7}
+          ringWidth={30}
+          customSegmentStops={[0, 50, 100, 150, 200, 300]}
+          segmentColors={['#00CC00', '#F8B52A', '#EB8A14', '#FF0000', '#A10649', '#7E0023']}
+          maxValue={300}
+          labelFontSize="12px"
+          value={aqi > 300 ? 300 : aqi}
+        />
+        <div class="speedometer-value">
+          {aqi}: {getAQIDisplay(aqi).text}
+        </div>
+      </div>
+      <!--
       <div class="aqi-box" style="background-color: {getAQIDisplay(aqi).color}">
         <div>Air Quality Index</div>
         <div class="aqi-value">{aqi}</div>
@@ -55,6 +74,7 @@
           {getAQIDisplay(aqi).text}
         </div>
       </div>
+      -->
 
       <div class="box measurement-box">
         <div class="measurement-pm">
@@ -216,21 +236,23 @@
   .box h3 {
     margin-top: 0;
   }
-  .aqi-box {
-    color: white;
+  h5 {
+    margin: 0;
     text-align: center;
-    padding: 2em;
-    margin-right: 1rem;
-    width: 8rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 5px;
+    position: relative;
+    top: -0.75rem;
   }
-  .aqi-value {
-    font-size: 3em;
-    letter-spacing: 0.1rem;
-    font-weight: bold;
+  .speedometer-box {
+    margin: 0 1rem 0 0;
+    position: relative;
+  }
+  .speedometer-value {
+    position: relative;
+    text-align: center;
+    left: 0;
+    bottom: 1.6rem;
+    width: 100%;
+    position: absolute;
   }
   .measurement-box {
     flex-grow: 1;
@@ -242,6 +264,9 @@
   .measurement-pm {
     padding: 1rem;
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   .measurement-pm > div {
     padding: 0.65rem 2rem;
@@ -257,7 +282,7 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     text-align: center;
-    padding: 0.75rem 0;
+    padding: 1.25rem 0;
   }
   .measurement-air > div {
     flex-grow: 1;
@@ -286,7 +311,8 @@
   .aqi-history .aqi-box {
     padding: 0 0 0.25rem 0;
     margin: 0.75em 1.5em 0 1.5em;
-    width: auto;
+    color: white;
+    border-radius: 5px;
   }
   .aqi-history .aqi-value {
     font-weight: 500;
