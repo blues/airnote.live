@@ -1,3 +1,6 @@
+*, ::after, ::before {
+  box-sizing: border-box;
+}
 html, body {
   position: relative;
   width: 100%;
@@ -20,7 +23,12 @@ body {
 }
 
 header {
-  display: flex;
+  background: #1b3a52;
+}
+header img {
+  width: 190px;
+  margin: 1.25rem 0.5rem 1.25rem 1rem;
+  vertical-align: middle;
 }
 
 main {
@@ -80,14 +88,6 @@ button, .btn {
 button:hover, .btn:hover {
   text-decoration: none;
   background: rgb(0, 105, 217);
-}
-
-header {
-  background: #1b3a52;
-}
-header img {
-  width: 190px;
-  padding: 1rem 0.75rem;
 }
 
 hr {
