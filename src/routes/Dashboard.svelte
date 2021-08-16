@@ -2,6 +2,7 @@
   import { format } from "date-fns";
   import { fade } from "svelte/transition";
 
+  import Recommendation from '../components/Recommendation.svelte';
   import {
     getAQIDisplay,
     getPM2_5Display,
@@ -18,23 +19,12 @@
   // Hardcoded for now
   let aqi = 50;
 
-  let getGreeting = () => {
-    let hour = new Date().getHours();
-    return hour >= 5 && hour < 12
-      ? "Good Morning"
-      : hour >= 12 && hour < 17
-      ? "Good Afternoon"
-      : "Good Evening";
-  };
-
   getReadings(deviceUID).then((data) => {
     lastAirReading = data.airReadings[0];
     lastAqReading = data.aqReadings[0];
     lastUpdated = data.lastUpdated;
   });
 </script>
-
-<h2>{getGreeting()}!</h2>
 
 <p class="banner">
   Use this to highlight articles or news about Airnote.
@@ -185,16 +175,7 @@
 
     <div class="box" in:fade>
       <h3>Health Recommendations</h3>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </p>
-      <a href="https://blues.io">Learn more</a>
+      <Recommendation />
     </div>
   {/if}
 </div>
