@@ -1,8 +1,6 @@
 <script>
   import { onMount } from 'svelte';
   import {
-    Alert,
-    Button,
     Col,
     Row
   } from 'sveltestrap';
@@ -189,20 +187,20 @@
 </script>
 
 {#if fetchError}
-  <Alert color="danger" isOpen={true}>
-    <h4 class="alert-heading text-capitalize">Unable to fetch device details.</h4>
+  <div class="alert">
+    <h4 class="alert-heading">Unable to fetch device details.</h4>
     Please make sure your Airnote is
     <a href="{eventsUrl}" target="_new">online and connected to Notehub.io</a>
     before visiting this page. For help getting started, visit
     <a href="https://start.airnote.live" target="_new">start.airnote.live</a>.
-  </Alert>
+  </div>
 {/if}
 
 {#if saveError}
-  <Alert color="danger" isOpen={true}>
-    <h4 class="alert-heading text-capitalize">Unable to safe configuration
+  <div>
+    <h4 class="alert-heading">Unable to safe configuration
       settings. Please try again later.
-  </Alert>
+    </div>
 {/if}
 
 
@@ -230,9 +228,7 @@
   </Col>
 </div>
 <div class="share">
-  <Col>
-      <Button color="primary" on:click={shareDevice}>Share my Device Dashboard</Button>
-  </Col>
+  <button on:click={shareDevice}>Share my Device Dashboard</button>
 </div>
 <hr />
 <p>
@@ -290,6 +286,7 @@
 
   .share {
     margin-top: 10px;
+    text-align: center;
   }
 
   :global(.toast) {

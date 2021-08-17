@@ -13,17 +13,10 @@
 
   export let deviceUID;
 
-  let lastAirReading;
-  let lastAqReading;
-  let lastUpdated;
-
-  // Hardcoded for now
-  let aqi = 55;
-
-  getReadings(deviceUID).then((data) => {
-    lastAirReading = data.airReadings[0];
-    lastAqReading = data.aqReadings[0];
-    lastUpdated = data.lastUpdated;
+  let lastReading;
+  getReadings(deviceUID).then(readings => {
+    lastReading = readings[0];
+    lastReading.timestamp = new Date(lastReading['@timestamp']);
   });
 </script>
 
@@ -35,16 +28,16 @@
 <h2 class="air-quality-heading">Air Quality</h2>
 
 <div class="dashboard">
-  {#if !lastUpdated}
+  {#if !lastReading}
     <div class="loading" />
   {/if}
 
-  {#if lastUpdated}
+  {#if lastReading}
     <p class="last-update" in:fade>
       Last Update:
       <span>
-        {format(lastUpdated, "MMMM dd yyyy")} at
-        {format(lastUpdated, "h:mm aaa")}
+        {format(lastReading['timestamp'], "MMMM dd yyyy")} at
+        {format(lastReading['timestamp'], "h:mm aaa")}
       </span>
     </p>
 
@@ -60,21 +53,12 @@
           segmentColors={['#00CC00', '#F8B52A', '#EB8A14', '#FF0000', '#A10649', '#7E0023']}
           maxValue={300}
           labelFontSize="12px"
-          value={aqi > 300 ? 300 : aqi}
+          value={lastReading.pms_aqi > 300 ? 300 : lastReading.pms_aqi}
         />
         <div class="speedometer-value">
-          {aqi}: {getAQIDisplay(aqi).text}
+          {lastReading.pms_aqi}: {getAQIDisplay(lastReading.pms_aqi).text}
         </div>
       </div>
-      <!--
-      <div class="aqi-box" style="background-color: {getAQIDisplay(aqi).color}">
-        <div>Air Quality Index</div>
-        <div class="aqi-value">{aqi}</div>
-        <div class="aqi-description">
-          {getAQIDisplay(aqi).text}
-        </div>
-      </div>
-      -->
 
       <div class="box measurement-box">
         <div class="measurement-pm">
@@ -83,7 +67,7 @@
             <span>
               <span
                 class="circle"
-                style="background-color: {getPM2_5Display(lastAqReading.pm02_5)
+                style="background-color: {getPM2_5Display(lastReading.pms_pm02_5)
                   .color}"
               />
             </span>
@@ -93,7 +77,7 @@
             <span>
               <span
                 class="circle"
-                style="background-color: {getPM10Display(lastAqReading.pm10_0)
+                style="background-color: {getPM10Display(lastReading.pms_pm10_0)
                   .color}"
               />
             </span>
@@ -103,15 +87,15 @@
         <div class="measurement-air">
           <div>
             Temperature
-            <strong>{lastAirReading.temp}°C</strong>
+            <strong>{lastReading.env_temp}°C</strong>
           </div>
           <div>
             Humidity
-            <strong>{lastAirReading.humid}%</strong>
+            <strong>{lastReading.env_humid}%</strong>
           </div>
           <div>
             Air Pressure
-            <strong>{lastAirReading.press}</strong>
+            <strong>{lastReading.env_press}</strong>
           </div>
         </div>
       </div>
@@ -320,23 +304,5 @@
   }
   .aqi-history .aqi-description {
     font-size: 0.8rem;
-  }
-
-  .loading {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border: 3px solid rgb(70, 124, 162);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s linear infinite;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-  }
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
   }
 </style>
