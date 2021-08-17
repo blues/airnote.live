@@ -103,15 +103,17 @@
         <div class="measurement-air">
           <div>
             Temperature
-            <strong>{lastReading.env_temp}°C</strong>
+            <strong>{Math.round(lastReading.env_temp)}°C</strong>
           </div>
           <div>
             Humidity
-            <strong>{lastReading.env_humid}%</strong>
+            <strong>{Math.round(lastReading.env_humid)}%</strong>
           </div>
           <div>
             Air Pressure
-            <strong>{lastReading.env_press}</strong>
+            <strong>
+              {Math.round(lastReading.env_press / 1000)} kPa
+            </strong>
           </div>
         </div>
       </div>
