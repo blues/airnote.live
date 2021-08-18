@@ -29,11 +29,16 @@
 
   let lastReading;
   let aqiHistory;
-  getReadings(deviceUID).then(data => {
-    lastReading = data.readings[0];
-    lastReading.timestamp = new Date(lastReading['@timestamp']);
-    aqiHistory = data.aqiHistory;
-  });
+  let fetchError = false;
+  getReadings(deviceUID)
+    .then(data => {
+      lastReading = data.readings[0];
+      lastReading.timestamp = new Date(lastReading['@timestamp']);
+      aqiHistory = data.aqiHistory;
+    })
+    .catch(() => {
+      fetchError = true;
+    });
 </script>
 
 <p class="banner">
@@ -44,8 +49,17 @@
 <h2 class="air-quality-heading">Air Quality</h2>
 
 <div class="dashboard">
-  {#if !lastReading}
+  {#if !lastReading && !fetchError}
     <div class="loading" />
+  {/if}
+
+  {#if fetchError }
+    <div class="alert">
+      <h4 class="alert-heading">Unable to fetch device details.</h4>
+      Please make sure your Airnote is online and connected before visiting
+      this page. For help getting started, visit
+      <a href="https://start.airnote.live" target="_new">start.airnote.live</a>.
+    </div>
   {/if}
 
   {#if lastReading}
