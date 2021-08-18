@@ -33,9 +33,13 @@ function getAqiHistory(readings) {
 }
 
 export function getReadings(deviceUID) {
-  return fetch(
-    AWS_API_BASE + '/getDeviceData?device_uid=' + deviceUID
-  )
+  var eightDaysAgo = new Date(new Date().setDate(new Date().getDate() - 8));
+
+  return fetch(`${AWS_API_BASE}/getDeviceData?` + new URLSearchParams({
+    device_uid: deviceUID,
+    from: eightDaysAgo.toISOString(),
+    to: new Date().toISOString()
+  }))
     .then(response => response.json())
     .then(data => {
       const readings = [];
@@ -46,8 +50,5 @@ export function getReadings(deviceUID) {
         readings: readings,
         aqiHistory: getAqiHistory(readings)
       }
-    })
-    .catch(error => {
-      console.log(error);
     });
 }
