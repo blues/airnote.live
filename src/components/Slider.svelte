@@ -57,7 +57,7 @@
   }
   input {
     border: none;
-    height: 1px;
+    height: 5px;
     outline: none;
     transition: background 450ms ease-in;
     -webkit-appearance: none;
@@ -78,25 +78,6 @@
     color: #1B3A52;
     top: 4px;
     right: 15%;
-  }
-
-  :global(input[type=range]::-webkit-slider-runnable-track) {
-    width: 100%;
-    height: 2px;
-    cursor: pointer;
-    background: #ced9e1;
-    border-radius: 25px;
-  }
-
-  :global(input[type=range]::-webkit-slider-thumb) {
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    background: #1B3A52;
-    box-shadow: 0 0 4px 0 rgba(0,0,0, 1);
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -8px;
   }
 
   .min-val, .max-val {

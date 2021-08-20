@@ -216,7 +216,7 @@
 <NotificationDisplay bind:this={notify} />
 
 <Settings
-  enableFields={enableFields}
+  enableFields={true}
   displayOptions={displayOptions}
   on:submit={handleSettingsSave}
 />
