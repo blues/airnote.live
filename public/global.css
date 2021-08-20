@@ -104,7 +104,7 @@ footer {
   text-align: center;
   display: flex;
   justify-content: space-evenly;
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
 }
 
 .alert {
@@ -141,4 +141,10 @@ footer {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Svelte speedometer plugin customization */
+#speedo-container {
+  display: flex;
+  justify-content: center;
 }

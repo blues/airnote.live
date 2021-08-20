@@ -93,6 +93,7 @@
       <div class="box speedometer-box">
         <h5>Air Quality Index</h5>
         <Speedometer
+          width={300}
           height={180}
           currentValueText=""
           needleHeightRatio={0.7}
@@ -223,7 +224,6 @@
     position: relative;
   }
   .speedometer-value {
-    position: relative;
     text-align: center;
     left: 0;
     bottom: 1.6rem;
@@ -236,6 +236,20 @@
     padding: 0;
     margin: 0;
     flex-direction: column;
+  }
+  @media (max-width: 700px) {
+    .all-measurements {
+      display: block;
+    }
+    .speedometer-box, .measurement-box {
+      margin: 1rem 0;
+    }
+  }
+  @media (max-width: 400px) {
+    .speedometer-box {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
   .measurement-pm {
     padding: 1rem;
