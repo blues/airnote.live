@@ -39,39 +39,38 @@
 </script>
 
 <div class="frequency-wrap">
-  <input type="range" name="frequency" id="sampleFrequency"
-    disabled={!enableFields ? 'disabled' : ''}
+  <input type="range"
+    name="frequency"
+    id="sampleFrequency"
+    disabled={enableFields ? null : 'disabled'}
     min="15" max="1440"
     bind:value={$sampleFrequencyFull}
     step="5" />
   <output class="frequencyPopup"></output>
 </div>
-<div class="min-val">15 min</div>
-<div class="max-val">1440 min</div>
+<span class="min-val">15 min</span>
+<span class="max-val">1440 min</span>
 
 <style>
-  :global(#sampleFrequency) {
+  .frequency-wrap {
+    position: relative;
+  }
+  input {
     border: none;
     height: 1px;
     outline: none;
     transition: background 450ms ease-in;
     -webkit-appearance: none;
+    margin-top: 2rem;
   }
 
-  :global(.frequencyPopup) {
-    background: none;
-    color: #1B3A52;
+  .frequencyPopup {
     font-weight: 600;
-    font-size: 16px;
-    line-height: 19px;
     padding: 4px 12px;
     position: absolute;
-    top: -200%;
-    left: 50%;
     transform: translateX(-50%);
   }
-
-  :global(.frequencyPopup::after) {
+  .frequencyPopup::after {
     content: " min";
     position: absolute;
     width: 2px;
@@ -79,10 +78,6 @@
     color: #1B3A52;
     top: 4px;
     right: 15%;
-  }
-  :global(input[type=range]) {
-    margin: 20px 0;
-    width: 100%;
   }
 
   :global(input[type=range]::-webkit-slider-runnable-track) {
@@ -104,20 +99,10 @@
     margin-top: -8px;
   }
 
-  :global(.frequency-wrap) {
-    width: 100%;
-    position: relative;
-    margin-top: 10px;
-  }
-
-  :global(.min-val, .max-val) {
-    font-size: 16px;
-    line-height: 19px;
+  .min-val, .max-val {
     color: #A0AFB9;
-    display: inline;
   }
-
-  :global(.max-val) {
+  .max-val {
     float: right;
   }
 </style>

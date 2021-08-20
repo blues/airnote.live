@@ -19,7 +19,7 @@
   <div>
     <label for="ownerName">Name</label>
     <input
-      disabled={!enableFields ? 'disabled' : ''}
+      disabled={enableFields ? null : 'disabled'}
       type="text"
       name="ownerName"
       bind:value={$contactName}
@@ -29,7 +29,7 @@
   <div>
     <label for="companyName">Affiliation</label>
     <input
-      disabled={!enableFields ? 'disabled' : ''}
+      disabled={enableFields ? null : 'disabled'}
       type="text"
       name="companyName"
       bind:value={$contactAffiliation}
@@ -39,7 +39,7 @@
   <div>
     <label for="ownerEmail">Contact Email</label>
     <input
-      disabled={!enableFields ? 'disabled' : ''}
+      disabled={enableFields ? null : 'disabled'}
       type="email"
       name="ownerEmail"
       bind:value={$contactEmail}

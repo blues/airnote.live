@@ -33,7 +33,8 @@
     <label for="displayValue">
       Airnote screen display value
     </label>
-    <select disabled={!enableFields ? 'disabled' : ''}
+    <select
+      disabled={enableFields ? null : 'disabled'}
       bind:value={$displayValue}
       name="display" id="displayValue">
       {#each displayOptions as option}
@@ -50,7 +51,7 @@
   <div>
     <label class="checkbox-label">
       <input
-        disabled={!enableFields ? 'disabled' : ''}
+        disabled={enableFields ? null : 'disabled'}
         bind:checked={$indoorDevice}
         type="checkbox" name="indoor" id="indoorDevice"
       />
