@@ -1,10 +1,13 @@
 <script>
+  import { NotificationDisplay } from '@beyonk/svelte-notifications';
   import { format, parse } from 'date-fns';
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
   import Speedometer from 'svelte-speedometer';
 
   import { DATE_FORMAT_KEY } from '../constants';
+  import ShareIcon from '../icons/ShareIcon.svelte';
+  import PrintIcon from '../icons/PrintIcon.svelte';
   import Recommendation from '../components/Recommendation.svelte';
   import {
     getAQIDisplay,
@@ -12,6 +15,7 @@
     getPM10Display,
   } from '../services/air';
   import { getReadings } from '../services/device';
+  import { shareDashboard } from '../util/share';
 
   export let deviceUID;
 
@@ -59,6 +63,7 @@
   });
 </script>
 
+<NotificationDisplay />
 <p class="banner">
   Use this to highlight articles or news about Airnote.
   <a href="https://blues.io">And use this for a link</a>.
@@ -86,6 +91,14 @@
       <span>
         {format(lastReading['timestamp'], "MMMM dd yyyy")} at
         {format(lastReading['timestamp'], "h:mm aaa")}
+      </span>
+      <span class="actions">
+        <button class="svg-button" on:click={() => window.print()}>
+          <PrintIcon />
+        </button>
+        <button class="svg-button" on:click={() => shareDashboard(deviceUID)}>
+          <ShareIcon />
+        </button>
       </span>
     </p>
 
@@ -187,10 +200,12 @@
     padding: 0.75rem 0.75rem;
     border-radius: 0.25rem;
   }
+
   .air-quality-heading {
     margin-bottom: 0;
   }
   .last-update {
+    display: flex;
     font-size: 0.8rem;
     margin-top: 0.25rem;
     color: rgb(69, 129, 172);
@@ -199,7 +214,13 @@
   .last-update span {
     color: rgb(166, 188, 207);
     font-weight: normal;
+    padding-left: 0.25rem;
   }
+  .actions {
+    flex-grow: 1;
+    text-align: right;
+  }
+
   .all-measurements {
     display: flex;
   }
