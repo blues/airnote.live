@@ -1,9 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import {
-    Col,
-    Row
-  } from 'sveltestrap';
   import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
   import Settings from '../components/Settings.svelte';
   import Owner from '../components/Owner.svelte';
@@ -178,7 +174,6 @@
     </div>
 {/if}
 
-
 <h1>
   Welcome to Airnote!
 </h1>
@@ -189,23 +184,27 @@
     <a href="https://safecast.org" target="_new">Safecast</a> map, or to share
     a link to your device dashboard.
 </p>
+
 <hr />
+
 <div>
   <h4><a href="https://safecast.org" target="_new">Safecast</a></h4>
 </div>
 <div class="links">
-  <Col>
+  <span>
     <a href='http://tt.safecast.org/dashboard/note:{deviceUID}'>Dashboard</a>
-  </Col>
+  </span>
   <div class='separator'>|</div>
-  <Col>
+  <span>
     <a href='http://tt.safecast.org/map/note:{deviceUID}'>Global Map</a>
-  </Col>
+  </span>
 </div>
 <div class="share">
   <button on:click={() => shareDashboard(deviceUID)}>Share my Device Dashboard</button>
 </div>
+
 <hr />
+
 <p>
   Use the fields below to personalize your device.
   <i>
@@ -214,8 +213,8 @@
   </i>
 </p>
 
-
 <NotificationDisplay bind:this={notify} />
+
 <Settings
   enableFields={enableFields}
   displayOptions={displayOptions}
@@ -226,25 +225,25 @@
   enableFields={enableFields}
   on:submit={handleSettingsSave}
 />
+
 <hr />
-<Row>
-  <Col>
-    <a href={eventsUrl} target="_new">
-      View live Airnote events on Notehub.io
-    </a>
-  </Col>
-</Row>
+
+<div>
+  <a href={eventsUrl} target="_new">
+    View live Airnote events on Notehub.io
+  </a>
+</div>
+
 <hr />
-<Row>
-  <Col>
-    <i>
-      By using your Airnote device, or completing the optional fields
-      on this page, you consent to share your device data and the optional
-      contact information with Blues Inc. for the purposes of publishing
-      public maps and device dashboards.
-    </i>
-  </Col>
-</Row>
+
+<p>
+  <i>
+    By using your Airnote device, or completing the optional fields
+    on this page, you consent to share your device data and the optional
+    contact information with Blues Inc. for the purposes of publishing
+    public maps and device dashboards.
+  </i>
+</p>
 
 <style>
   .links {
@@ -253,18 +252,12 @@
     text-align: center;
     line-height: 38px;
   }
-
   .separator {
     font-size: 1.5rem;
     color: #CED9E1;
   }
-
   .share {
     margin-top: 10px;
     text-align: center;
-  }
-
-  :global(.toast) {
-    opacity: unset;
   }
 </style>

@@ -1,6 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import { Input } from 'sveltestrap';
   import { sampleFrequencyFull } from '../settingsStore';
 
   export let enableFields;
@@ -40,7 +39,7 @@
 </script>
 
 <div class="frequency-wrap">
-  <Input type="range" name="frequency" id="sampleFrequency"
+  <input type="range" name="frequency" id="sampleFrequency"
     disabled={!enableFields ? 'disabled' : ''}
     min="15" max="1440"
     bind:value={$sampleFrequencyFull}

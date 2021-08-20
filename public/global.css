@@ -74,8 +74,12 @@ input, select {
   border-radius: 0.25rem;
   width: 100%;
 }
-input:disabled {
-  color: #ccc;
+input[type=checkbox] {
+  width: auto;
+  margin-right: 0.25rem;
+}
+.checkbox-label {
+  margin-top: 1rem;
 }
 
 button, .btn {

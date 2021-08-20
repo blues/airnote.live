@@ -1,19 +1,10 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import {
-    Button,
-    Col,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Row
-  } from 'sveltestrap';
-  import {
-		contactName,
-		contactEmail,
-		contactAffiliation
-	} from '../settingsStore';
+    contactName,
+    contactEmail,
+    contactAffiliation
+  } from '../settingsStore';
 
   const dispatch = createEventDispatcher();
 
@@ -22,47 +13,43 @@
   const save = () => dispatch('submit');
 </script>
 
-<Row>
-  <Col><h4>Device Owner Info</h4></Col>
-</Row>
+<h4>Device Owner Info</h4>
 
-<Form>
-  <FormGroup>
-    <Label for="ownerName">Name</Label>
-    <Input
+<form>
+  <div>
+    <label for="ownerName">Name</label>
+    <input
       disabled={!enableFields ? 'disabled' : ''}
       type="text"
       name="ownerName"
       bind:value={$contactName}
       id="ownerName"
       placeholder="Ada Lovelace" />
-  </FormGroup>
-  <FormGroup>
-    <Label for="companyName">Affiliation</Label>
-    <Input
+  </div>
+  <div>
+    <label for="companyName">Affiliation</label>
+    <input
       disabled={!enableFields ? 'disabled' : ''}
       type="text"
       name="companyName"
       bind:value={$contactAffiliation}
       id="companyName"
       placeholder="Blues Inc." />
-  </FormGroup>
-  <FormGroup>
-    <Label for="ownerEmail">Contact Email</Label>
-    <Input
+  </div>
+  <div>
+    <label for="ownerEmail">Contact Email</label>
+    <input
       disabled={!enableFields ? 'disabled' : ''}
       type="email"
       name="ownerEmail"
       bind:value={$contactEmail}
       id="ownerEmail"
       placeholder="ada@blues.com" />
-  </FormGroup>
-</Form>
+  </div>
+</form>
 
 {#if enableFields}
-<Row>
-  <Col>
-    <Button color="primary" on:click={save}>Update Device Owner</Button>
-  </Col>
-</Row>
+  <div>
+    <button on:click={save}>Update Device Owner</button>
+  </div>
 {/if}

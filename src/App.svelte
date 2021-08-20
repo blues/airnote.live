@@ -25,7 +25,7 @@
     window.location.pathname.indexOf("dashboard") == -1
   ) {
     // Temporary. Need to figure out the best URL structure at some point.
-    navigate(`dashboard/${deviceUID}`);
+    // navigate(`dashboard/${deviceUID}`);
     // navigate(`http://tt.safecast.org/dashboard/note:${deviceUID}`, { replace: true });
   }
 </script>
