@@ -152,7 +152,7 @@
     </div>
 
     <div class="box" in:fade>
-      <h3>Air Quality Index (Last 7 Days)</h3>
+      <h3 class="aqi-heading">Air Quality Index (Last 7 Days)</h3>
       <div class="aqi-history">
         {#each getLastSevenDays() as day}
           <div>
@@ -275,14 +275,23 @@
     display: inline-block;
   }
 
+  .aqi-heading {
+    margin-bottom: 0;
+  }
   .aqi-history {
-    display: flex;
+    display: grid;
+    grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%;
     text-align: center;
     font-size: 0.8rem;
   }
+  @media (max-width: 775px) {
+    .aqi-history {
+      grid-template-rows: 50% 50%;
+      grid-template-columns: 25% 25% 25% 25%;
+    }
+  }
   .aqi-history > div {
-    flex-grow: 1;
-    flex-basis: 0;
+    padding-top: 1rem;
   }
   .aqi-history .aqi-box {
     padding: 0 0 0.25rem 0;
