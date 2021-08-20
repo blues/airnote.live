@@ -1,5 +1,6 @@
 <script>
   import { format, parse } from 'date-fns';
+  import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
   import Speedometer from 'svelte-speedometer';
 
@@ -15,6 +16,8 @@
   export let deviceUID;
 
   function getLastSevenDays() {
+    // Get the last eight days, and then splice off today as we don’t want to
+    // show the current day.
     const lastEightDays = [...Array(8)].map((_, i) => {
       const d = new Date()
       d.setDate(d.getDate() - i)
@@ -22,7 +25,9 @@
     });
     return lastEightDays.splice(1);
   }
+
   function getDayDisplay(day) {
+    // Format the date for HTML display needed in AQI history.
     const date = parse(day, DATE_FORMAT_KEY, new Date());
     return format(date, 'EEEE') + '<br>' + format(date, 'MMMM dd');
   }
@@ -30,15 +35,28 @@
   let lastReading;
   let aqiHistory;
   let fetchError = false;
-  getReadings(deviceUID)
-    .then(data => {
-      lastReading = data.readings[0];
-      lastReading.timestamp = new Date(lastReading['@timestamp']);
-      aqiHistory = data.aqiHistory;
-    })
-    .catch(() => {
-      fetchError = true;
-    });
+
+  onMount(() => {
+    getReadings(deviceUID)
+      .then(data => {
+        lastReading = data.readings[0];
+        lastReading.timestamp = new Date(lastReading['@timestamp']);
+        aqiHistory = data.aqiHistory;
+
+        // This is a hack, but the speedometer plugin doesn’t give any
+        // way to customize these labels.
+        setTimeout(() => {
+          var lastLabel = document.querySelector('text:last-child');
+          if (lastLabel) {
+            lastLabel.innerHTML = '250+';
+          }
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        fetchError = true;
+      });
+  });
 </script>
 
 <p class="banner">
@@ -79,11 +97,11 @@
           currentValueText=""
           needleHeightRatio={0.7}
           ringWidth={30}
-          customSegmentStops={[0, 50, 100, 150, 200, 300]}
+          customSegmentStops={[0, 50, 100, 150, 200, 250]}
           segmentColors={['#00CC00', '#F8B52A', '#EB8A14', '#FF0000', '#A10649', '#7E0023']}
-          maxValue={300}
+          maxValue={250}
           labelFontSize="12px"
-          value={lastReading.pms_aqi > 300 ? 300 : lastReading.pms_aqi}
+          value={lastReading.pms_aqi > 250 ? 250 : lastReading.pms_aqi}
         />
         <div class="speedometer-value">
           {lastReading.pms_aqi}: {getAQIDisplay(lastReading.pms_aqi).text}
@@ -138,7 +156,6 @@
       <div class="aqi-history">
         {#each getLastSevenDays() as day}
           <div>
-            <!-- figure out how to format this better -->
             <span>{@html getDayDisplay(day)}</span>
             <div
               class="aqi-box"
