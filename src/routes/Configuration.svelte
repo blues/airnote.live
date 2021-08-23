@@ -210,7 +210,7 @@
 <p>
   Use the fields below to personalize your device.
   <i>
-    For help setting-up your Airnote, visit
+    For help setting up your Airnote, visit
     <a href='https://start.airnote.live'>start.airnote.live</a>
   </i>
 </p>

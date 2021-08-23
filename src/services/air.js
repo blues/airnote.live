@@ -4,10 +4,13 @@ const UNHEALTHY_SENSITIVE = { text: 'Unhealthy for Sensitive Groups', color: '#E
 const UNHEALTHY = { text: 'Unhealthy', color: '#FF0000' };
 const VERY_UNHEALTHY = { text: 'Very Unhealthy', color: '#A10649' };
 const HAZARDOUS = { text: 'Hazardous', color: '#7E0023' };
+const NO_DATA = { text: 'No Data', color: '#757575' };
 
 // Based on https://www.airnow.gov/aqi/aqi-basics/
 export function getAQIDisplay(value) {
   switch(true) {
+    case (!value):
+      return NO_DATA;
     case (value > 300):
       return HAZARDOUS;
     case (value > 200):

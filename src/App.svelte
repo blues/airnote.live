@@ -38,11 +38,15 @@
   </header>
   <main>
     <div class="container">
-      <Route path="/:deviceUID" component={Configuration} {pin} {productUID} />
-      <Route path="/dashboard/:deviceUID" component={Dashboard} />
-      <Route path="/">
-        <Home />
-      </Route>
+      <Route
+        path="/:deviceUID"
+        component={Configuration} {pin} {productUID} />
+      <Route
+        path="/dashboard/:deviceUID"
+        component={Dashboard} />
+      <Route
+        path="/"
+        component={Home} />
 
       <hr />
 

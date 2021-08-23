@@ -38,27 +38,36 @@
 
   let lastReading;
   let aqiHistory;
+
+  let noDataError = false;
   let fetchError = false;
+  let loading = true;
 
   onMount(() => {
     getReadings(deviceUID)
       .then(data => {
         lastReading = data.readings[0];
-        lastReading.timestamp = new Date(lastReading['@timestamp']);
-        aqiHistory = data.aqiHistory;
+        if (!lastReading) {
+          noDataError = true;
+        } else {
+          lastReading.timestamp = new Date(lastReading['@timestamp']);
+          aqiHistory = data.aqiHistory;
 
-        // This is a hack, but the speedometer plugin doesn’t give any
-        // way to customize these labels.
-        setTimeout(() => {
-          var lastLabel = document.querySelector('text:last-child');
-          if (lastLabel) {
-            lastLabel.innerHTML = '250+';
-          }
-        });
+          // This is a hack, but the speedometer plugin doesn’t give any
+          // way to customize these labels.
+          setTimeout(() => {
+            var lastLabel = document.querySelector('text:last-child');
+            if (lastLabel) {
+              lastLabel.innerHTML = '250+';
+            }
+          });
+        }
+        loading = false;
       })
       .catch(err => {
         console.log(err);
         fetchError = true;
+        loading = false;
       });
   });
 </script>
@@ -72,11 +81,21 @@
 <h2 class="air-quality-heading">Air Quality</h2>
 
 <div class="dashboard">
-  {#if !lastReading && !fetchError}
+  {#if loading}
     <div class="loading" />
   {/if}
 
-  {#if fetchError }
+  {#if noDataError}
+    <div class="alert">
+      <h4 class="alert-heading">No data</h4>
+      There is no data associated with this Airnote. If this is a new Airnote,
+      it may take several hours for your device to report its first readings.
+      For help setting up your Airnote, visit
+      <a href='https://start.airnote.live'>start.airnote.live</a>.
+    </div>
+  {/if}
+
+  {#if fetchError}
     <div class="alert">
       <h4 class="alert-heading">Unable to fetch device details.</h4>
       Please make sure your Airnote is online and connected before visiting
@@ -175,7 +194,7 @@
               class="aqi-box"
               style="background-color: {getAQIDisplay(aqiHistory[day]).color}"
             >
-              <div class="aqi-value">{aqiHistory[day]}</div>
+              <div class="aqi-value">{aqiHistory[day] || '—'}</div>
               <div class="aqi-description">{getAQIDisplay(aqiHistory[day]).text}</div>
             </div>
           </div>
