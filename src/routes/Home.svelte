@@ -17,6 +17,8 @@
   <a href="https://start.airnote.live" class="btn">Set up my Airnote</a>
 </section>
 
+<hr />
+
 <section>
   <p>
     To join the network, visit the
@@ -29,8 +31,12 @@
 </section>
 
 <style>
+  h1 {
+    text-align: center;
+  }
   section {
     margin: 20px 0;
+    text-align: center;
   }
   .btn {
     display: inline-block;

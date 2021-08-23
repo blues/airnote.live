@@ -40,6 +40,11 @@ main {
   max-width: 960px;
   margin: 0 auto;
 }
+@media (max-width: 992px) {
+  .container {
+    max-width: 720px;
+  }
+}
 
 h4 {
   font-weight: bold;
@@ -83,7 +88,6 @@ input[type=checkbox] {
 }
 input[type=range]::-webkit-slider-runnable-track {
   height: 5px;
-  cursor: pointer;
   border-radius: 25px;
   background: #ced9e1;
 }
@@ -100,6 +104,10 @@ input[type=range]::-webkit-slider-thumb {
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -8px;
+}
+input[type=range]:disabled::-webkit-slider-thumb {
+  cursor: default;
+  background: gray;
 }
 
 button, .btn {

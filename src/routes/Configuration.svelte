@@ -177,12 +177,14 @@
 <h1>
   Welcome to Airnote!
 </h1>
-<p>You're now part of a community of citizens helping to
-  monitor the air we breathe.</p>
-  <p>Click the links to
-    view charts for your device, the global
-    <a href="https://safecast.org" target="_new">Safecast</a> map, or to share
-    a link to your device dashboard.
+<p>
+  You're now part of a community of citizens helping to monitor the 
+  air we breathe.
+</p>
+<p>
+  Click the links to view charts for your device, the global
+  <a href="https://safecast.org" target="_new">Safecast</a> map,
+  or to share a link to your device dashboard.
 </p>
 
 <hr />
@@ -246,6 +248,9 @@
 </p>
 
 <style>
+  h1, h1 + p, h1 + p + p {
+    text-align: center;
+  }
   .links {
     display: flex;
     justify-content: space-evenly;
