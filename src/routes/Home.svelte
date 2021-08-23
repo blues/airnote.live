@@ -1,8 +1,8 @@
-<h1>
-  Welcome to Airnote!
-</h1>
-
 <section>
+  <h1>
+    Welcome to Airnote!
+  </h1>
+
   <p>A global partnership between
     <a href="https://safecast.org" target="_new">Safecast</a> &amp;
     <a href="https://blues.io" target="_net">Blues Wireless</a>.
@@ -35,8 +35,13 @@
     text-align: center;
   }
   section {
-    margin: 20px 0;
+    margin: 20px auto 0 auto;
     text-align: center;
+  }
+  @media (max-width: 992px) {
+    section {
+      max-width: 720px;
+    }
   }
   .btn {
     display: inline-block;

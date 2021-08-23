@@ -174,82 +174,106 @@
     </div>
 {/if}
 
-<h1>
-  Welcome to Airnote!
-</h1>
-<p>
-  You're now part of a community of citizens helping to monitor the 
-  air we breathe.
-</p>
-<p>
-  Click the links to view charts for your device, the global
-  <a href="https://safecast.org" target="_new">Safecast</a> map,
-  or to share a link to your device dashboard.
-</p>
+<section>
+  <h1>
+    Welcome to Airnote!
+  </h1>
+  <p>
+    You're now part of a community of citizens helping to monitor the 
+    air we breathe.
+  </p>
+  <p>
+    Click the links to view charts for your device, the global
+    <a href="https://safecast.org" target="_new">Safecast</a> map,
+    or to share a link to your device dashboard.
+  </p>
+</section>
 
 <hr />
 
-<div>
-  <h4><a href="https://safecast.org" target="_new">Safecast</a></h4>
-</div>
-<div class="links">
-  <span>
-    <a href='http://tt.safecast.org/dashboard/note:{deviceUID}'>Dashboard</a>
-  </span>
-  <div class='separator'>|</div>
-  <span>
-    <a href='http://tt.safecast.org/map/note:{deviceUID}'>Global Map</a>
-  </span>
-</div>
-<div class="share">
-  <button on:click={() => shareDashboard(deviceUID)}>Share my Device Dashboard</button>
-</div>
+<section>
+  <div>
+    <h4><a href="https://safecast.org" target="_new">Safecast</a></h4>
+  </div>
+  <div class="links">
+    <span>
+      <a href='http://tt.safecast.org/dashboard/note:{deviceUID}'>Dashboard</a>
+    </span>
+    <div class='separator'>|</div>
+    <span>
+      <a href='http://tt.safecast.org/map/note:{deviceUID}'>Global Map</a>
+    </span>
+  </div>
+  <div class="share">
+    <button on:click={() => shareDashboard(deviceUID)}>Share my Device Dashboard</button>
+  </div>
+</section>
 
 <hr />
 
-<p>
-  Use the fields below to personalize your device.
-  <i>
-    For help setting up your Airnote, visit
-    <a href='https://start.airnote.live'>start.airnote.live</a>
-  </i>
-</p>
+<section>
+  <p>
+    Use the fields below to personalize your device.
+    <i>
+      For help setting up your Airnote, visit
+      <a href='https://start.airnote.live'>start.airnote.live</a>
+    </i>
+  </p>
+</section>
 
 <NotificationDisplay bind:this={notify} />
 
-<Settings
-  enableFields={enableFields}
-  displayOptions={displayOptions}
-  on:submit={handleSettingsSave}
-/>
-<hr />
-<Owner
-  enableFields={enableFields}
-  on:submit={handleSettingsSave}
-/>
+<section>
+  <Settings
+    enableFields={enableFields}
+    displayOptions={displayOptions}
+    on:submit={handleSettingsSave}
+  />
+</section>
 
 <hr />
 
-<div>
-  <a href={eventsUrl} target="_new">
-    View live Airnote events on Notehub.io
-  </a>
-</div>
+<section>
+  <Owner
+    enableFields={enableFields}
+    on:submit={handleSettingsSave}
+  />
+</section>
 
 <hr />
 
-<p>
-  <i>
-    By using your Airnote device, or completing the optional fields
-    on this page, you consent to share your device data and the optional
-    contact information with Blues Inc. for the purposes of publishing
-    public maps and device dashboards.
-  </i>
-</p>
+<section>
+  <div>
+    <a href={eventsUrl} target="_new">
+      View live Airnote events on Notehub.io
+    </a>
+  </div>
+</section>
+
+<hr />
+
+<section>
+  <p>
+    <i>
+      By using your Airnote device, or completing the optional fields
+      on this page, you consent to share your device data and the optional
+      contact information with Blues Inc. for the purposes of publishing
+      public maps and device dashboards.
+    </i>
+  </p>
+</section>
 
 <style>
   h1, h1 + p, h1 + p + p {
     text-align: center;
+  }
+  section {
+    margin: 0 auto;
+  }
+  @media (max-width: 992px) {
+    section {
+      max-width: 720px;
+    }
   }
   .links {
     display: flex;
