@@ -63,7 +63,7 @@
       </li>
       <li>
         <a href="https://airnote.live/{deviceUID}">
-          Advanced Dashboard
+          Raw Data
           <ExternalLink />
         </a>
       </li>

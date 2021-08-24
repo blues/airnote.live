@@ -57,5 +57,5 @@ export function saveLastViewedDevice(data) {
   localStorage.setItem('device', JSON.stringify(data));
 }
 export function readLastViewedDevice() {
-  return JSON.parse(localStorage.getItem('device'));
+  return JSON.parse(localStorage.getItem('device')) || {};
 }

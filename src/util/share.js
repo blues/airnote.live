@@ -21,6 +21,6 @@ export function shareDashboard(deviceUID) {
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    notifier.success('Dashboard URL Copied to clipboard!');
+    notifier.success('Dashboard URL copied to clipboard!');
   }
 }
