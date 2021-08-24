@@ -1,48 +1,18 @@
 <script>
-  import { Router, Route } from "svelte-routing";
-  import queryString from "query-string";
+  import { Router, Route } from 'svelte-routing';
 
-  import Configuration from "./routes/Configuration.svelte";
-  import Dashboard from "./routes/Dashboard.svelte";
-  import Home from "./routes/Home.svelte";
-  import { airnoteProductUID } from "./constants";
-  import { readLastViewedDevice, saveLastViewedDevice } from './services/device';
   import ExternalLink from './icons/ExternalLink.svelte';
+  import Configuration from './routes/Configuration.svelte';
+  import Dashboard from './routes/Dashboard.svelte';
+  import Home from './routes/Home.svelte';
+  import { getCurrentDeviceFromUrl } from './services/device';
+
+  const currentDevice = getCurrentDeviceFromUrl(window.location);
 
   export let url = '';
-  export let pin;
-  export let productUID;
-  export let deviceUID;
-
-  const lastViewedDevice = readLastViewedDevice();
-
-  if (typeof window != 'undefined') {
-    const query = queryString.parse(window.location.search);
-    pin = query['pin'] || '';
-    productUID = query['product'] || airnoteProductUID;
-    deviceUID = window.location.pathname.match(/dev:\d*/)?.[0];
-
-    // If there is no device in the query string default to the
-    // last viewed device.
-    if (lastViewedDevice.deviceUID && !deviceUID) {
-      deviceUID = lastViewedDevice.deviceUID;
-    }
-
-    // If still working with the last viewed device, and we don’t have
-    // a pin or productUID in the URL, grab those from local storage.
-    if (deviceUID === lastViewedDevice.deviceUID) {
-      if (!pin) pin = lastViewedDevice.pin;
-      if (!productUID) productUID = lastViewedDevice.productUID
-    }
-
-    if (deviceUID) {
-      saveLastViewedDevice({
-        pin: pin,
-        productUID: productUID,
-        deviceUID: deviceUID,
-      });
-    }
-  }
+  export let pin = currentDevice.pin;
+  export let productUID = currentDevice.productUID;
+  export let deviceUID = currentDevice.deviceUID;
 </script>
 
 <Router {url}>

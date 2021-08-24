@@ -1,5 +1,6 @@
-import { AWS_API_BASE, DATE_FORMAT_KEY } from '../constants';
+import { AWS_API_BASE, DATE_FORMAT_KEY, airnoteProductUID } from '../constants';
 import { format } from 'date-fns';
+import queryString from 'query-string';
 
 function getAqiHistory(readings) {
   // Group the readings into the calendar day they occurred on
@@ -53,9 +54,42 @@ export function getReadings(deviceUID) {
     });
 }
 
-export function saveLastViewedDevice(data) {
+function saveLastViewedDevice(data) {
   localStorage.setItem('device', JSON.stringify(data));
 }
-export function readLastViewedDevice() {
+function readLastViewedDevice() {
   return JSON.parse(localStorage.getItem('device')) || {};
+}
+
+export function getCurrentDeviceFromUrl(location) {
+  const lastViewedDevice = readLastViewedDevice();
+  const currentDevice = {};
+
+  const query = queryString.parse(location.search);
+  let pin = query['pin'] || '';
+  let productUID = query['product'] || airnoteProductUID;
+  let deviceUID = location.pathname.match(/dev:\d*/)?.[0] || '';
+
+  // If there is no device in the query string default to the
+  // last viewed device.
+  if (lastViewedDevice.deviceUID && !deviceUID) {
+    deviceUID = lastViewedDevice.deviceUID;
+  }
+
+  // If still working with the last viewed device, and we don’t have
+  // a pin or productUID in the URL, grab those from local storage.
+  if (deviceUID === lastViewedDevice.deviceUID) {
+    pin = lastViewedDevice.pin;
+    productUID = lastViewedDevice.productUID;
+  }
+
+  currentDevice.pin = pin;
+  currentDevice.deviceUID = deviceUID;
+  currentDevice.productUID = productUID;
+
+  if (deviceUID) {
+    saveLastViewedDevice(currentDevice);
+  }
+
+  return currentDevice;
 }
