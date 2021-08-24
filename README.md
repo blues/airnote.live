@@ -17,6 +17,15 @@ The entry-point is [./src/App.svelte](./src/App.svelte).
 
 airnote.live uses the [Svelte](https://svelte.dev/) web framework.
 
+## Testing
+
+This repo has a unit testing setup based on [Jest](https://jestjs.io/) and 
+[Testing Library](https://testing-library.com/docs/svelte-testing-library/intro/). You can run the test suite with the following command.
+
+``` sh
+npm run test
+```
+
 ## Production Deployment
 
 Fork this repo and click the button below to deploy.
