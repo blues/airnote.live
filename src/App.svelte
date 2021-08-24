@@ -50,30 +50,32 @@
     <a href="https://blues.io/">
       <img alt="Blues Wireless" src="/images/logo-white.svg" />
     </a>
-    <ul>
-      <li>
-        <a href="/{deviceUID}?product={productUID}&pin={pin}">
-          Settings
-        </a>
-      </li>
-      <li>
-        <a href="/{deviceUID}/dashboard">
-          Dashboard
-        </a>
-      </li>
-      <li>
-        <a href="https://airnote.live/{deviceUID}">
-          Raw Data
-          <ExternalLink />
-        </a>
-      </li>
-      <li>
-        <a href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes">
-          Global Map
-          <ExternalLink />
-        </a>
-      </li>
-    </ul>
+    {#if deviceUID}
+      <ul>
+        <li>
+          <a href="/{deviceUID}?product={productUID}&pin={pin}">
+            Settings
+          </a>
+        </li>
+        <li>
+          <a href="/{deviceUID}/dashboard">
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="https://airnote.live/{deviceUID}">
+            Raw Data
+            <ExternalLink />
+          </a>
+        </li>
+        <li>
+          <a href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes">
+            Global Map
+            <ExternalLink />
+          </a>
+        </li>
+      </ul>
+    {/if}
   </header>
   <main>
     <div class="container">
