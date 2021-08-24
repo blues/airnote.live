@@ -137,7 +137,6 @@
         const response = await fetch(envVarsReadWriteUrl, {
           headers: envVarsReadWriteHeader
         });
-        console.log(response);
         if (response.status !== 200) {
           fetchError = true;
           enableFields = false;

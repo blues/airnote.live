@@ -1,32 +1,47 @@
 <script>
-  import { Router, Route, navigate } from "svelte-routing";
+  import { Router, Route } from "svelte-routing";
   import queryString from "query-string";
 
   import Configuration from "./routes/Configuration.svelte";
   import Dashboard from "./routes/Dashboard.svelte";
   import Home from "./routes/Home.svelte";
   import { airnoteProductUID } from "./constants";
+  import { readLastViewedDevice, saveLastViewedDevice } from './services/device';
+  import ExternalLink from './icons/ExternalLink.svelte';
 
-  export let url = "";
+  export let url = '';
   export let pin;
   export let productUID;
   export let deviceUID;
 
-  if (typeof window != "undefined") {
-    const query = queryString.parse(window.location.search);
-    pin = query["pin"] ? query["pin"] : "";
-    productUID = query["product"] ? query["product"] : airnoteProductUID;
-    deviceUID = window.location.pathname.replace("/", "");
-  }
+  const lastViewedDevice = readLastViewedDevice();
 
-  if (
-    pin === "" &&
-    deviceUID !== "" &&
-    window.location.pathname.indexOf("dashboard") == -1
-  ) {
-    // Temporary. Need to figure out the best URL structure at some point.
-    // navigate(`dashboard/${deviceUID}`);
-    // navigate(`http://tt.safecast.org/dashboard/note:${deviceUID}`, { replace: true });
+  if (typeof window != 'undefined') {
+    const query = queryString.parse(window.location.search);
+    pin = query['pin'] || '';
+    productUID = query['product'] || airnoteProductUID;
+    deviceUID = window.location.pathname.match(/dev:\d*/)?.[0];
+
+    // If there is no device in the query string default to the
+    // last viewed device.
+    if (lastViewedDevice.deviceUID && !deviceUID) {
+      deviceUID = lastViewedDevice.deviceUID;
+    }
+
+    // If still working with the last viewed device, and we don’t have
+    // a pin or productUID in the URL, grab those from local storage.
+    if (deviceUID === lastViewedDevice.deviceUID) {
+      if (!pin) pin = lastViewedDevice.pin;
+      if (!productUID) productUID = lastViewedDevice.productUID
+    }
+
+    if (deviceUID) {
+      saveLastViewedDevice({
+        pin: pin,
+        productUID: productUID,
+        deviceUID: deviceUID,
+      });
+    }
   }
 </script>
 
@@ -35,6 +50,30 @@
     <a href="https://blues.io/">
       <img alt="Blues Wireless" src="/images/logo-white.svg" />
     </a>
+    <ul>
+      <li>
+        <a href="/{deviceUID}?product={productUID}&pin={pin}">
+          Settings
+        </a>
+      </li>
+      <li>
+        <a href="/{deviceUID}/dashboard">
+          Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="https://airnote.live/{deviceUID}">
+          Advanced Dashboard
+          <ExternalLink />
+        </a>
+      </li>
+      <li>
+        <a href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes">
+          Global Map
+          <ExternalLink />
+        </a>
+      </li>
+    </ul>
   </header>
   <main>
     <div class="container">
@@ -42,7 +81,7 @@
         path="/:deviceUID"
         component={Configuration} {pin} {productUID} />
       <Route
-        path="/dashboard/:deviceUID"
+        path="/:deviceUID/dashboard"
         component={Dashboard} />
       <Route
         path="/"

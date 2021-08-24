@@ -24,12 +24,35 @@ body {
 
 header {
   background: #1b3a52;
+  display: flex;
 }
 header img {
   width: 190px;
   margin: 1.25rem 0.5rem 1.25rem 1rem;
   vertical-align: middle;
 }
+header ul {
+  padding: 0;
+  display: flex;
+  list-style: none;
+  color: white;
+  flex-grow: 1;
+  align-self: center;
+  justify-content: flex-end;
+  margin-right: 1rem;
+}
+header li {
+  padding-left: 1rem;
+}
+header ul a {
+  color: white;
+}
+header svg {
+  height: 20px;
+  width: 20px;
+  vertical-align: text-bottom;
+}
+
 
 main {
   padding: 0 1rem;
