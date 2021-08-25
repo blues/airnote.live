@@ -1,5 +1,6 @@
 <script>
   import { format, parse } from 'date-fns';
+import { onMount } from 'svelte';
 
   import { DATE_FORMAT_KEY } from '../../constants';
   import { getDisplay } from '../../services/air';
@@ -16,7 +17,6 @@
   }
 
   function getDayDisplay(day) {
-    // Format the date for HTML display needed in AQI history.
     const date = parse(day, DATE_FORMAT_KEY, new Date());
     return format(date, 'EEEE') + '<br>' + format(date, 'MMMM dd');
   }

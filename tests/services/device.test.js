@@ -1,5 +1,3 @@
-import { render, fireEvent } from '@testing-library/svelte';
-
 import LocalStorageMock from '../LocalStorageMock';
 import { airnoteProductUID } from '../../src/constants';
 import { getCurrentDeviceFromUrl } from '../../src/services/device';
