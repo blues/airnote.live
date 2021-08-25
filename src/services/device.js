@@ -2,7 +2,7 @@ import { AWS_API_BASE, DATE_FORMAT_KEY, airnoteProductUID } from '../constants';
 import { format } from 'date-fns';
 import queryString from 'query-string';
 
-function getAqiHistory(readings) {
+function getHistory(readings) {
   // Group the readings into the calendar day they occurred on
   const groupedReadings = {};
   readings.forEach(reading => {
@@ -16,21 +16,33 @@ function getAqiHistory(readings) {
 
   // Now get the average aqi reading on each of those days
   const aqiHistory = {};
+  const pm02_5History = {};
+  const pm10_0History = {};
   Object.keys(groupedReadings).forEach(date => {
     let aqiTotal = 0;
-    let aqiReadings = 0;
+    let pm2_5Total = 0;
+    let pm10_0Total = 0;
+    let validReadings = 0;
     groupedReadings[date].forEach(reading => {
       // There are some strange outliers in the sensor data and
       // we don’t want them to wildly throw off the averages.
       if (reading.pms_aqi < 500) {
         aqiTotal += reading.pms_aqi;
-        aqiReadings++;
+        pm2_5Total += reading.pms_pm02_5;
+        pm10_0Total += reading.pms_pm10_0;
+        validReadings++;
       }
     });
-    aqiHistory[date] = Math.round(aqiTotal / aqiReadings);
+    aqiHistory[date] = Math.round(aqiTotal / validReadings);
+    pm02_5History[date] = Math.round(pm2_5Total / validReadings);
+    pm10_0History[date] = Math.round(pm10_0Total / validReadings);
   });
 
-  return aqiHistory;
+  return {
+    aqi: aqiHistory,
+    pm2_5: pm02_5History,
+    pm10_0: pm10_0History,
+  };
 }
 
 export function getReadings(deviceUID) {
@@ -49,7 +61,7 @@ export function getReadings(deviceUID) {
       });
       return {
         readings: readings,
-        aqiHistory: getAqiHistory(readings)
+        history: getHistory(readings)
       }
     });
 }

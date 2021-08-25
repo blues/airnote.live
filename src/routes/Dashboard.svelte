@@ -10,6 +10,7 @@
   import PrintIcon from '../icons/PrintIcon.svelte';
   import Recommendation from '../components/Recommendation.svelte';
   import {
+    getDisplay,
     getAQIDisplay,
     getPM2_5Display,
     getPM10Display,
@@ -37,11 +38,12 @@
   }
 
   let lastReading;
-  let aqiHistory;
+  let history;
 
   let noDataError = false;
   let fetchError = false;
   let loading = true;
+  let historyFilter = 'aqi';
 
   onMount(() => {
     getReadings(deviceUID)
@@ -51,7 +53,7 @@
           noDataError = true;
         } else {
           lastReading.timestamp = new Date(lastReading['@timestamp']);
-          aqiHistory = data.aqiHistory;
+          history = data.history;
 
           // This is a hack, but the speedometer plugin doesn’t give any
           // way to customize these labels.
@@ -185,20 +187,43 @@
     </div>
 
     <div class="box" in:fade>
-      <h3 class="aqi-heading">Air Quality Index (Last 7 Days)</h3>
-      <div class="aqi-history">
+      <h3 class="history-heading">
+        {
+          historyFilter == 'aqi' ? 'Air Quality Index' :
+          historyFilter == 'pm2_5' ? 'PM2.5' : 'PM10'
+        }
+        (Last 7 Days)
+      </h3>
+      <div class="history">
         {#each getLastSevenDays() as day}
           <div>
             <span>{@html getDayDisplay(day)}</span>
             <div
-              class="aqi-box"
-              style="background-color: {getAQIDisplay(aqiHistory[day]).color}"
+              class="history-box"
+              style="background-color: {getDisplay(historyFilter, history[historyFilter][day]).color}"
             >
-              <div class="aqi-value">{aqiHistory[day] || '—'}</div>
-              <div class="aqi-description">{getAQIDisplay(aqiHistory[day]).text}</div>
+              <div class="history-value">{history[historyFilter][day] || '—'}</div>
+              <div class="history-description">{getDisplay(historyFilter, history[historyFilter][day]).text}</div>
             </div>
           </div>
         {/each}
+      </div>
+      <div class="button-group">
+        <button
+          class={historyFilter == 'aqi' ? 'active' : ''}
+          on:click={() => historyFilter = 'aqi'}>
+          Air Quality Index
+        </button>
+        <button
+          class={historyFilter == 'pm2_5' ? 'active' : ''}
+          on:click={() => historyFilter = 'pm2_5'}>
+          PM2.5
+        </button>
+        <button
+          class={historyFilter == 'pm10_0' ? 'active' : ''}
+          on:click={() => historyFilter = 'pm10_0'}>
+          PM10
+        </button>
       </div>
     </div>
 
@@ -329,35 +354,47 @@
     display: inline-block;
   }
 
-  .aqi-heading {
+  .history-heading {
     margin-bottom: 0;
   }
-  .aqi-history {
+  .history {
     display: grid;
     grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%;
     text-align: center;
     font-size: 0.8rem;
   }
   @media (max-width: 775px) {
-    .aqi-history {
+    .history {
       grid-template-rows: 50% 50%;
       grid-template-columns: 25% 25% 25% 25%;
     }
   }
-  .aqi-history > div {
+  .history > div {
     padding-top: 1rem;
   }
-  .aqi-history .aqi-box {
+  .history .history-box {
     padding: 0 0 0.25rem 0;
     margin: 0.75em 1.5em 0 1.5em;
     color: white;
     border-radius: 5px;
   }
-  .aqi-history .aqi-value {
+  .history .history-value {
     font-weight: 500;
     font-size: 2em;
   }
-  .aqi-history .aqi-description {
+  .history .history-description {
     font-size: 0.8rem;
+  }
+
+  .button-group {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  .button-group button:hover {
+    background: rgb(0, 185, 255);
+  }
+  .button-group button:not(.active) {
+    background: white;
+    color: inherit;
   }
 </style>

@@ -6,6 +6,16 @@ const VERY_UNHEALTHY = { text: 'Very Unhealthy', color: '#A10649' };
 const HAZARDOUS = { text: 'Hazardous', color: '#7E0023' };
 const NO_DATA = { text: 'No Data', color: '#757575' };
 
+export function getDisplay(type, value) {
+  if (type == 'aqi') {
+    return getAQIDisplay(value);
+  } else if (type == 'pm2_5') {
+    return getPM2_5Display(value);
+  } else {
+    return getPM10Display(value);
+  }
+}
+
 // Based on https://www.airnow.gov/aqi/aqi-basics/
 export function getAQIDisplay(value) {
   switch(true) {
