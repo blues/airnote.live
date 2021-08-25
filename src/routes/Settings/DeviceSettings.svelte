@@ -5,7 +5,7 @@
     deviceName,
     displayValue,
     indoorDevice
-  } from '../settingsStore';
+  } from '../../settingsStore';
 
   const dispatch = createEventDispatcher();
 

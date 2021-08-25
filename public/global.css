@@ -1,3 +1,6 @@
+:root {
+  --button-bg-color: rgb(0, 185, 255);
+}
 *, ::after, ::before {
   box-sizing: border-box;
 }
@@ -129,7 +132,7 @@ input[type=range]:disabled::-webkit-slider-thumb {
 }
 
 button, .btn {
-  background: rgb(0, 185, 255);
+  background: var(--button-bg-color);
   color: white;
   border-radius: 0.3rem;
   box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.05);
@@ -189,6 +192,17 @@ footer {
 .alert a {
   color: #6a1a21;
   text-decoration: underline;
+}
+
+.box {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 5px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+.box h3 {
+  margin-top: 0;
 }
 
 .loading {

@@ -2,9 +2,9 @@
   import { Router, Route } from 'svelte-routing';
 
   import ExternalLink from './icons/ExternalLink.svelte';
-  import Configuration from './routes/Configuration.svelte';
-  import Dashboard from './routes/Dashboard.svelte';
-  import Home from './routes/Home.svelte';
+  import Settings from './routes/Settings/Settings.svelte';
+  import Dashboard from './routes/Dashboard/Dashboard.svelte';
+  import Home from './routes/Home/Home.svelte';
   import { getCurrentDeviceFromUrl } from './services/device';
 
   const currentDevice = getCurrentDeviceFromUrl(window.location);
@@ -51,7 +51,7 @@
     <div class="container">
       <Route
         path="/:deviceUID"
-        component={Configuration} {pin} {productUID} />
+        component={Settings} {pin} {productUID} />
       <Route
         path="/:deviceUID/dashboard"
         component={Dashboard} />

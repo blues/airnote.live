@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { sampleFrequencyFull } from '../settingsStore';
+  import { sampleFrequencyFull } from '../../settingsStore';
 
   export let enableFields;
 

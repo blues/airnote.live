@@ -1,9 +1,9 @@
 <script>
   import { onMount } from 'svelte';
   import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
-  import Settings from '../components/Settings.svelte';
-  import Owner from '../components/Owner.svelte';
-  import { airnoteProductUID, notehubAPIBase, appUID } from '../constants';
+  import DeviceSettings from './DeviceSettings.svelte';
+  import DeviceOwner from './DeviceOwner.svelte';
+  import { airnoteProductUID, notehubAPIBase, appUID } from '../../constants';
   import {
     deviceName,
     displayValue,
@@ -14,8 +14,8 @@
     contactName,
     contactEmail,
     contactAffiliation
-  } from '../settingsStore';
-  import { shareDashboard } from '../util/share';
+  } from '../../settingsStore';
+  import { shareDashboard } from '../../util/share';
 
   export let pin;
   export let productUID;
@@ -223,7 +223,7 @@
 <NotificationDisplay bind:this={notify} />
 
 <section>
-  <Settings
+  <DeviceSettings
     enableFields={enableFields}
     displayOptions={displayOptions}
     on:submit={handleSettingsSave}
@@ -233,7 +233,7 @@
 <hr />
 
 <section>
-  <Owner
+  <DeviceOwner
     enableFields={enableFields}
     on:submit={handleSettingsSave}
   />

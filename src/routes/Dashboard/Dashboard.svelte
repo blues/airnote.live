@@ -1,41 +1,23 @@
 <script>
   import { NotificationDisplay } from '@beyonk/svelte-notifications';
-  import { format, parse } from 'date-fns';
+  import { format } from 'date-fns';
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
   import Speedometer from 'svelte-speedometer';
 
-  import { DATE_FORMAT_KEY } from '../constants';
-  import ShareIcon from '../icons/ShareIcon.svelte';
-  import PrintIcon from '../icons/PrintIcon.svelte';
-  import Recommendation from '../components/Recommendation.svelte';
+  import ShareIcon from '../../icons/ShareIcon.svelte';
+  import PrintIcon from '../../icons/PrintIcon.svelte';
+  import History from './History.svelte';
+  import Recommendation from './Recommendation.svelte';
   import {
-    getDisplay,
     getAQIDisplay,
     getPM2_5Display,
     getPM10Display,
-  } from '../services/air';
-  import { getReadings } from '../services/device';
-  import { shareDashboard } from '../util/share';
+  } from '../../services/air';
+  import { getReadings } from '../../services/device';
+  import { shareDashboard } from '../../util/share';
 
   export let deviceUID;
-
-  function getLastSevenDays() {
-    // Get the last eight days, and then splice off today as we don’t want to
-    // show the current day.
-    const lastEightDays = [...Array(8)].map((_, i) => {
-      const d = new Date()
-      d.setDate(d.getDate() - i)
-      return format(d, DATE_FORMAT_KEY);
-    });
-    return lastEightDays.splice(1);
-  }
-
-  function getDayDisplay(day) {
-    // Format the date for HTML display needed in AQI history.
-    const date = parse(day, DATE_FORMAT_KEY, new Date());
-    return format(date, 'EEEE') + '<br>' + format(date, 'MMMM dd');
-  }
 
   let lastReading;
   let history;
@@ -43,7 +25,6 @@
   let noDataError = false;
   let fetchError = false;
   let loading = true;
-  let historyFilter = 'aqi';
 
   onMount(() => {
     getReadings(deviceUID)
@@ -187,44 +168,7 @@
     </div>
 
     <div class="box" in:fade>
-      <h3 class="history-heading">
-        {
-          historyFilter == 'aqi' ? 'Air Quality Index' :
-          historyFilter == 'pm2_5' ? 'PM2.5' : 'PM10'
-        }
-        (Last 7 Days)
-      </h3>
-      <div class="history">
-        {#each getLastSevenDays() as day}
-          <div>
-            <span>{@html getDayDisplay(day)}</span>
-            <div
-              class="history-box"
-              style="background-color: {getDisplay(historyFilter, history[historyFilter][day]).color}"
-            >
-              <div class="history-value">{history[historyFilter][day] || '—'}</div>
-              <div class="history-description">{getDisplay(historyFilter, history[historyFilter][day]).text}</div>
-            </div>
-          </div>
-        {/each}
-      </div>
-      <div class="button-group">
-        <button
-          class={historyFilter == 'aqi' ? 'active' : ''}
-          on:click={() => historyFilter = 'aqi'}>
-          Air Quality Index
-        </button>
-        <button
-          class={historyFilter == 'pm2_5' ? 'active' : ''}
-          on:click={() => historyFilter = 'pm2_5'}>
-          PM2.5
-        </button>
-        <button
-          class={historyFilter == 'pm10_0' ? 'active' : ''}
-          on:click={() => historyFilter = 'pm10_0'}>
-          PM10
-        </button>
-      </div>
+      <History data={history} />
     </div>
 
     <div class="box" in:fade>
@@ -267,16 +211,6 @@
 
   .all-measurements {
     display: flex;
-  }
-  .box {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    background: white;
-    border-radius: 5px;
-    padding: 1.5rem;
-    margin: 1rem 0;
-  }
-  .box h3 {
-    margin-top: 0;
   }
   h5 {
     margin: 0;
@@ -352,49 +286,5 @@
     width: 20px;
     border-radius: 20px;
     display: inline-block;
-  }
-
-  .history-heading {
-    margin-bottom: 0;
-  }
-  .history {
-    display: grid;
-    grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%;
-    text-align: center;
-    font-size: 0.8rem;
-  }
-  @media (max-width: 775px) {
-    .history {
-      grid-template-rows: 50% 50%;
-      grid-template-columns: 25% 25% 25% 25%;
-    }
-  }
-  .history > div {
-    padding-top: 1rem;
-  }
-  .history .history-box {
-    padding: 0 0 0.25rem 0;
-    margin: 0.75em 1.5em 0 1.5em;
-    color: white;
-    border-radius: 5px;
-  }
-  .history .history-value {
-    font-weight: 500;
-    font-size: 2em;
-  }
-  .history .history-description {
-    font-size: 0.8rem;
-  }
-
-  .button-group {
-    text-align: center;
-    margin-top: 1.5rem;
-  }
-  .button-group button:hover {
-    background: rgb(0, 185, 255);
-  }
-  .button-group button:not(.active) {
-    background: white;
-    color: inherit;
   }
 </style>

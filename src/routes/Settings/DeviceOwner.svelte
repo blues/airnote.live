@@ -4,7 +4,7 @@
     contactName,
     contactEmail,
     contactAffiliation
-  } from '../settingsStore';
+  } from '../../settingsStore';
 
   const dispatch = createEventDispatcher();
 
