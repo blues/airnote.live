@@ -1,7 +1,6 @@
 <script>
   import { Router, Route } from 'svelte-routing';
 
-  import ExternalLink from './icons/ExternalLink.svelte';
   import Settings from './routes/Settings/Settings.svelte';
   import Dashboard from './routes/Dashboard/Dashboard.svelte';
   import Home from './routes/Home/Home.svelte';
@@ -33,15 +32,13 @@
           </a>
         </li>
         <li>
-          <a href="https://airnote.live/{deviceUID}">
-            Raw Data
-            <ExternalLink />
+          <a href="http://tt.safecast.org/dashboard/note:{deviceUID}" target="_blank">
+            Data
           </a>
         </li>
         <li>
-          <a href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes">
+          <a href="http://tt.safecast.org/map/note:{deviceUID}" target="_blank">
             Global Map
-            <ExternalLink />
           </a>
         </li>
       </ul>

@@ -50,11 +50,6 @@ header li {
 header ul a {
   color: white;
 }
-header svg {
-  height: 20px;
-  width: 20px;
-  vertical-align: text-bottom;
-}
 @media (max-width: 600px) {
   header {
     display: block;

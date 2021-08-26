@@ -15,7 +15,6 @@
     contactEmail,
     contactAffiliation
   } from '../../settingsStore';
-  import { shareDashboard } from '../../util/share';
 
   export let pin;
   export let productUID;
@@ -182,43 +181,21 @@
     air we breathe.
   </p>
   <p>
-    Click the links to view charts for your device, the global
-    <a href="https://safecast.org" target="_new">Safecast</a> map,
-    or to share a link to your device dashboard.
+    Use can now
+    <a href="/{deviceUID}/dashboard">view your device’s dashboard</a>,
+    check out the 
+    <a href="http://tt.safecast.org/map/note:{deviceUID}" target="_blank">global Safecast map</a>,
+    or use the forms below to personalize your device.
   </p>
-</section>
 
-<hr />
-
-<section>
-  <div>
-    <h4><a href="https://safecast.org" target="_new">Safecast</a></h4>
-  </div>
-  <div class="links">
-    <span>
-      <a href='http://tt.safecast.org/dashboard/note:{deviceUID}'>Dashboard</a>
-    </span>
-    <div class='separator'>|</div>
-    <span>
-      <a href='http://tt.safecast.org/map/note:{deviceUID}'>Global Map</a>
-    </span>
-  </div>
-  <div class="share">
-    <button on:click={() => shareDashboard(deviceUID)}>Share my Device Dashboard</button>
-  </div>
-</section>
-
-<hr />
-
-<section>
   <p>
-    Use the fields below to personalize your device.
     <i>
       For help setting up your Airnote, visit
-      <a href='https://start.airnote.live'>start.airnote.live</a>
+      <a href='https://start.airnote.live'>start.airnote.live</a>.
     </i>
-  </p>
 </section>
+
+<hr />
 
 <NotificationDisplay bind:this={notify} />
 
@@ -242,11 +219,11 @@
 <hr />
 
 <section>
-  <div>
+  <p>
     <a href={eventsUrl} target="_new">
       View live Airnote events on Notehub.io
     </a>
-  </div>
+  </p>
 </section>
 
 <hr />
@@ -263,7 +240,7 @@
 </section>
 
 <style>
-  h1, h1 + p, h1 + p + p {
+  p {
     text-align: center;
   }
   section {
@@ -273,19 +250,5 @@
     section {
       max-width: 720px;
     }
-  }
-  .links {
-    display: flex;
-    justify-content: space-evenly;
-    text-align: center;
-    line-height: 38px;
-  }
-  .separator {
-    font-size: 1.5rem;
-    color: #CED9E1;
-  }
-  .share {
-    margin-top: 10px;
-    text-align: center;
   }
 </style>
