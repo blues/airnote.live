@@ -130,6 +130,7 @@
             <span>PM2.5</span>
             <span>
               <span
+                title={Math.round(lastReading.pms_pm02_5)}
                 class="circle"
                 style="background-color: {getPM2_5Display(lastReading.pms_pm02_5)
                   .color}"
@@ -140,6 +141,7 @@
             <span>PM10</span>
             <span>
               <span
+                title={Math.round(lastReading.pms_pm10_0)}
                 class="circle"
                 style="background-color: {getPM10Display(lastReading.pms_pm10_0)
                   .color}"

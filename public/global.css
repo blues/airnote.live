@@ -55,6 +55,16 @@ header svg {
   width: 20px;
   vertical-align: text-bottom;
 }
+@media (max-width: 600px) {
+  header {
+    display: block;
+  }
+  header ul {
+    justify-content: center;
+    margin: 0;
+    padding-bottom: 0.5rem;
+  }
+}
 
 
 main {
