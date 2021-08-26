@@ -4,7 +4,7 @@
   import {
     deviceName,
     displayValue,
-    indoorDevice
+    indoorDevice,
   } from '../../settingsStore';
 
   const dispatch = createEventDispatcher();
@@ -12,12 +12,15 @@
   export let enableFields;
   export let displayOptions;
 
-  const save = () => dispatch('submit');
+  const save = (event) => {
+    event.preventDefault();
+    dispatch('submit');
+  }
 </script>
 
 <h4>Device Settings</h4>
 
-<form>
+<form on:submit={save}>
   <div>
     <label for="deviceName">Device name</label>
     <input
@@ -61,10 +64,10 @@
       </span>
     </label>
   </div>
-</form>
 
-{#if enableFields}
-  <div>
-    <button on:click={save}>Update Device Settings</button>
-  </div>
-{/if}
+  {#if enableFields}
+    <div>
+      <button>Update Device Settings</button>
+    </div>
+  {/if}
+</form>

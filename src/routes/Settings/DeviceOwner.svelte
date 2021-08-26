@@ -10,12 +10,15 @@
 
   export let enableFields;
 
-  const save = () => dispatch('submit');
+  const save = (event) => {
+    event.preventDefault();
+    dispatch('submit');
+  }
 </script>
 
 <h4>Device Owner Info</h4>
 
-<form>
+<form on:submit={save}>
   <div>
     <label for="ownerName">Name</label>
     <input
@@ -26,6 +29,7 @@
       id="ownerName"
       placeholder="Ada Lovelace" />
   </div>
+
   <div>
     <label for="companyName">Affiliation</label>
     <input
@@ -36,6 +40,7 @@
       id="companyName"
       placeholder="Blues Inc." />
   </div>
+
   <div>
     <label for="ownerEmail">Contact Email</label>
     <input
@@ -46,10 +51,10 @@
       id="ownerEmail"
       placeholder="ada@blues.com" />
   </div>
-</form>
 
-{#if enableFields}
-  <div>
-    <button on:click={save}>Update Device Owner</button>
-  </div>
-{/if}
+  {#if enableFields}
+    <div>
+      <button>Update Device Owner</button>
+    </div>
+  {/if}
+</form>
