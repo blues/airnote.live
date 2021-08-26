@@ -105,12 +105,12 @@
     border: 1px solid transparent;
   }
   .button-group button:hover {
-    background: var(--button-bg-color);
+    background: var(--primary);
   }
   .button-group button:not(.active) {
     background: white;
     color: inherit;
-    border: 1px solid var(--button-bg-color);
-    color: var(--button-bg-color);;
+    border: 1px solid var(--primary);
+    color: var(--primary);
   }
 </style>

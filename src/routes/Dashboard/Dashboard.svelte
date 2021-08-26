@@ -27,8 +27,14 @@
   let noDataError = false;
   let fetchError = false;
   let loading = true;
+  let tempDisplay = localStorage.getItem('tempDisplay') || 'C';
   let showPM2_5Tooltip = false;
   let showPM10_0Tooltip = false;
+
+  const toggleTempDisplay = () => {
+    tempDisplay = tempDisplay == 'C' ? 'F' : 'C';
+    localStorage.setItem('tempDisplay', tempDisplay);
+  }
 
   onMount(() => {
     getReadings(deviceUID)
@@ -171,7 +177,15 @@
         <div class="measurement-air">
           <div>
             Temperature
-            <strong>{Math.round(lastReading.env_temp)}°C</strong>
+            <strong>
+              {
+                tempDisplay == 'C' ? Math.round(lastReading.env_temp) + '°C' :
+                Math.round((lastReading.env_temp * 9/5) + 32) + '°F'
+              }
+            </strong>
+            <button on:click={toggleTempDisplay}>
+              Change to °{tempDisplay == 'C' ? 'F' : 'C'}
+            </button>
           </div>
           <div>
             Humidity
@@ -326,6 +340,14 @@
   .measurement-air strong {
     display: block;
     font-size: 1.4rem;
+  }
+  .measurement-air button {
+    background: none;
+    color: var(--primary);
+    padding: 0;
+    font-size: 11px;
+    border: none;
+    box-shadow: none;
   }
   .circle {
     height: 20px;
