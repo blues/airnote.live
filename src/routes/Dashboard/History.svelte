@@ -1,6 +1,5 @@
 <script>
   import { format, parse } from 'date-fns';
-import { onMount } from 'svelte';
 
   import { DATE_FORMAT_KEY } from '../../constants';
   import { getDisplay } from '../../services/air';
