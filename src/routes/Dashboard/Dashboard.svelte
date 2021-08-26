@@ -5,6 +5,7 @@
   import { fade } from 'svelte/transition';
   import Speedometer from 'svelte-speedometer';
 
+  import InfoIcon from '../../icons/InfoIcon.svelte';
   import ShareIcon from '../../icons/ShareIcon.svelte';
   import PrintIcon from '../../icons/PrintIcon.svelte';
   import History from './History.svelte';
@@ -26,6 +27,8 @@
   let noDataError = false;
   let fetchError = false;
   let loading = true;
+  let showPM2_5Tooltip = false;
+  let showPM10_0Tooltip = false;
 
   onMount(() => {
     getReadings(deviceUID)
@@ -56,14 +59,10 @@
 </script>
 
 <NotificationDisplay />
-<p class="banner">
-  Use this to highlight articles or news about Airnote.
-  <a href="https://blues.io">And use this for a link</a>.
-</p>
 
-<h2 class="air-quality-heading">Air Quality</h2>
+<div class="dashboard"
+  style="opacity: {(showPM2_5Tooltip || showPM10_0Tooltip) ? 0.3 : 1}">
 
-<div class="dashboard">
   {#if loading}
     <div class="loading" />
   {/if}
@@ -88,6 +87,13 @@
   {/if}
 
   {#if lastReading}
+    <p class="banner" in:fade>
+      Use this to highlight articles or news about Airnote.
+      <a href="https://blues.io">And use this for a link</a>.
+    </p>
+
+    <h2 class="air-quality-heading" in:fade>Air Quality</h2>
+
     <p class="last-update" in:fade>
       Last Update:
       <span>
@@ -127,7 +133,13 @@
       <div class="box measurement-box">
         <div class="measurement-pm">
           <div>
-            <span>PM2.5</span>
+            <span>
+              PM2.5
+              <button class="svg-button info"
+                on:click={() => showPM2_5Tooltip = true }>
+                <InfoIcon />
+              </button>
+            </span>
             <span>
               <span
                 title={Math.round(lastReading.pms_pm02_5)}
@@ -138,7 +150,13 @@
             </span>
           </div>
           <div>
-            <span>PM10</span>
+            <span>
+              PM10
+              <button class="svg-button info"
+                on:click={() => showPM10_0Tooltip = true }>
+                <InfoIcon />
+              </button>
+            </span>
             <span>
               <span
                 title={Math.round(lastReading.pms_pm10_0)}
@@ -179,6 +197,32 @@
     </div>
   {/if}
 </div>
+
+{#if showPM2_5Tooltip || showPM10_0Tooltip}
+  <div class="tooltip">
+    {#if showPM2_5Tooltip}
+      <p>
+        PM2.5 is particulate matter 2.5 microns and below. These particles typically 
+        consist of combustion particles, organic compounds, and metals.
+      </p>
+    {/if}
+    {#if showPM10_0Tooltip}
+      <p>
+        PM10 is particulate matter 10 microns and below. These particles typically
+        consist of dust, pollen, and mold.
+      </p>
+    {/if}
+    <p>
+      <a href="https://www.epa.gov/pm-pollution/particulate-matter-pm-basics">
+        Learn more
+      </a>
+    </p>
+    <button
+      on:click={() => { showPM2_5Tooltip = false; showPM10_0Tooltip = false; }}>
+      Close
+    </button>
+  </div>
+{/if}
 
 <style>
   .dashboard {
@@ -288,5 +332,16 @@
     width: 20px;
     border-radius: 20px;
     display: inline-block;
+  }
+
+  .tooltip {
+    position: fixed;
+    top: 200px;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 2rem;
+    border: 1px solid black;
+    border-width: 1px 0;
   }
 </style>
