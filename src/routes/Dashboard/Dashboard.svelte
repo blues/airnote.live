@@ -16,6 +16,7 @@
   } from '../../services/air';
   import { getReadings } from '../../services/device';
   import { shareDashboard } from '../../util/share';
+  import { NO_DATA_ERROR_HEADING, FETCH_ERROR_HEADING } from '../../constants';
 
   export let deviceUID;
 
@@ -47,8 +48,7 @@
         }
         loading = false;
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
         fetchError = true;
         loading = false;
       });
@@ -70,7 +70,7 @@
 
   {#if noDataError}
     <div class="alert">
-      <h4 class="alert-heading">No data</h4>
+      <h4 class="alert-heading">{NO_DATA_ERROR_HEADING}</h4>
       There is no data associated with this Airnote. If this is a new Airnote,
       it may take several hours for your device to report its first readings.
       For help setting up your Airnote, visit
@@ -80,7 +80,7 @@
 
   {#if fetchError}
     <div class="alert">
-      <h4 class="alert-heading">Unable to fetch device details.</h4>
+      <h4 class="alert-heading">{FETCH_ERROR_HEADING}</h4>
       Please make sure your Airnote is online and connected before visiting
       this page. For help getting started, visit
       <a href="https://start.airnote.live" target="_new">start.airnote.live</a>.

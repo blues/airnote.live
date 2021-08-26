@@ -1,8 +1,5 @@
-import LocalStorageMock from '../LocalStorageMock';
 import { airnoteProductUID } from '../../src/constants';
 import { getCurrentDeviceFromUrl } from '../../src/services/device';
-
-global.localStorage = new LocalStorageMock;
 
 afterEach(() => {
   localStorage.clear();

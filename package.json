@@ -16,10 +16,14 @@
       "^.+\\.svelte$": "svelte-jester",
       "^.+\\.js$": "babel-jest"
     },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@beyonk/svelte-notifications)/)"
+    ],
     "moduleFileExtensions": [
       "js",
       "svelte"
     ],
+    "setupFiles": ["./tests/setup.js"],
     "testEnvironment": "jsDom"
   },
   "devDependencies": {
