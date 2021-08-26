@@ -39,6 +39,8 @@ export function getAQIDisplay(value) {
 // Based on https://blissair.com/what-is-pm-2-5.htm
 export function getPM2_5Display(value) {
   switch(true) {
+    case (!value):
+      return NO_DATA;
     case (value > 250.5):
       return HAZARDOUS;
     case (value > 150.5):
@@ -57,6 +59,8 @@ export function getPM2_5Display(value) {
 // Based on https://www.epa.vic.gov.au/for-community/environmental-information/air-quality/pm10-particles-in-the-air
 export function getPM10Display(value) {
   switch(true) {
+    case (!value):
+      return NO_DATA;
     case (value > 300):
       return HAZARDOUS;
     case (value > 120):
