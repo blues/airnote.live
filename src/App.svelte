@@ -16,8 +16,8 @@
 
 <Router {url}>
   <header>
-    <a href="https://blues.io/">
-      <img alt="Blues Wireless" src="/images/logo-white.svg" />
+    <a href="https://airnote.live">
+      <img alt="Airnote logo" src="/images/airnote.svg" />
     </a>
     {#if deviceUID}
       <ul>
