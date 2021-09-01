@@ -50,14 +50,45 @@ header li {
 header ul a {
   color: white;
 }
+header .svg-button {
+  height: 2rem;
+  width: 2rem;
+  border: 1px solid white;
+  align-self: center;
+  margin-right: 1rem;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+header .svg-button svg {
+  color: white;
+}
 @media (max-width: 600px) {
   header {
-    display: block;
+    justify-content: space-between;
+    position: relative;
   }
   header ul {
-    justify-content: center;
-    margin: 0;
-    padding-bottom: 0.5rem;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    background: #1b3a52;
+    display: none;
+    text-align: center;
+  }
+  header ul.open {
+    display: block;
+  }
+  header li {
+    display: block;
+    padding: 1rem;
+    border: 1px solid white;
+    border-width: 1px 0;
+  }
+  header .svg-button {
+    display: flex;
   }
 }
 
