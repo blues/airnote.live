@@ -21,7 +21,7 @@
 
 <Router {url}>
   <header>
-    <a href="https://airnote.live">
+    <a href="/">
       <img alt="Airnote logo" src="/images/airnote.svg" />
     </a>
     {#if deviceUID}
