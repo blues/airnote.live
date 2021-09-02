@@ -3,18 +3,14 @@
   import { format } from 'date-fns';
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
-  import Speedometer from 'svelte-speedometer';
 
   import InfoIcon from '../../icons/InfoIcon.svelte';
   import ShareIcon from '../../icons/ShareIcon.svelte';
   import PrintIcon from '../../icons/PrintIcon.svelte';
   import History from './History.svelte';
   import Recommendation from './Recommendation.svelte';
-  import {
-    getAQIDisplay,
-    getPM2_5Display,
-    getPM10Display,
-  } from '../../services/air';
+  import Speedometer from './Speedometer.svelte';
+  import { getPM2_5Display, getPM10Display } from '../../services/air';
   import { getReadings } from '../../services/device';
   import { shareDashboard } from '../../util/share';
   import { NO_DATA_ERROR_HEADING, FETCH_ERROR_HEADING } from '../../constants';
@@ -118,22 +114,7 @@
 
     <div class="all-measurements" in:fade>
       <div class="box speedometer-box">
-        <h5>Air Quality Index</h5>
-        <Speedometer
-          width={300}
-          height={180}
-          currentValueText=""
-          needleHeightRatio={0.7}
-          ringWidth={30}
-          customSegmentStops={[0, 50, 100, 150, 200, 250]}
-          segmentColors={['#00CC00', '#F8B52A', '#EB8A14', '#FF0000', '#A10649', '#7E0023']}
-          maxValue={250}
-          labelFontSize="12px"
-          value={lastReading.pms_aqi > 250 ? 250 : lastReading.pms_aqi}
-        />
-        <div class="speedometer-value">
-          {lastReading.pms_aqi}: {getAQIDisplay(lastReading.pms_aqi).text}
-        </div>
+        <Speedometer lastReading={lastReading} />
       </div>
 
       <div class="box measurement-box">
@@ -272,23 +253,10 @@
   .all-measurements {
     display: flex;
   }
-  h5 {
-    margin: 0;
-    text-align: center;
-    position: relative;
-    top: -0.75rem;
-  }
   .speedometer-box {
     margin: 0 1rem 0 0;
-    position: relative;
   }
-  .speedometer-value {
-    text-align: center;
-    left: 0;
-    bottom: 1.6rem;
-    width: 100%;
-    position: absolute;
-  }
+
   .measurement-box {
     flex-grow: 1;
     display: flex;
