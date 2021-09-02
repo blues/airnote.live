@@ -21,15 +21,15 @@ export function getAQIDisplay(value) {
   switch(true) {
     case (!value):
       return NO_DATA;
-    case (value > 300):
+    case (value >= 300):
       return HAZARDOUS;
-    case (value > 200):
+    case (value >= 200):
       return VERY_UNHEALTHY
-    case (value > 150):
+    case (value >= 150):
       return UNHEALTHY;
-    case (value > 100):
+    case (value >= 100):
       return UNHEALTHY_SENSITIVE;
-    case (value > 50):
+    case (value >= 50):
       return MODERATE;
     default:
       return GOOD;
@@ -41,15 +41,15 @@ export function getPM2_5Display(value) {
   switch(true) {
     case (!value):
       return NO_DATA;
-    case (value > 250.5):
+    case (value >= 250.5):
       return HAZARDOUS;
-    case (value > 150.5):
+    case (value >= 150.5):
       return VERY_UNHEALTHY
-    case (value > 55.5):
+    case (value >= 55.5):
       return UNHEALTHY;
-    case (value > 35.5):
+    case (value >= 35.5):
       return UNHEALTHY_SENSITIVE;
-    case (value > 12.1):
+    case (value >= 12.1):
       return MODERATE;
     default:
       return GOOD;

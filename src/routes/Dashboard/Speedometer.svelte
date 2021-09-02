@@ -2,7 +2,7 @@
   import Speedometer from 'svelte-speedometer';
   import { getAQIDisplay } from '../../services/air';
 
-  export let lastReading;
+  export let aqi;
 </script>
 
 <h5>Air Quality Index</h5>
@@ -18,11 +18,13 @@
     maxValue={250}
     needleColor="black"
     labelFontSize="12px"
-    value={lastReading.pms_aqi > 250 ? 250 : lastReading.pms_aqi}
+    value={aqi > 250 ? 250 : aqi}
   />
-  <div class="speedometer-value" style="background-color: {getAQIDisplay(lastReading.pms_aqi).color}">
-    <div>{lastReading.pms_aqi}</div>
-    <div>{getAQIDisplay(lastReading.pms_aqi).text}</div>
+  <div class="speedometer-value" style="background-color: {getAQIDisplay(aqi).color}">
+    <div>{aqi}</div>
+    <div class={aqi >= 100 & aqi < 150 ? 'small' : ''}>
+      {getAQIDisplay(aqi).text}
+    </div>
   </div>
 </div>
 
@@ -31,12 +33,13 @@
     margin: 0;
     text-align: center;
     position: relative;
-    top: -0.75rem;
+    top: -0.5rem;
   }
   .speedometer-container {
     position: relative;
     width: 300px;
     margin: 0 auto;
+    top: 5px;
   }
   .speedometer-value {
     text-align: center;
@@ -48,28 +51,34 @@
     width: 166px;
     border-top-left-radius: 166px;
     border-top-right-radius: 166px;
-    border: 2px solid black;
+    border: 1px solid rgb(166, 188, 207);
   }
   .speedometer-value div:first-child {
     font-size: 2.3rem;
     margin-top: 3px;
   }
   .speedometer-value div:last-child {
-    margin: block;
     margin-top: -7px;
+  }
+  .speedometer-value div.small {
+    font-size: 0.7rem;
+    width: 100px;
+    margin: 0 auto;
+    top: -10px;
+    position: relative;
   }
   .speedometer-value::before {
     width: 260px;
-    height: 2px;
-    background: black;
+    height: 1px;
+    background: rgb(166, 188, 207);
     content: '';
     position: absolute;
-    left: -50px;
-    top: 79px;
+    left: -49px;
+    top: 80px;
   }
   .speedometer-value::after {
     width: 260px;
-    height: 5px;
+    height: 10px;
     background: white;
     content: '';
     position: absolute;

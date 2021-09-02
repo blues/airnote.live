@@ -114,7 +114,7 @@
 
     <div class="all-measurements" in:fade>
       <div class="box speedometer-box">
-        <Speedometer lastReading={lastReading} />
+        <Speedometer aqi={lastReading.pms_aqi} />
       </div>
 
       <div class="box measurement-box">
