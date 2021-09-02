@@ -1,8 +1,56 @@
 import { airnoteProductUID } from '../../src/constants';
-import { getCurrentDeviceFromUrl } from '../../src/services/device';
+import { getCurrentDeviceFromUrl, getReadings } from '../../src/services/device';
 
-afterEach(() => {
+beforeEach(() => {
   localStorage.clear();
+  fetch.mockClear();
+});
+
+test('Filter out bad readings', () => {
+  fetch.mockImplementationOnce(() => Promise.resolve({
+    json: () => Promise.resolve({
+      hits: {
+        hits: [
+          { _source: { pms_aqi: 999999, '@timestamp': '2021-01-01T01:01:01Z', env_temp: 99 }},
+          { _source: { pms_aqi: 10, '@timestamp': '2021-01-01T01:01:01Z', env_temp: 10 }},
+        ]
+      }
+    })
+  }));
+
+  getReadings().then(data => {
+    expect(data.readings.length).toBe(1);
+    expect(data.readings[0].env_temp).toBe(10);
+  })
+});
+
+test('Calculate daily averages for aqi, pm2.5, and pm10', () => {
+  fetch.mockImplementationOnce(() => Promise.resolve({
+    json: () => Promise.resolve({
+      hits: {
+        hits: [
+          { _source: {
+            pms_aqi: 10,
+            pms_pm02_5: 10,
+            pms_pm10_0: 10,
+            '@timestamp': '2021-01-01T10:01:01Z',
+          }},
+          { _source: {
+            pms_aqi: 20,
+            pms_pm02_5: 20,
+            pms_pm10_0: 20,
+            '@timestamp': '2021-01-01T10:01:01Z',
+          }},
+        ]
+      }
+    })
+  }));
+
+  getReadings().then(data => {
+    expect(data.history.aqi['January 01 2021']).toBe(15);
+    expect(data.history.pm2_5['January 01 2021']).toBe(15);
+    expect(data.history.pm10_0['January 01 2021']).toBe(15);
+  })
 });
 
 test('If there’s no device in the URL return an object with no device UID', () => {

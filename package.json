@@ -23,7 +23,9 @@
       "js",
       "svelte"
     ],
-    "setupFiles": ["./tests/setup.js"],
+    "setupFiles": [
+      "./tests/setup.js"
+    ],
     "testEnvironment": "jsDom"
   },
   "devDependencies": {

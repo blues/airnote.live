@@ -22,20 +22,15 @@ function getHistory(readings) {
     let aqiTotal = 0;
     let pm2_5Total = 0;
     let pm10_0Total = 0;
-    let validReadings = 0;
+    let totalReadings = groupedReadings[date].length;
     groupedReadings[date].forEach(reading => {
-      // There are some strange outliers in the sensor data and
-      // we don’t want them to wildly throw off the averages.
-      if (reading.pms_aqi < 500) {
-        aqiTotal += reading.pms_aqi;
-        pm2_5Total += reading.pms_pm02_5;
-        pm10_0Total += reading.pms_pm10_0;
-        validReadings++;
-      }
+      aqiTotal += reading.pms_aqi;
+      pm2_5Total += reading.pms_pm02_5;
+      pm10_0Total += reading.pms_pm10_0;
     });
-    aqiHistory[date] = Math.round(aqiTotal / validReadings);
-    pm02_5History[date] = Math.round(pm2_5Total / validReadings);
-    pm10_0History[date] = Math.round(pm10_0Total / validReadings);
+    aqiHistory[date] = Math.round(aqiTotal / totalReadings);
+    pm02_5History[date] = Math.round(pm2_5Total / totalReadings);
+    pm10_0History[date] = Math.round(pm10_0Total / totalReadings);
   });
 
   return {
@@ -57,7 +52,10 @@ export function getReadings(deviceUID) {
     .then(data => {
       const readings = [];
       data.hits.hits.forEach(reading => {
-        readings.push(reading._source);
+        // There are some strange outliers in the sensor data.
+        if (reading._source.pms_aqi < 500) {
+          readings.push(reading._source);
+        }
       });
       return {
         readings: readings,

@@ -53,7 +53,8 @@
         }
         loading = false;
       })
-      .catch(() => {
+      .catch(err => {
+        console.log(err);
         fetchError = true;
         loading = false;
       });
