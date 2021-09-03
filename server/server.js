@@ -80,14 +80,14 @@ const init = async () => {
         const from = request.query.from;
         
         try {
-          const response = await axios.post(url, {
+          const response = await axios.post(url, buildBody(device_uid, to, from), {
             headers: headers,
-            data: JSON.stringify(buildBody(device_uid, to, from))
           });
-          const data = await response.json();
-          return h.response(data).type('application/json').code(201);
+          return h.response(response.data)
+            .type('application/json')
+            .code(200);
         } catch(err) {
-          return h.response(err).code(500);
+          return h.response().code(500);
         }
       }
     }
