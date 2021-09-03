@@ -1,5 +1,6 @@
 'use strict';
 const Hapi = require('@hapi/hapi');
+const axios = request('axios');
 const https = require('https');
 
 const server = Hapi.server({
@@ -47,15 +48,10 @@ const buildBody = (device_uid, to, from) => {
   };
 }
 
-const options = {
-  hostname: '40ad140d461d810ac41ed710b5c7a5b6.us-west-2.aws.found.io',
-  port: 9243,
-  path: '/_search',
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Basic ' + new Buffer(process.env.username + ':' + process.env.password).toString('base64')
-  }
+const url = 'https://40ad140d461d810ac41ed710b5c7a5b6.us-west-2.aws.found.io:9243/_search';
+const headers = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Basic ' + new Buffer(process.env.username + ':' + process.env.password).toString('base64')
 };
 
 const init = async () => {
@@ -79,26 +75,21 @@ const init = async () => {
       cors: {
         origin: ['http://localhost:5000']
       },
-      handler: (request, h) => {
+      handler: async (request, h) => {
         const device_uid = request.query.device_uid;
         const to = request.query.to;
         const from = request.query.from;
-        return new Promise(function(resolve, reject) {
-          var req = https.request(options, res => {
-            var data = '';
-            res.on('data', chunk => {
-              data += chunk;
-            });
-            res.on('end', () => {
-              resolve({
-                statusCode: 200,
-                body: data
-              });
-            });
+        
+        try {
+          const response = await axios.post(url, {
+            headers: headers,
+            data: JSON.stringify(buildBody(device_uid, to, from))
           });
-          req.write(JSON.stringify(buildBody(device_uid, to, from)));
-          req.end();
-        });
+          const data = await response.json();
+          return h.response(data).type('application/json').code(201);
+        } catch(err) {
+          return h.response(err).code(500);
+        }
       }
     }
   });
