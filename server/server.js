@@ -4,7 +4,13 @@ const https = require('https');
 
 const server = Hapi.server({
   port: 3000,
-  host: "0.0.0.0" // needed for Render deployment
+  host: '0.0.0.0', // needed for Render deployment
+  routes: {
+    cors: {
+      origin: ['http://localhost:5000'],
+      credentials: true
+    }
+  } 
 });
 
 const buildBody = (device_uid, to, from) => {
