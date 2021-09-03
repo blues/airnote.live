@@ -7,43 +7,45 @@ const server = Hapi.server({
   host: "0.0.0.0" // needed for Render deployment
 });
 
-const body = {
-  "size": 500,
-  "sort": [
-    {
-      "service_uploaded": {
-        "order": "desc"
+const buildBody = (device_uid, to, from) => {
+  return {
+    "size": 500,
+    "sort": [
+      {
+        "service_uploaded": {
+          "order": "desc"
+        }
       }
-    }
-  ],
-  "query": {
-    "bool": {
-      "must": [],
-      "filter": [
-        {
-          "bool": {
-            "should": [
-              {
-                "match_phrase": {
-                  "device_urn": "note:" + device_uid
+    ],
+    "query": {
+      "bool": {
+        "must": [],
+        "filter": [
+          {
+            "bool": {
+              "should": [
+                {
+                  "match_phrase": {
+                    "device_urn": "note:" + device_uid
+                  }
                 }
+              ]
+            }
+          },
+          {
+            "range": {
+              "service_uploaded": {
+                "format": "strict_date_optional_time",
+                "gte": from,
+                "lte": to
               }
-            ]
-          }
-        },
-        {
-          "range": {
-            "service_uploaded": {
-              "format": "strict_date_optional_time",
-              "gte": from,
-              "lte": to
             }
           }
-        }
-      ]
+        ]
+      }
     }
-  }
-};
+  };
+}
 
 const options = {
   hostname: '40ad140d461d810ac41ed710b5c7a5b6.us-west-2.aws.found.io',
@@ -74,6 +76,9 @@ const init = async () => {
     method: 'GET',
     path: '/',
     handler: (request, h) => {
+      const device_uid = request.query.device_uid;
+      const to = request.query.to;
+      const from = request.query.from;
       return new Promise(function(resolve, reject) {
         var req = https.request(options, res => {
           var data = '';
@@ -87,7 +92,7 @@ const init = async () => {
             });
           });
         });
-        req.write(JSON.stringify(body));
+        req.write(JSON.stringify(buildBody(device_uid, to, from)));
         req.end();
       });
     }
