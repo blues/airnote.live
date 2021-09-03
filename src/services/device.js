@@ -89,8 +89,8 @@ export function getCurrentDeviceFromUrl(location) {
   // If still working with the last viewed device, and we don’t have
   // a pin or productUID in the URL, grab those from local storage.
   if (deviceUID === lastViewedDevice.deviceUID) {
-    pin = lastViewedDevice.pin;
-    productUID = lastViewedDevice.productUID;
+    if (!pin) pin = lastViewedDevice.pin;
+    if (!productUID) productUID = lastViewedDevice.productUID;
   }
 
   currentDevice.pin = pin;

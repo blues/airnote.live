@@ -1,5 +1,4 @@
 import { render, waitFor } from '@testing-library/svelte';
-import Speedometer from 'svelte-speedometer';
 
 import Dashboard from '../../../src/routes/Dashboard/Dashboard.svelte';
 import { NO_DATA_ERROR_HEADING, FETCH_ERROR_HEADING } from '../../../src/constants';

@@ -54,7 +54,6 @@
         loading = false;
       })
       .catch(err => {
-        console.log(err);
         fetchError = true;
         loading = false;
       });
