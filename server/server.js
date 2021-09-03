@@ -1,7 +1,6 @@
 'use strict';
 const Hapi = require('@hapi/hapi');
-const axios = request('axios');
-const https = require('https');
+const axios = require('axios');
 
 const server = Hapi.server({
   port: 3000,
