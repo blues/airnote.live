@@ -5,12 +5,6 @@ const https = require('https');
 const server = Hapi.server({
   port: 3000,
   host: '0.0.0.0', // needed for Render deployment
-  routes: {
-    cors: {
-      origin: ['http://localhost:5000'],
-      credentials: true
-    }
-  } 
 });
 
 const buildBody = (device_uid, to, from) => {
@@ -81,26 +75,31 @@ const init = async () => {
   server.route({
     method: 'GET',
     path: '/',
-    handler: (request, h) => {
-      const device_uid = request.query.device_uid;
-      const to = request.query.to;
-      const from = request.query.from;
-      return new Promise(function(resolve, reject) {
-        var req = https.request(options, res => {
-          var data = '';
-          res.on('data', chunk => {
-            data += chunk;
-          });
-          res.on('end', () => {
-            resolve({
-              statusCode: 200,
-              body: data
+    options: {
+      cors: {
+        origin: ['http://localhost:5000']
+      },
+      handler: (request, h) => {
+        const device_uid = request.query.device_uid;
+        const to = request.query.to;
+        const from = request.query.from;
+        return new Promise(function(resolve, reject) {
+          var req = https.request(options, res => {
+            var data = '';
+            res.on('data', chunk => {
+              data += chunk;
+            });
+            res.on('end', () => {
+              resolve({
+                statusCode: 200,
+                body: data
+              });
             });
           });
+          req.write(JSON.stringify(buildBody(device_uid, to, from)));
+          req.end();
         });
-        req.write(JSON.stringify(buildBody(device_uid, to, from)));
-        req.end();
-      });
+      }
     }
   });
 
