@@ -80,6 +80,12 @@
       grid-template-columns: 25% 25% 25% 25%;
     }
   }
+  @media (max-width: 500px) {
+    .history {
+      grid-template-rows: 33% 33% 33%;
+      grid-template-columns: 33% 33% 33%;
+    }
+  }
   .history > div {
     padding-top: 1rem;
   }

@@ -181,7 +181,7 @@
     air we breathe.
   </p>
   <p>
-    Use can now
+    You can 
     <a href="/{deviceUID}/dashboard">view your device’s dashboard</a>,
     check out the 
     <a href="http://tt.safecast.org/map/note:{deviceUID}" target="_blank">global Safecast map</a>,
@@ -240,6 +240,9 @@
 </section>
 
 <style>
+  h1 {
+    text-align: center;
+  }
   p {
     text-align: center;
   }
