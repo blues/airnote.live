@@ -5,10 +5,6 @@
 
 {#if recommendationToShow == 1}
   <p>
-    Ozone pollution is often worse on hot sunny days, especially during the afternoon 
-    and early evening. Plan outdoor activities in the morning, when air quality is better 
-    and it is not as hot. 
-    <br><br>
     Particle pollution can be high any time of day. Since vehicle exhaust contains 
     particle pollution, limit activity near idling cars and buses and near busy roads, 
     especially during rush hours. Also, limit outdoor activity when there is smoke in 
