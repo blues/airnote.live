@@ -43,7 +43,7 @@ function getHistory(readings) {
 export function getReadings(deviceUID) {
   var eightDaysAgo = new Date(new Date().setDate(new Date().getDate() - 8));
 
-  return fetch(`${AWS_API_BASE}/getDeviceData?` + new URLSearchParams({
+  return fetch('https://safecast-api.onrender.com/?' + new URLSearchParams({
     device_uid: deviceUID,
     from: eightDaysAgo.toISOString(),
     to: new Date().toISOString()
