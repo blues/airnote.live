@@ -50,7 +50,7 @@ const buildBody = (device_uid, to, from) => {
 const url = 'https://40ad140d461d810ac41ed710b5c7a5b6.us-west-2.aws.found.io:9243/_search';
 const headers = {
   'Content-Type': 'application/json',
-  'Authorization': 'Basic ' + new Buffer(process.env.username + ':' + process.env.password).toString('base64')
+  'Authorization': 'Basic ' + new Buffer(process.env.SAFECAST_USERNAME + ':' + process.env.SAFECAST_PASSWORD).toString('base64')
 };
 
 const init = async () => {
