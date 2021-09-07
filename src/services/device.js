@@ -1,4 +1,4 @@
-import { AWS_API_BASE, DATE_FORMAT_KEY, airnoteProductUID } from '../constants';
+import { DATE_FORMAT_KEY, airnoteProductUID } from '../constants';
 import { format } from 'date-fns';
 import queryString from 'query-string';
 

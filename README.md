@@ -6,16 +6,14 @@ open-source reference implementation of a web-based
 
 ## Local Development
 
-First install the [node.js runtime](https://nodejs.org/en/)
+First install the [Node.js runtime](https://nodejs.org/en/).
 
 ```sh
 npm install # get dependencies
 npm run dev # start a dev server
 ```
 
-The entry-point is [./src/App.svelte](./src/App.svelte).
-
-airnote.live uses the [Svelte](https://svelte.dev/) web framework.
+airnote.live uses the [Svelte](https://svelte.dev/) web framework. The entry-point is [./src/App.svelte](./src/App.svelte).
 
 ## Testing
 
