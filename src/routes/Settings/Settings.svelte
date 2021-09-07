@@ -3,7 +3,7 @@
   import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
   import DeviceSettings from './DeviceSettings.svelte';
   import DeviceOwner from './DeviceOwner.svelte';
-  import { airnoteProductUID, notehubAPIBase, appUID } from '../../constants';
+  import { airnoteProductUID, NOTEHUB_API_URL, appUID } from '../../constants';
   import {
     deviceName,
     displayValue,
@@ -92,7 +92,7 @@
   const handleSettingsSave = async () => {
     const varsBody = createBodyFromStore();
 
-		const url = `${notehubAPIBase}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
+		const url = `${NOTEHUB_API_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
     const headers = {
       'Content-Type': 'application/json',
       'X-Auth-Token': pin
@@ -114,7 +114,7 @@
     // If no Pin, Get Env Vars using legacy req API
     if (pin === '') {
       enableFields = false;
-      const envVarsReadOnlyUrl = `${notehubAPIBase}/req?product="${airnoteProductUID}"&device="${deviceUID}"`;
+      const envVarsReadOnlyUrl = `${NOTEHUB_API_URL}/req?product="${airnoteProductUID}"&device="${deviceUID}"`;
       const envVarsReadOnlyPayload = '{"req":"hub.env.get","scope":"device"}';
 
       const response = await fetch(envVarsReadOnlyUrl, {
@@ -129,7 +129,7 @@
       updateSettingsFromEnvVars(envVars);
 
     } else { // If Pin, Get Env Vars using new V1 API
-      const envVarsReadWriteUrl = `${notehubAPIBase}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
+      const envVarsReadWriteUrl = `${NOTEHUB_API_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
       const envVarsReadWriteHeader = { 'X-Auth-Token': pin };
 
       try {
