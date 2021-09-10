@@ -1,9 +1,11 @@
 <script>
   import { NotificationDisplay } from '@beyonk/svelte-notifications';
   import { format } from 'date-fns';
+  import { unparse } from 'papaparse';
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
 
+  import DownloadIcon from '../../icons/DownloadIcon.svelte';
   import InfoIcon from '../../icons/InfoIcon.svelte';
   import ShareIcon from '../../icons/ShareIcon.svelte';
   import PrintIcon from '../../icons/PrintIcon.svelte';
@@ -18,6 +20,7 @@
   export let deviceUID;
 
   let lastReading;
+  let readings;
   let history;
 
   let noDataError = false;
@@ -32,6 +35,17 @@
     localStorage.setItem('tempDisplay', tempDisplay);
   }
 
+  const downloadData = () => {
+    const csv = 'data:text/csv;charset=utf-8,' +
+      unparse(readings);
+    const encodedURI = encodeURI(csv);
+
+    var link = document.createElement('a');
+    link.setAttribute('href', encodedURI);
+    link.setAttribute('download', 'airnote.csv');
+    link.click();
+  }
+
   onMount(() => {
     getReadings(deviceUID)
       .then(data => {
@@ -39,8 +53,8 @@
         if (!lastReading) {
           noDataError = true;
         } else {
-          lastReading.timestamp = new Date(lastReading['@timestamp']);
           history = data.history;
+          readings = data.readings;
 
           // This is a hack, but the speedometer plugin doesn’t give any
           // way to customize these labels.
@@ -99,10 +113,13 @@
     <p class="last-update" in:fade>
       Last Update:
       <span>
-        {format(lastReading['timestamp'], "MMMM dd yyyy")} at
-        {format(lastReading['timestamp'], "h:mm aaa")}
+        {format(new Date(lastReading['@timestamp']),
+          "MMMM dd yyyy 'at' h:mm aaa")}
       </span>
       <span class="actions">
+        <button class="svg-button" on:click={downloadData}>
+          <DownloadIcon />
+        </button>
         <button class="svg-button" on:click={() => window.print()}>
           <PrintIcon />
         </button>
