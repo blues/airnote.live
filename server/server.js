@@ -12,7 +12,7 @@ const buildBody = (device_uid, to, from) => {
     "size": 500,
     "sort": [
       {
-        "service_uploaded": {
+        "when_captured": {
           "order": "desc"
         }
       }
