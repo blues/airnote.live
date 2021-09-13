@@ -155,6 +155,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Airnote Device Configuration</title>
+</svelte:head>
+
 {#if fetchError}
   <div class="alert">
     <h4 class="alert-heading">Unable to fetch device details.</h4>

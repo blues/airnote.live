@@ -74,6 +74,10 @@
   });
 </script>
 
+<svelte:head>
+  <title>Airnote Dashboard</title>
+</svelte:head>
+
 <NotificationDisplay />
 
 <div class="dashboard"

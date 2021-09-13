@@ -1,3 +1,7 @@
+<svelte:head>
+  <title>Welcome to Airnote</title>
+</svelte:head>
+
 <section>
   <h1>
     Welcome to Airnote!
