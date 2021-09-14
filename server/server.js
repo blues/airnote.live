@@ -72,7 +72,12 @@ const init = async () => {
     path: '/',
     options: {
       cors: {
-        origin: ['http://localhost:5000']
+        origin: [
+          // Temporarily allow everything for staging testing
+          '*'
+          // 'http://localhost:5000',
+          // 'https://airnote.live'
+        ]
       },
       handler: async (request, h) => {
         const device_uid = request.query.device_uid;
