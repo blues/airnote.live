@@ -112,7 +112,9 @@
       <a href="https://blues.io">And use this for a link</a>.
     </p>
 
-    <h2 class="air-quality-heading" in:fade>Air Quality</h2>
+    <h2 class="air-quality-heading" in:fade>
+      Air Quality {lastReading.loc_name ? 'in ' + lastReading.loc_name : ''}
+    </h2>
 
     <p class="last-update" in:fade>
       Last Update:
