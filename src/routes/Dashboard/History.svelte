@@ -12,7 +12,7 @@
       d.setDate(d.getDate() - i)
       return format(d, DATE_FORMAT_KEY);
     });
-    return lastEightDays.splice(1);
+    return lastEightDays.splice(1).reverse();
   }
 
   function getDayDisplay(day) {
