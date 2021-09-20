@@ -5,6 +5,7 @@
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
 
+  import CloseIcon from '../../icons/CloseIcon.svelte';
   import DownloadIcon from '../../icons/DownloadIcon.svelte';
   import InfoIcon from '../../icons/InfoIcon.svelte';
   import ShareIcon from '../../icons/ShareIcon.svelte';
@@ -27,6 +28,7 @@
   let fetchError = false;
   let loading = true;
   let tempDisplay = localStorage.getItem('tempDisplay') || 'C';
+  let showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
   let showPM2_5Tooltip = false;
   let showPM10_0Tooltip = false;
 
@@ -44,6 +46,11 @@
     link.setAttribute('href', encodedURI);
     link.setAttribute('download', 'airnote.csv');
     link.click();
+  }
+
+  const closeBanner = () => {
+    showBanner = false;
+    localStorage.setItem('showBanner', 'false');
   }
 
   onMount(() => {
@@ -107,10 +114,19 @@
   {/if}
 
   {#if lastReading}
-    <p class="banner" in:fade>
-      Use this to highlight articles or news about Airnote.
-      <a href="https://blues.io">And use this for a link</a>.
-    </p>
+    {#if showBanner }
+      <div class="banner" in:fade>
+        <p>
+          The Airnote is made in partnership with
+          <a href="https://safecast.org/">Safecast</a>,
+          a volunteer-centered organization devoted to open citizen
+          science for environmental monitoring.
+        </p>
+        <button class="svg-button" on:click={closeBanner}>
+          <CloseIcon />
+        </button>
+      </div>
+    {/if}
 
     <h2 class="air-quality-heading" in:fade>
       Air Quality {lastReading.loc_name ? 'in ' + lastReading.loc_name : ''}
@@ -251,6 +267,15 @@
     background: rgb(215, 229, 241);
     padding: 0.75rem 0.75rem;
     border-radius: 0.25rem;
+    display: flex;
+    margin-top: 1rem;
+  }
+  .banner p {
+    margin: 0;
+  }
+  .banner button {
+    float: right;
+    margin-left: 0.5rem;
   }
 
   .air-quality-heading {
