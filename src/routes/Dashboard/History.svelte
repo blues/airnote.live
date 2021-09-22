@@ -30,7 +30,7 @@
     historyFilter == 'aqi' ? 'Air Quality Index' :
     historyFilter == 'pm2_5' ? 'PM2.5' : 'PM10'
   }
-  (Last 7 Days)
+  Average (Last 7 Days)
 </h3>
 <div class="history">
   {#each getLastSevenDays() as day}
