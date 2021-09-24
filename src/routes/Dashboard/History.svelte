@@ -40,7 +40,9 @@
         class="history-box"
         style="background-color: {getDisplay(historyFilter, data[historyFilter][day]).color}"
       >
-        <div class="history-value">{data[historyFilter][day] || '—'}</div>
+        <div class="history-value">{
+          data[historyFilter][day] === undefined ? '-' : data[historyFilter][day]
+        }</div>
         <div class="history-description">{getDisplay(historyFilter, data[historyFilter][day]).text}</div>
       </div>
     </div>
@@ -51,6 +53,11 @@
     class={historyFilter == 'aqi' ? 'active' : ''}
     on:click={() => historyFilter = 'aqi'}>
     Air Quality Index
+  </button>
+  <button
+    class={historyFilter == 'pm1_0' ? 'active' : ''}
+    on:click={() => historyFilter = 'pm1_0'}>
+    PM1
   </button>
   <button
     class={historyFilter == 'pm2_5' ? 'active' : ''}
@@ -91,9 +98,6 @@
     padding-top: 1rem;
   }
 
-  .test {
-
-  }
   .history .history-box {
     padding: .4rem 0 0.65rem 0;
     margin: 0.75em 1.5em 0 1.5em;

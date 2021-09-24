@@ -29,6 +29,8 @@
   let loading = true;
   let tempDisplay = localStorage.getItem('tempDisplay') || 'C';
   let showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
+
+  let showPM1_0Tooltip = false;
   let showPM2_5Tooltip = false;
   let showPM10_0Tooltip = false;
 
@@ -88,7 +90,7 @@
 <NotificationDisplay />
 
 <div class="dashboard"
-  style="opacity: {(showPM2_5Tooltip || showPM10_0Tooltip) ? 0.3 : 1}">
+  style="opacity: {(showPM1_0Tooltip || showPM2_5Tooltip || showPM10_0Tooltip) ? 0.3 : 1}">
 
   {#if loading}
     <div class="loading" />
@@ -162,15 +164,15 @@
             <span>
               PM1
               <button class="svg-button info"
-                on:click={() => showPM2_5Tooltip = true }>
+                on:click={() => showPM1_0Tooltip = true }>
                 <InfoIcon />
               </button>
             </span>
             <span>
               <span
-                title={Math.round(lastReading.pms_pm02_5)}
+                title={Math.round(lastReading.pms_pm01_0)}
                 class="circle"
-                style="background-color: {getPM10Display(lastReading.pms_pm02_5)
+                style="background-color: {getPM10Display(lastReading.pms_pm01_0)
                   .color}"
               />
             </span>
@@ -249,8 +251,14 @@
   {/if}
 </div>
 
-{#if showPM2_5Tooltip || showPM10_0Tooltip}
+{#if showPM1_0Tooltip || showPM2_5Tooltip || showPM10_0Tooltip}
   <div class="tooltip">
+    {#if showPM1_0Tooltip}
+      <p>
+        PM1.0 is particulate matter 1.0 microns and below. These particles typically 
+        consist of dust, combustion particles, bacteria, and viruses.
+      </p>
+    {/if}
     {#if showPM2_5Tooltip}
       <p>
         PM2.5 is particulate matter 2.5 microns and below. These particles typically 
@@ -269,7 +277,7 @@
       </a>
     </p>
     <button
-      on:click={() => { showPM2_5Tooltip = false; showPM10_0Tooltip = false; }}>
+      on:click={() => { showPM1_0Tooltip = false; showPM2_5Tooltip = false; showPM10_0Tooltip = false; }}>
       Close
     </button>
   </div>
