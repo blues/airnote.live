@@ -173,8 +173,7 @@ button, .btn {
   background: var(--primary);
   color: white;
   border-radius: 0.3rem;
-  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.05);
-  border: 1px solid #ccc;
+  border: none;
   padding: 0.5rem 1rem;
   font-size: 1rem;
   cursor: pointer;
@@ -182,7 +181,7 @@ button, .btn {
 }
 button:hover, .btn:hover {
   text-decoration: none;
-  background: rgb(0, 105, 217);
+  background: #009AD4;
 }
 
 .svg-button {

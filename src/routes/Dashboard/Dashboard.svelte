@@ -160,6 +160,23 @@
         <div class="measurement-pm">
           <div>
             <span>
+              PM1
+              <button class="svg-button info"
+                on:click={() => showPM2_5Tooltip = true }>
+                <InfoIcon />
+              </button>
+            </span>
+            <span>
+              <span
+                title={Math.round(lastReading.pms_pm02_5)}
+                class="circle"
+                style="background-color: {getPM10Display(lastReading.pms_pm02_5)
+                  .color}"
+              />
+            </span>
+          </div>
+          <div>
+            <span>
               PM2.5
               <button class="svg-button info"
                 on:click={() => showPM2_5Tooltip = true }>
@@ -326,29 +343,17 @@
       padding-right: 0;
     }
   }
-  .measurement-pm {
-    padding: 1rem;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .measurement-pm > div {
-    padding: 0.65rem 2rem;
-    display: flex;
-  }
-  .measurement-pm span {
-    flex-grow: 1;
-  }
-  .measurement-pm span:last-child {
-    text-align: right;
-  }
+  .measurement-pm,
   .measurement-air {
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     text-align: center;
-    padding: 1.25rem 0;
+    padding: 1.9rem 0;
   }
+
+  .measurement-air {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .measurement-pm > div,
   .measurement-air > div {
     flex-grow: 1;
     font-size: 0.8rem;
@@ -369,17 +374,18 @@
     height: 20px;
     width: 20px;
     border-radius: 20px;
-    display: inline-block;
+    display: block;
+    margin: 10px auto 0 auto;
   }
 
   .tooltip {
     position: fixed;
     top: 200px;
-    left: 0;
-    width: 100%;
+    left: 25%;
+    width: 50%;
     background: white;
     padding: 2rem;
-    border: 1px solid black;
-    border-width: 1px 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
   }
 </style>
