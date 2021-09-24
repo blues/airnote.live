@@ -17,7 +17,7 @@
 
   function getDayDisplay(day) {
     const date = parse(day, DATE_FORMAT_KEY, new Date());
-    return format(date, 'EEEE') + '<br>' + format(date, 'MMMM dd');
+    return '<div>' + format(date, 'EEEE') + '</div>' + '<div>' + format(date, 'MMMM dd') + '</div>';
   }
 
   export let data;
@@ -35,7 +35,7 @@
 <div class="history">
   {#each getLastSevenDays() as day}
     <div>
-      <span>{@html getDayDisplay(day)}</span>
+      {@html getDayDisplay(day)}
       <div
         class="history-box"
         style="background-color: {getDisplay(historyFilter, data[historyFilter][day]).color}"
@@ -74,6 +74,7 @@
     text-align: center;
     font-size: 0.8rem;
   }
+
   @media (max-width: 775px) {
     .history {
       grid-template-rows: 50% 50%;
@@ -89,11 +90,16 @@
   .history > div {
     padding-top: 1rem;
   }
+
+  .test {
+
+  }
   .history .history-box {
-    padding: 0 0 0.25rem 0;
+    padding: .4rem 0 0.65rem 0;
     margin: 0.75em 1.5em 0 1.5em;
     color: white;
     border-radius: 5px;
+    line-height: 1.3;
   }
   .history .history-value {
     font-weight: 500;
