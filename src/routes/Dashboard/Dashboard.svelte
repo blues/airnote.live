@@ -13,7 +13,7 @@
   import History from './History.svelte';
   import Recommendation from './Recommendation.svelte';
   import Speedometer from './Speedometer.svelte';
-  import { getPM2_5Display, getPM10Display } from '../../services/air';
+  import { getHeatIndex, getPM2_5Display, getPM10Display, toFahrenheit, toCelsius } from '../../services/air';
   import { getReadings } from '../../services/device';
   import { shareDashboard } from '../../util/share';
   import { NO_DATA_ERROR_HEADING, FETCH_ERROR_HEADING } from '../../constants';
@@ -62,6 +62,10 @@
         if (!lastReading) {
           noDataError = true;
         } else {
+          lastReading.heatIndex = getHeatIndex({
+            temperature: toFahrenheit(lastReading.env_temp),
+            humidity: lastReading.env_humid,
+          });
           history = data.history;
           readings = data.readings;
 
@@ -77,6 +81,7 @@
         loading = false;
       })
       .catch(err => {
+        console.error(err);
         fetchError = true;
         loading = false;
       });
@@ -84,7 +89,7 @@
 </script>
 
 <svelte:head>
-  <title>Airnote Dashboard</title>
+  <title>Airnote Dashboard {lastReading ? '— ' + lastReading.device_sn : ''}</title>
 </svelte:head>
 
 <NotificationDisplay />
@@ -132,6 +137,7 @@
 
     <h2 class="air-quality-heading" in:fade>
       Air Quality {lastReading.loc_name ? 'in ' + lastReading.loc_name : ''}
+      — {lastReading.device_sn}
     </h2>
 
     <p class="last-update" in:fade>
@@ -219,7 +225,7 @@
             <strong>
               {
                 tempDisplay == 'C' ? Math.round(lastReading.env_temp) + '°C' :
-                Math.round((lastReading.env_temp * 9/5) + 32) + '°F'
+                Math.round(toFahrenheit(lastReading.env_temp)) + '°F'
               }
             </strong>
             <button on:click={toggleTempDisplay}>
@@ -229,6 +235,15 @@
           <div>
             Humidity
             <strong>{Math.round(lastReading.env_humid)}%</strong>
+          </div>
+          <div>
+            Heat Index
+            <strong>
+              {
+                tempDisplay == 'F' ? Math.round(lastReading.heatIndex) + '°F' :
+                Math.round(toCelsius(lastReading.heatIndex)) + '°C'
+              }
+            </strong>
           </div>
           <div>
             Air Pressure
