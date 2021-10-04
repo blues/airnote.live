@@ -54,11 +54,13 @@
     on:click={() => historyFilter = 'aqi'}>
     Air Quality Index
   </button>
+  <!--
   <button
     class={historyFilter == 'pm1_0' ? 'active' : ''}
     on:click={() => historyFilter = 'pm1_0'}>
     PM1
   </button>
+  -->
   <button
     class={historyFilter == 'pm2_5' ? 'active' : ''}
     on:click={() => historyFilter = 'pm2_5'}>

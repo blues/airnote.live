@@ -166,6 +166,7 @@
 
       <div class="box measurement-box">
         <div class="measurement-pm">
+          <!--
           <div>
             <span>
               PM1
@@ -183,6 +184,7 @@
               />
             </span>
           </div>
+          -->
           <div>
             <span>
               PM2.5
