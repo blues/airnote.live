@@ -24,7 +24,7 @@
     <a href="/">
       <img alt="Airnote logo" src="/images/airnote.svg" />
     </a>
-    {#if deviceUID}
+    {#if deviceUID && pin}
       <ul class="{menuOpen ? 'open' : ''}">
         <li>
           <a href="/{deviceUID}?product={productUID}&pin={pin}">
@@ -36,18 +36,6 @@
             Dashboard
           </a>
         </li>
-        <!--
-        <li>
-          <a href="http://tt.safecast.org/dashboard/note:{deviceUID}" target="_blank">
-            Data
-          </a>
-        </li>
-        <li>
-          <a href="http://tt.safecast.org/map/note:{deviceUID}" target="_blank">
-            Global Map
-          </a>
-        </li>
-      -->
       </ul>
       <button class="svg-button" on:click={toggleMenu}>
         {#if menuOpen }<CloseIcon />{/if}
