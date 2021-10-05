@@ -131,6 +131,7 @@
           <a href="https://safecast.org/">Safecast</a>,
           a volunteer-centered organization devoted to open citizen
           science for environmental monitoring.
+          <a href="https://safecast.org/donate/">Donate here!</a>
         </p>
         <button class="svg-button" on:click={closeBanner}>
           <CloseIcon />
@@ -147,7 +148,7 @@
       </h2>
 
       <p class="provided-by">
-        Provided by <a href="https://safecast.org/">Safecast</a>
+        Courtesy of <a href="https://safecast.org/">Safecast</a>
       </p>
 
       <p class="last-update">
@@ -339,6 +340,7 @@
   .banner button {
     float: right;
     margin-left: 0.5rem;
+    align-self: center;
   }
 
   .air-quality-heading {
