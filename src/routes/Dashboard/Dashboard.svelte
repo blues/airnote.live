@@ -6,11 +6,14 @@
   import { fade } from 'svelte/transition';
 
   import CloseIcon from '../../icons/CloseIcon.svelte';
+  import ExternalLinkIcon from '../../icons/ExternalLinkIcon.svelte';
   import DownloadIcon from '../../icons/DownloadIcon.svelte';
   import InfoIcon from '../../icons/InfoIcon.svelte';
   import ShareIcon from '../../icons/ShareIcon.svelte';
   import PrintIcon from '../../icons/PrintIcon.svelte';
+
   import History from './History.svelte';
+  import Map from './Map.svelte';
   import Recommendation from './Recommendation.svelte';
   import Speedometer from './Speedometer.svelte';
   import { getHeatIndex, getPM2_5Display, getPM10Display, toFahrenheit, toCelsius } from '../../services/air';
@@ -135,29 +138,37 @@
       </div>
     {/if}
 
-    <h2 class="air-quality-heading" in:fade>
-      Air Quality {lastReading.loc_name ? 'in ' + lastReading.loc_name : ''}
-      — {lastReading.device_sn}
-    </h2>
+    <div in:fade>
+      <h2 class="air-quality-heading">
+        <span>
+          Air Quality {lastReading.loc_name ? 'in ' + lastReading.loc_name : ''}
+          — {lastReading.device_sn}
+        </span>
+      </h2>
 
-    <p class="last-update" in:fade>
-      Last Update:
-      <span>
-        {format(new Date(lastReading['@timestamp']),
-          "MMMM dd yyyy 'at' h:mm aaa")}
-      </span>
-      <span class="actions">
-        <button class="svg-button" on:click={downloadData}>
-          <DownloadIcon />
-        </button>
-        <button class="svg-button" on:click={() => window.print()}>
-          <PrintIcon />
-        </button>
-        <button class="svg-button" on:click={() => shareDashboard(deviceUID)}>
-          <ShareIcon />
-        </button>
-      </span>
-    </p>
+      <p class="provided-by">
+        Provided by <a href="https://safecast.org/">Safecast</a>
+      </p>
+
+      <p class="last-update">
+        Last Update:
+        <span>
+          {format(new Date(lastReading['@timestamp']),
+            "MMMM dd yyyy 'at' h:mm aaa")}
+        </span>
+        <span class="actions">
+          <button class="svg-button" on:click={downloadData}>
+            <DownloadIcon />
+          </button>
+          <button class="svg-button" on:click={() => window.print()}>
+            <PrintIcon />
+          </button>
+          <button class="svg-button" on:click={() => shareDashboard(deviceUID)}>
+            <ShareIcon />
+          </button>
+        </span>
+      </p>
+    </div>
 
     <div class="all-measurements" in:fade>
       <div class="box speedometer-box">
@@ -257,9 +268,19 @@
       </div>
     </div>
 
+    <a in:fade href="http://tt.safecast.org/dashboard/note:{deviceUID}" class="full-data-link svg-link" target="_blank">
+      <span>View full data</span>
+      <ExternalLinkIcon />
+    </a>
+
     <div class="box" in:fade>
       <History data={history} />
     </div>
+
+    <Map
+      lastReading={lastReading}
+      deviceUID={deviceUID}
+    />
 
     <div class="box" in:fade>
       <h3>Health Recommendations</h3>
@@ -323,12 +344,18 @@
   .air-quality-heading {
     margin-bottom: 0;
   }
-  .last-update {
-    display: flex;
+  .provided-by, .last-update {
     font-size: 0.8rem;
     margin-top: 0.25rem;
-    color: rgb(69, 129, 172);
     font-weight: 500;
+  }
+  .provided-by {
+    color: rgb(166, 188, 207);
+    margin-bottom: 0;
+  }
+  .last-update {
+    color: rgb(69, 129, 172);
+    display: flex;
   }
   .last-update span {
     color: rgb(166, 188, 207);
@@ -401,6 +428,16 @@
     border-radius: 20px;
     display: block;
     margin: 10px auto 0 auto;
+  }
+  .full-data-link {
+    font-size: 12px;
+    display: flex;
+    justify-content: right;
+    margin-top: 0.5rem;
+  }
+  .full-data-link span {
+    display: inline-block;
+    margin-right: 0.1rem;
   }
 
   .tooltip {

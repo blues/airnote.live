@@ -191,14 +191,19 @@ button:hover, .btn:hover {
   border: none;
   padding: 0;
   vertical-align: middle;
+  height: 20px;
+  width: 20px;
 }
 .svg-button:hover {
   background: transparent;
 }
-.svg-button svg {
+.svg-button svg, .svg-link svg {
   color: #1B3A52;
-  height: 20px;
-  width: 20px;
+}
+.svg-link svg {
+  color: var(--primary);
+  height: 18px;
+  width: 18px;
 }
 .svg-button.info svg {
   color: steelblue;

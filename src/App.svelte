@@ -36,6 +36,7 @@
             Dashboard
           </a>
         </li>
+        <!--
         <li>
           <a href="http://tt.safecast.org/dashboard/note:{deviceUID}" target="_blank">
             Data
@@ -46,6 +47,7 @@
             Global Map
           </a>
         </li>
+      -->
       </ul>
       <button class="svg-button" on:click={toggleMenu}>
         {#if menuOpen }<CloseIcon />{/if}
