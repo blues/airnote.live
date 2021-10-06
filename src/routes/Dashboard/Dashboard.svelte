@@ -131,7 +131,7 @@
           <a href="https://safecast.org/">Safecast</a>,
           a volunteer-centered organization devoted to open citizen
           science for environmental monitoring.
-          <a href="https://safecast.org/donate/">Donate here!</a>
+          <a href="https://safecast.org/donate/">Donate here</a>.
         </p>
         <button class="svg-button" on:click={closeBanner}>
           <CloseIcon />
