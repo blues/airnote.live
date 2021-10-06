@@ -57,10 +57,7 @@ export function getReadings(deviceUID) {
     .then(data => {
       const readings = [];
       data.hits.hits.forEach(reading => {
-        // There are some strange outliers in the sensor data.
-        if (reading._source.pms_aqi < 500) {
-          readings.push(reading._source);
-        }
+        readings.push(reading._source);
       });
       return {
         readings: readings,
