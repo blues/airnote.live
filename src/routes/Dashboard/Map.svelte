@@ -1,8 +1,8 @@
 <script>
+  import { fade } from 'svelte/transition';
   import ExternalLinkIcon from '../../icons/ExternalLinkIcon.svelte';
 
   export let lastReading;
-  export let deviceUID;
 
   let zoomLevel = 10;
   let imageDimensions = '960x300';
@@ -15,18 +15,20 @@
     mapboxToken;
 </script>
 
-<div>
-  <h3>Map</h3>
-  <a href="http://tt.safecast.org/map/note:{deviceUID}" class="svg-link" target="_blank">
-    View all Airnotes on the Safecast global map
-    <ExternalLinkIcon />
-  </a>
+<div in:fade>
+  <div class="map-heading">
+    <h3>Map</h3>
+    <a href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes" class="svg-link" target="_blank">
+      View all Airnotes on the Safecast global map
+      <ExternalLinkIcon />
+    </a>
+  </div>
+
+  <img alt="Your Airnote’s location" src={mapUrl} />
 </div>
 
-<img alt="Your Airnote’s location" src={mapUrl} />
-
 <style>
-  div {
+  .map-heading {
     display: flex;
     justify-content: space-between;
     align-items: center;

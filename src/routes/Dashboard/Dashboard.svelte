@@ -124,7 +124,7 @@
   {/if}
 
   {#if lastReading}
-    {#if showBanner }
+    {#if showBanner}
       <div class="banner" in:fade>
         <p>
           The Airnote is made in partnership with
@@ -269,19 +269,18 @@
       </div>
     </div>
 
-    <a in:fade href="http://tt.safecast.org/dashboard/note:{deviceUID}" class="full-data-link svg-link" target="_blank">
-      <span>View full data</span>
-      <ExternalLinkIcon />
-    </a>
+    <div class="full-data-link">
+      <a in:fade href="http://tt.safecast.org/dashboard/note:{deviceUID}" class="svg-link" target="_blank">
+        <span>View full data</span>
+        <ExternalLinkIcon />
+      </a>
+    </div>
 
     <div class="box" in:fade>
       <History data={history} />
     </div>
 
-    <Map
-      lastReading={lastReading}
-      deviceUID={deviceUID}
-    />
+    <Map lastReading={lastReading} />
 
     <div class="box" in:fade>
       <h3>Health Recommendations</h3>
@@ -432,10 +431,13 @@
     margin: 10px auto 0 auto;
   }
   .full-data-link {
+    margin-top: 0.5rem;
+    overflow: auto;
+  }
+  .full-data-link a {
     font-size: 12px;
     display: flex;
-    justify-content: right;
-    margin-top: 0.5rem;
+    float: right;
   }
   .full-data-link span {
     display: inline-block;
