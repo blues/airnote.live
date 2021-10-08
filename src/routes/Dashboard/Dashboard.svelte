@@ -337,8 +337,8 @@
     margin: 0;
   }
   .banner button {
-    float: right;
     margin-left: 0.5rem;
+    min-width: 20px;
     align-self: center;
   }
 
@@ -453,5 +453,12 @@
     padding: 2rem;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+  }
+  @media (max-width: 700px) {
+    .tooltip {
+      top: 100px;
+      left: 15%;
+      width: 70%;
+    }
   }
 </style>

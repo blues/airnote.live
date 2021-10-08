@@ -185,13 +185,13 @@
     air we breathe.
   </p>
   <p>
-    You can 
-    <a href="/{deviceUID}/dashboard">view your device’s dashboard</a>,
-    check out the 
+    You can view your device’s dashboard, check out the 
     <a href="http://tt.safecast.org/map/note:{deviceUID}" target="_blank">global Safecast map</a>,
     or use the forms below to personalize your device.
   </p>
-
+  <p>
+    <a href="/{deviceUID}/dashboard" class="btn">View your device’s dashboard</a>
+  </p>
   <p>
     <i>
       For help setting up your Airnote, visit
@@ -247,6 +247,9 @@
   h1 {
     text-align: center;
   }
+  a {
+    text-align: cetner;
+  }
   p {
     text-align: center;
   }
@@ -256,6 +259,7 @@
   @media (max-width: 992px) {
     section {
       max-width: 720px;
+      padding: 0 1rem;
     }
   }
 </style>

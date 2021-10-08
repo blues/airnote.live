@@ -53,8 +53,14 @@
   </div>
 
   {#if enableFields}
-    <div>
+    <div class="form-buttons">
       <button>Update Device Owner</button>
     </div>
   {/if}
 </form>
+
+<style>
+  .form-buttons {
+    text-align: center;
+  }
+</style>

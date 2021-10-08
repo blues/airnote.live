@@ -66,8 +66,17 @@
   </div>
 
   {#if enableFields}
-    <div>
+    <div class="form-buttons">
       <button>Update Device Settings</button>
     </div>
   {/if}
 </form>
+
+<style>
+  label[for="sampleFrequency"] {
+    margin-bottom: 0.5rem;
+  }
+  .form-buttons {
+    text-align: center;
+  }
+</style>

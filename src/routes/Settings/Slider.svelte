@@ -57,17 +57,20 @@
   }
   input {
     border: none;
-    height: 5px;
+    height: 1px;
     outline: none;
-    transition: background 450ms ease-in;
     -webkit-appearance: none;
     margin-top: 2rem;
+    background: var(--background);
   }
 
   .frequencyPopup {
+    color: #1B3A52;
     font-weight: 600;
     padding: 4px 12px;
     position: absolute;
+    top: 0;
+    left: 50%;
     transform: translateX(-50%);
   }
   .frequencyPopup::after {

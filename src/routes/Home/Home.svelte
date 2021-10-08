@@ -45,10 +45,12 @@
   @media (max-width: 992px) {
     section {
       max-width: 720px;
+      padding: 0 1rem;
     }
   }
   .btn {
     display: inline-block;
+    margin-bottom: 10px;
   }
   .btn + .btn {
     margin-left: 10px;
