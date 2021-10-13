@@ -52,8 +52,6 @@ header ul a {
   color: white;
 }
 header .svg-button {
-  height: 2rem;
-  width: 2rem;
   border: 1px solid white;
   align-self: center;
   margin-right: 1rem;
@@ -63,6 +61,11 @@ header .svg-button {
 }
 header .svg-button svg {
   color: white;
+}
+header .svg-button, header .svg-button svg {
+  /* Safari requires the height on both for whatever reason */
+  height: 2rem;
+  width: 2rem;
 }
 @media (max-width: 600px) {
   header {
