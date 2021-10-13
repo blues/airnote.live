@@ -73,10 +73,8 @@ const init = async () => {
     options: {
       cors: {
         origin: [
-          // Temporarily allow everything for staging testing
-          '*'
-          // 'http://localhost:5000',
-          // 'https://airnote.live'
+          'http://localhost:5000',
+          'https://airnote.live'
         ]
       },
       handler: async (request, h) => {
