@@ -12,7 +12,7 @@
   "dependencies": {
     "@hapi/hapi": "^20.1.5",
     "@hapi/inert": "^6.0.4",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "hapi-pino": "^8.3.0"
   }
 }
