@@ -15,17 +15,19 @@
     mapboxToken;
 </script>
 
-<div in:fade>
-  <div class="map-heading">
-    <h3>Map</h3>
-    <a href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes" class="svg-link" target="_blank">
-      View all Airnotes on the Safecast global map
-      <ExternalLinkIcon />
-    </a>
-  </div>
+{#if lastReading.loc_lon && lastReading.loc_lat}
+  <div in:fade>
+    <div class="map-heading">
+      <h3>Map</h3>
+      <a href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes" class="svg-link" target="_blank">
+        View all Airnotes on the Safecast global map
+        <ExternalLinkIcon />
+      </a>
+    </div>
 
-  <img alt="Your Airnote’s location" src={mapUrl} />
-</div>
+    <img alt="Your Airnote’s location" src={mapUrl} />
+  </div>
+{/if}
 
 <style>
   .map-heading {
