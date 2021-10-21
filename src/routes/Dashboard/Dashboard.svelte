@@ -16,6 +16,7 @@
   import Map from './Map.svelte';
   import Recommendation from './Recommendation.svelte';
   import Speedometer from './Speedometer.svelte';
+  import TOOLTIP_STATES from './TooltipStates';
   import { getHeatIndex, getPM2_5Display, getPM10Display, toFahrenheit, toCelsius } from '../../services/air';
   import { getReadings } from '../../services/device';
   import { shareDashboard } from '../../util/share';
@@ -32,10 +33,7 @@
   let loading = true;
   let tempDisplay = localStorage.getItem('tempDisplay') || 'C';
   let showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
-
-  let showPM1_0Tooltip = false;
-  let showPM2_5Tooltip = false;
-  let showPM10_0Tooltip = false;
+  let tooltipState = TOOLTIP_STATES.CLOSED;
 
   const toggleTempDisplay = () => {
     tempDisplay = tempDisplay == 'C' ? 'F' : 'C';
@@ -98,7 +96,7 @@
 <NotificationDisplay />
 
 <div class="dashboard"
-  style="opacity: {(showPM1_0Tooltip || showPM2_5Tooltip || showPM10_0Tooltip) ? 0.3 : 1}">
+  style="opacity: {tooltipState !== TOOLTIP_STATES.CLOSED ? 0.3 : 1}">
 
   {#if loading}
     <div class="loading" />
@@ -173,6 +171,13 @@
 
     <div class="all-measurements" in:fade>
       <div class="box speedometer-box">
+        <h5>
+          Air Quality Index
+          <button class="svg-button info"
+            on:click={() => tooltipState = TOOLTIP_STATES.AQI_HELP }>
+            <InfoIcon />
+          </button>
+        </h5>
         <Speedometer aqi={lastReading.pms_aqi} />
       </div>
 
@@ -183,7 +188,7 @@
             <span>
               PM1
               <button class="svg-button info"
-                on:click={() => showPM1_0Tooltip = true }>
+                on:click={() => tooltipState = TOOLTIP_STATES.PM01_0_HELP }>
                 <InfoIcon />
               </button>
             </span>
@@ -201,7 +206,7 @@
             <span>
               PM2.5
               <button class="svg-button info"
-                on:click={() => showPM2_5Tooltip = true }>
+                on:click={() => tooltipState = TOOLTIP_STATES.PM02_5_HELP }>
                 <InfoIcon />
               </button>
             </span>
@@ -218,7 +223,7 @@
             <span>
               PM10
               <button class="svg-button info"
-                on:click={() => showPM10_0Tooltip = true }>
+                on:click={() => tooltipState = TOOLTIP_STATES.PM10_0_HELP }>
                 <InfoIcon />
               </button>
             </span>
@@ -289,33 +294,47 @@
   {/if}
 </div>
 
-{#if showPM1_0Tooltip || showPM2_5Tooltip || showPM10_0Tooltip}
+{#if tooltipState !== TOOLTIP_STATES.CLOSED}
   <div class="tooltip">
-    {#if showPM1_0Tooltip}
+    {#if tooltipState === TOOLTIP_STATES.PM01_0_HELP}
       <p>
         PM1.0 is particulate matter 1.0 microns and below. These particles typically 
         consist of dust, combustion particles, bacteria, and viruses.
       </p>
     {/if}
-    {#if showPM2_5Tooltip}
+    {#if tooltipState === TOOLTIP_STATES.PM02_5_HELP}
       <p>
         PM2.5 is particulate matter 2.5 microns and below. These particles typically 
         consist of combustion particles, organic compounds, and metals.
       </p>
     {/if}
-    {#if showPM10_0Tooltip}
+    {#if tooltipState === TOOLTIP_STATES.PM10_0_HELP}
       <p>
         PM10 is particulate matter 10 microns and below. These particles typically
         consist of dust, pollen, and mold.
       </p>
     {/if}
+    {#if tooltipState === TOOLTIP_STATES.AQI_HELP}
+      <p>
+        Air Quality Index, or AQI, is the EPA’s index for reporting air quality.
+        The higher the AQI value, the greater the level of air pollution and the
+        greater the health concern.
+      </p>
+    {/if}
     <p>
-      <a href="https://www.epa.gov/pm-pollution/particulate-matter-pm-basics">
-        Learn more
-      </a>
+      {#if tooltipState === TOOLTIP_STATES.PM02_5_HELP || tooltipState === TOOLTIP_STATES.PM10_0_HELP}
+        <a href="https://www.epa.gov/pm-pollution/particulate-matter-pm-basics">
+          Learn more
+        </a>
+      {/if}
+      {#if tooltipState === TOOLTIP_STATES.AQI_HELP}
+        <a href="https://www.airnow.gov/aqi/aqi-basics/">
+          Learn more
+        </a>
+      {/if}
     </p>
     <button
-      on:click={() => { showPM1_0Tooltip = false; showPM2_5Tooltip = false; showPM10_0Tooltip = false; }}>
+      on:click={() => { tooltipState = TOOLTIP_STATES.CLOSED }}>
       Close
     </button>
   </div>
@@ -373,6 +392,12 @@
   }
   .speedometer-box {
     margin: 0 1rem 0 0;
+  }
+  .speedometer-box h5 {
+    margin: 0;
+    text-align: center;
+    position: relative;
+    top: -0.5rem;
   }
 
   .measurement-box {
