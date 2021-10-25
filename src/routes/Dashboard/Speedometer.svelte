@@ -5,7 +5,6 @@
   export let aqi;
 </script>
 
-<h5>Air Quality Index</h5>
 <div class="speedometer-container">
   <Speedometer
     width={300}
@@ -29,12 +28,6 @@
 </div>
 
 <style>
-  h5 {
-    margin: 0;
-    text-align: center;
-    position: relative;
-    top: -0.5rem;
-  }
   .speedometer-container {
     position: relative;
     width: 300px;
