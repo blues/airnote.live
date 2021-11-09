@@ -265,9 +265,13 @@
             </strong>
           </div>
           <div>
-            Air Pressure
+            Voltage
+            <button class="svg-button info"
+              on:click={() => tooltipState = TOOLTIP_STATES.VOLTAGE_HELP }>
+              <InfoIcon />
+            </button>
             <strong>
-              {Math.round(lastReading.env_press / 1000)} kPa
+              {Number(lastReading.bat_voltage).toFixed(1)}V
             </strong>
           </div>
         </div>
@@ -319,6 +323,14 @@
         Air Quality Index, or AQI, is the EPA’s index for reporting air quality.
         The higher the AQI value, the greater the level of air pollution and the
         greater the health concern.
+      </p>
+    {/if}
+    {#if tooltipState === TOOLTIP_STATES.VOLTAGE_HELP}
+      <p>
+        The voltage level of the Airnote. Anything over 4 volts indicates the battery
+        is full. If your Airnote is running low on battery, you may want to move your
+        device to an area with more sunlight, or
+        <a href="https://dev.blues.io/hardware/airnote-quickstart/#how-can-i-manually-charge-my-airnote">manually charge the device</a>.
       </p>
     {/if}
     <p>
