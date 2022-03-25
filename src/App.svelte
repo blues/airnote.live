@@ -17,6 +17,13 @@
   export let pin = currentDevice.pin;
   export let productUID = currentDevice.productUID;
   export let deviceUID = currentDevice.deviceUID;
+
+  // Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
+  // and we want Notehub users to view the device’s dashboard, and not the
+  // settings page.
+  if (window.location.pathname === ('/' + deviceUID) && !pin) {
+    window.location.href = `${window.location.origin}/${deviceUID}/dashboard`;
+  }
 </script>
 
 <Router {url}>
