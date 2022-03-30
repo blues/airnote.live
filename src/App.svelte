@@ -1,5 +1,6 @@
 <script>
-  import { Router, Route } from 'svelte-routing';
+  import { Router, Route, navigate } from 'svelte-routing';
+  import { onMount } from 'svelte';
 
   import CloseIcon from './icons/CloseIcon.svelte';
   import MenuIcon from './icons/MenuIcon.svelte';
@@ -8,7 +9,8 @@
   import Home from './routes/Home/Home.svelte';
   import { getCurrentDeviceFromUrl } from './services/device';
 
-  const currentDevice = getCurrentDeviceFromUrl(window.location);
+  const location = window.location;
+  const currentDevice = getCurrentDeviceFromUrl(location);
 
   let menuOpen = false;
   const toggleMenu = () => menuOpen = !menuOpen;
@@ -18,12 +20,14 @@
   export let productUID = currentDevice.productUID;
   export let deviceUID = currentDevice.deviceUID;
 
-  // Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
-  // and we want Notehub users to view the device’s dashboard, and not the
-  // settings page.
-  if (deviceUID && (window.location.pathname === ('/' + deviceUID)) && !pin) {
-    window.location.href = `${window.location.origin}/${deviceUID}/dashboard`;
-  }
+  onMount(() => {
+    // Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
+    // and we want Notehub users to view the device’s dashboard, and not the
+    // settings page.
+    if (deviceUID && (location.pathname === ('/' + deviceUID)) && !pin) {
+      navigate(`/${deviceUID}/dashboard`, { replace: true });
+    }
+  });
 </script>
 
 <Router {url}>
