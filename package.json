@@ -4,7 +4,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public -s",
+    "start": "sirv public --single --port 5555",
     "test": "jest",
     "test:watch": "npm run test -- --watch"
   },
