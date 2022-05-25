@@ -101,6 +101,16 @@ const init = async () => {
     },
   });
 
+  server.route({
+    method: "GET",
+    path: "/health",
+    options: {
+      handler: async (request, h) => {
+        return h.response({}).type("application/json").code(200);
+      },
+    },
+  });
+
   await server.start();
   console.log(`Server running at: ${server.info.uri}`);
 };
