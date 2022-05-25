@@ -110,7 +110,7 @@
     <div class="alert">
       <h4 class="alert-heading">{NO_DATA_ERROR_HEADING}</h4>
       <p>
-        There is no recent data associated with this Airnote. If this is a new
+        This Airnote has not reported data in the last seven days. If this is a new
         Airnote, it may take several hours for your device to report its first
         readings. For help setting up your Airnote, visit
         <a href='https://start.airnote.live'>start.airnote.live</a>.
