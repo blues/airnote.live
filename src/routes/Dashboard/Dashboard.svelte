@@ -40,6 +40,10 @@
     localStorage.setItem('tempDisplay', tempDisplay);
   }
 
+  const getSafecastDashboardLink = (deviceUID) => (
+    `http://tt.safecast.org/dashboard/note:${deviceUID}`
+  );
+
   const downloadData = () => {
     const csv = 'data:text/csv;charset=utf-8,' +
       unparse(readings);
@@ -105,10 +109,20 @@
   {#if noDataError}
     <div class="alert">
       <h4 class="alert-heading">{NO_DATA_ERROR_HEADING}</h4>
-      There is no data associated with this Airnote. If this is a new Airnote,
-      it may take several hours for your device to report its first readings.
-      For help setting up your Airnote, visit
-      <a href='https://start.airnote.live'>start.airnote.live</a>.
+      <p>
+        There is no recent data associated with this Airnote. If this is a new
+        Airnote, it may take several hours for your device to report its first
+        readings. For help setting up your Airnote, visit
+        <a href='https://start.airnote.live'>start.airnote.live</a>.
+      </p>
+
+      <p>
+        If this is a device that has previously reported readings, you can view
+        historical data on
+        <a href={getSafecastDashboardLink(deviceUID)}>this device’s Safecast dashboard</a>,
+        and <a href="https://discuss.blues.io">reach out on our forum</a> if you need
+        help getting your Airnote back up and running.
+      </p>
     </div>
   {/if}
 
@@ -279,7 +293,7 @@
     </div>
 
     <div class="full-data-link">
-      <a in:fade href="http://tt.safecast.org/dashboard/note:{deviceUID}" class="svg-link" target="_blank">
+      <a in:fade href="{getSafecastDashboardLink(deviceUID)}" class="svg-link" target="_blank">
         <span>View full data</span>
         <ExternalLinkIcon />
       </a>
