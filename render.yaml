@@ -11,7 +11,7 @@ services:
     pullRequestPreviewsEnabled: true
     envVars:
       - key: NOTEHUB_API_URL
-      value: https://api.notefile.net
+        value: https://api.notefile.net
     routes:
       - type: rewrite # Because we're a Single Page App (i.e. uses Client-Side Routing)
         source: /* # every page on the site...
@@ -35,7 +35,9 @@ services:
     startCommand: node server/server.js
     pullRequestPreviewsEnabled: true
     envVars:
-      -key: SAFECAST_USERNAME
-      sync: false
+      - key: SAFECAST_USERNAME
+        sync: false
       - key: SAFECAST_PASSWORD
-      sync: false
+        sync: false
+      - key: PORT
+        value: 3000
