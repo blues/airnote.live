@@ -68,8 +68,8 @@
           noDataError = true;
         } else {
           lastReading.heatIndex = getHeatIndex({
-            temperature: toFahrenheit(lastReading.env_temp),
-            humidity: lastReading.env_humid,
+            temperature: toFahrenheit(lastReading.temperature),
+            humidity: lastReading.humidity,
           });
           history = data.history;
           readings = data.readings;
@@ -94,7 +94,7 @@
 </script>
 
 <svelte:head>
-  <title>Airnote Dashboard {lastReading ? '— ' + lastReading.device_sn : ''}</title>
+  <title>Airnote Dashboard {lastReading?.serial_number ? '— ' + lastReading.serial_number : ''}</title>
 </svelte:head>
 
 <NotificationDisplay />
@@ -154,8 +154,8 @@
     <div in:fade>
       <h2 class="air-quality-heading">
         <span>
-          Air Quality {lastReading.loc_name ? 'in ' + lastReading.loc_name : ''}
-          — {lastReading.device_sn}
+          Air Quality {lastReading.location ? 'in ' + lastReading.location : ''}
+            {lastReading.serial_number ? '—' + lastReading.serial_number : ''}
         </span>
       </h2>
 
@@ -166,7 +166,7 @@
       <p class="last-update">
         Last Update:
         <span>
-          {format(new Date(lastReading['@timestamp']),
+          {format(new Date(lastReading.captured),
             "MMMM dd yyyy 'at' h:mm aaa")}
         </span>
         <span class="actions">
@@ -208,9 +208,9 @@
             </span>
             <span>
               <span
-                title={Math.round(lastReading.pms_pm01_0)}
+                title={Math.round(lastReading.pm01_0)}
                 class="circle"
-                style="background-color: {getPM10Display(lastReading.pms_pm01_0)
+                style="background-color: {getPM10Display(lastReading.pm01_0)
                   .color}"
               />
             </span>
@@ -226,9 +226,9 @@
             </span>
             <span>
               <span
-                title={Math.round(lastReading.pms_pm02_5)}
+                title={Math.round(lastReading.pm02_5)}
                 class="circle"
-                style="background-color: {getPM2_5Display(lastReading.pms_pm02_5)
+                style="background-color: {getPM2_5Display(lastReading.pm02_5)
                   .color}"
               />
             </span>
@@ -243,9 +243,9 @@
             </span>
             <span>
               <span
-                title={Math.round(lastReading.pms_pm10_0)}
+                title={Math.round(lastReading.pm10_0)}
                 class="circle"
-                style="background-color: {getPM10Display(lastReading.pms_pm10_0)
+                style="background-color: {getPM10Display(lastReading.pm10_0)
                   .color}"
               />
             </span>
@@ -257,8 +257,8 @@
             Temperature
             <strong>
               {
-                tempDisplay == 'C' ? Math.round(lastReading.env_temp) + '°C' :
-                Math.round(toFahrenheit(lastReading.env_temp)) + '°F'
+                tempDisplay == 'C' ? Math.round(lastReading.temperature) + '°C' :
+                Math.round(toFahrenheit(lastReading.temperature)) + '°F'
               }
             </strong>
             <button on:click={toggleTempDisplay}>
@@ -267,7 +267,7 @@
           </div>
           <div>
             Humidity
-            <strong>{Math.round(lastReading.env_humid)}%</strong>
+            <strong>{Math.round(lastReading.humidity)}%</strong>
           </div>
           <div>
             Heat Index
@@ -285,7 +285,7 @@
               <InfoIcon />
             </button>
             <strong>
-              {Number(lastReading.bat_voltage).toFixed(1)}V
+              {Number(lastReading.voltage).toFixed(1)}V
             </strong>
           </div>
         </div>

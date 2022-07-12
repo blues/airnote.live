@@ -1,4 +1,5 @@
 "use strict";
+const fns = require("date-fns");
 const Hapi = require("@hapi/hapi");
 const axios = require("axios");
 
@@ -7,55 +8,46 @@ const server = Hapi.server({
   host: "0.0.0.0", // needed for Render deployment
 });
 
-const buildBody = (device_uid, to, from) => {
-  return {
-    size: 500,
-    sort: [
-      {
-        when_captured: {
-          order: "desc",
-        },
-      },
-    ],
-    query: {
-      bool: {
-        must: [],
-        filter: [
-          {
-            bool: {
-              should: [
-                {
-                  match_phrase: {
-                    device_urn: "note:" + device_uid,
-                  },
-                },
-              ],
-            },
-          },
-          {
-            range: {
-              service_uploaded: {
-                format: "strict_date_optional_time",
-                gte: from,
-                lte: to,
-              },
-            },
-          },
-        ],
-      },
-    },
-  };
+const NOTEHUB_BASE_URL =
+  "https://api.notefile.net/v1/projects/app:2606f411-dea6-44a0-9743-1130f57d77d8";
+const HEADERS = {
+  "Content-Type": "application/json",
+  "X-SESSION-TOKEN": process.env.HUB_AUTH_TOKEN,
 };
 
-const url =
-  "https://40ad140d461d810ac41ed710b5c7a5b6.us-west-2.aws.found.io:9243/_search";
-const headers = {
-  "Content-Type": "application/json",
-  Authorization:
-    "Basic " +
-    new Buffer(
-      process.env.SAFECAST_USERNAME + ":" + process.env.SAFECAST_PASSWORD
-    ).toString("base64"),
+const getEightDaysAgo = () => {
+  const date = new Date();
+  const rawEpochDate = fns.sub(date, { minutes: 60 * 24 * 8 });
+  const formattedEpochDate = Math.round(
+    rawEpochDate.getTime() / 1000
+  ).toString();
+  return formattedEpochDate;
+};
+
+const getEvents = (deviceUID, startDate, since) => {
+  return axios.get(
+    NOTEHUB_BASE_URL + "/events",
+    {
+      params: {
+        deviceUIDs: deviceUID,
+        startDate: startDate,
+        since: since,
+      },
+    },
+    {
+      headers: HEADERS,
+    }
+  );
+};
+
+const getEnvironmentVariables = (deviceUID) => {
+  return axios.get(
+    `${NOTEHUB_BASE_URL}/devices/${deviceUID}/environment_variables`,
+    {},
+    {
+      headers: HEADERS,
+    }
+  );
 };
 
 const init = async () => {
@@ -81,22 +73,43 @@ const init = async () => {
         origin: ["http://localhost:5555", "https://airnote.live"],
       },
       handler: async (request, h) => {
-        const device_uid = request.query.device_uid;
-        const to = request.query.to;
-        const from = request.query.from;
+        const deviceUID = request.query.device_uid;
+        const startDate = getEightDaysAgo();
+        const allEvents = [];
+        let serialNumber;
+        let since = "";
+        let allEventsFound = false;
 
         try {
-          const response = await axios.post(
-            url,
-            buildBody(device_uid, to, from),
-            {
-              headers: headers,
-            }
-          );
-          return h.response(response.data).type("application/json").code(200);
+          const response = await getEnvironmentVariables(deviceUID);
+          serialNumber = response.data.environment_variables._sn;
         } catch (err) {
+          console.log(err);
           return h.response().code(500);
         }
+
+        while (!allEventsFound) {
+          try {
+            const response = await getEvents(deviceUID, startDate, since);
+            const filteredData = response.data.events.filter((entry) => {
+              return entry.file === "_air.qo";
+            });
+            filteredData.forEach(
+              (entry) => (entry.serial_number = serialNumber)
+            );
+            allEvents.push(...filteredData);
+            if (response.data.has_more) {
+              since = response.data.through;
+            } else {
+              allEventsFound = true;
+            }
+          } catch (err) {
+            console.log(err);
+            return h.response().code(500);
+          }
+        }
+
+        return h.response(allEvents).type("application/json").code(200);
       },
     },
   });
