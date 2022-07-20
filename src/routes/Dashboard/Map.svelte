@@ -8,14 +8,14 @@
   let imageDimensions = '960x300';
   let mapboxToken = 'pk.eyJ1IjoidGp2YW50b2xsYmx1ZXMiLCJhIjoiY2t1ZThuNzBiMHk5dzJvbzk2Ym5uMG03ZiJ9.Twd-L6c9Y3ewBv0UKYKTCQ';
   let mapUrl = 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+555555(' +
-    `${lastReading.loc_lon},${lastReading.loc_lat}` +
+    `${lastReading.lon},${lastReading.lat}` +
     ')/' +
-    `${lastReading.loc_lon},${lastReading.loc_lat}` +
+    `${lastReading.lon},${lastReading.lat}` +
     `,${zoomLevel},0/${imageDimensions}?access_token=` +
     mapboxToken;
 </script>
 
-{#if lastReading.loc_lon && lastReading.loc_lat}
+{#if lastReading.lon && lastReading.lat}
   <div in:fade>
     <div class="map-heading">
       <h3>Map</h3>

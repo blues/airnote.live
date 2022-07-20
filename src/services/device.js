@@ -48,7 +48,7 @@ function getHistory(readings) {
 
 export function getReadings(deviceUID) {
   return fetch(
-    "http://localhost:3000/?" +
+    "http://localhost:3001/?" +
       new URLSearchParams({
         device_uid: deviceUID,
       })
@@ -56,7 +56,7 @@ export function getReadings(deviceUID) {
     .then((response) => response.json())
     .then((data) => {
       const readings = [];
-      data.forEach((event) => {
+      data.reverse().forEach((event) => {
         const data = event.body;
         data.device_uid = event.device_uid;
         data.captured = event.captured;
@@ -65,6 +65,8 @@ export function getReadings(deviceUID) {
           : event.tower_location
           ? event.tower_location.name
           : "";
+        data.lat = event.gps_location?.latitude;
+        data.lon = event.gps_location?.longitude;
         data.serial_number = event.serial_number;
         readings.push(data);
       });

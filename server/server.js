@@ -4,7 +4,7 @@ const Hapi = require("@hapi/hapi");
 const axios = require("axios");
 
 const server = Hapi.server({
-  port: 3000,
+  port: 3001,
   host: "0.0.0.0", // needed for Render deployment
 });
 
