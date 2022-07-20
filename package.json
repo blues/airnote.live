@@ -2,8 +2,11 @@
   "name": "airnote.live",
   "version": "0.1.0",
   "scripts": {
+    "install-node": "cd server && npm install",
+    "install-svelte": "npm install",
+    "setup": "npm run install-node & npm run install-svelte",
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "npx concurrently --raw \"cd server && npx nodemon server.js\" \"rollup -c -w\"",
     "start": "sirv public --single --port 5555",
     "test": "jest",
     "test:watch": "npm run test -- --watch"
