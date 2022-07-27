@@ -15,6 +15,7 @@
   import History from "./History.svelte";
   import Map from "./Map.svelte";
   import VoltageChart from "./VoltageChart.svelte";
+  import TempChart from "./TempChart.svelte";
   import Recommendation from "./Recommendation.svelte";
   import Speedometer from "./Speedometer.svelte";
   import TOOLTIP_STATES from "./TooltipStates";
@@ -334,6 +335,10 @@
 
     <div class="box" in:fade>
       <VoltageChart {readings} />
+    </div>
+
+    <div class="box" in:fade>
+      <TempChart {readings} />
     </div>
   {/if}
 </div>

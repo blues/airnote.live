@@ -8,9 +8,11 @@
   let voltageChart;
   let ctx;
   let voltageData = [];
+  let chargingData = [];
 
-  $: if (voltageChart && voltageData) {
+  $: if (voltageChart && voltageData && chargingData) {
     voltageChart.data.datasets[0].data = voltageData;
+    voltageChart.data.datasets[1].data = chargingData;
     voltageChart.update();
   }
 
@@ -23,6 +25,15 @@
         borderColor: "rgb(75, 192, 192)",
         backgroundColor: "rgb(75, 192, 192, 0.5)",
         tension: 0.1,
+      },
+      {
+        label: "Charging",
+        data: chargingData,
+        fill: true,
+        backgroundColor: "rgb(255,255,0,0.4)",
+        type: "bar",
+        categoryPercentage: 1.0,
+        barPercentage: 1.0,
       },
     ],
   };
@@ -52,9 +63,12 @@
         tooltip: {
           callbacks: {
             label: function (context) {
-              let label = `Current Voltage: ${parseFloat(context.raw.y).toFixed(
-                2
-              )}V. Currently charging? ${context.raw.charging}`;
+              let label;
+              if (context.dataset.label === "Charging") {
+                label = `Current voltage ${context.raw.voltage}V.`;
+              } else {
+                label = `Current Voltage: ${context.raw.y}V.`;
+              }
               return label;
             },
           },
@@ -69,15 +83,27 @@
         const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
         return {
           x: format(d, DATE_TIME_FORMAT_KEY),
-          y: reading.voltage,
-          charging: reading.charging ? true : false,
+          y: parseFloat(reading.voltage).toFixed(2),
         };
       });
+      chargingData = readings
+        .filter((reading) => reading.charging)
+        .map((reading) => {
+          const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+          return {
+            x: format(d, DATE_TIME_FORMAT_KEY),
+            y: 5,
+            voltage: parseFloat(reading.voltage).toFixed(2),
+          };
+        });
     }
+
     getVoltageData(readings);
 
     // Initialize chart using default config set
     voltageChart = new Chart(ctx, config);
+
+    // TODO: add last charging indicator for users
   });
 
   export let readings;
