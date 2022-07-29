@@ -13,7 +13,7 @@
   import PrintIcon from "../../icons/PrintIcon.svelte";
 
   import History from "./History.svelte";
-  import Map from "./Map.svelte";
+  import MapboxMap from "./MapboxMap.svelte";
   import VoltageChart from "./VoltageChart.svelte";
   import TempChart from "./TempChart.svelte";
   import Recommendation from "./Recommendation.svelte";
@@ -326,7 +326,7 @@
       <History data={history} />
     </div>
 
-    <Map {lastReading} />
+    <MapboxMap {lastReading} />
 
     <div class="box" in:fade>
       <h3>Health Recommendations</h3>

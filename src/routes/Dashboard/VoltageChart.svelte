@@ -65,9 +65,9 @@
             label: function (context) {
               let label;
               if (context.dataset.label === "Charging") {
-                label = `Current voltage ${context.raw.voltage}V.`;
+                label = `Current voltage (V): ${context.raw.voltage}`;
               } else {
-                label = `Current Voltage: ${context.raw.y}V.`;
+                label = `Current Voltage (V): ${context.raw.y}`;
               }
               return label;
             },
@@ -102,8 +102,6 @@
 
     // Initialize chart using default config set
     voltageChart = new Chart(ctx, config);
-
-    // TODO: add last charging indicator for users
   });
 
   export let readings;
