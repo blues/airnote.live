@@ -14,6 +14,7 @@
   let mapboxToken =
     "pk.eyJ1IjoicGFpZ2VuMTEiLCJhIjoiY2lyemJlZ3A0MDBqZTJ5cGs5ZHJicjI2YyJ9.2-dZqM-k2obDN47BpWq5Lw";
 
+  // todo move these colors, layers and functions out to the air.js file probably
   const layers = ["< 12", "12-35", "35-55", "55-150", "150-250", "250+"];
   const colors = [
     "#6390D4",

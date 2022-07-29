@@ -86,7 +86,7 @@
           setTimeout(() => {
             var lastLabel = document.querySelector("text:last-child");
             if (lastLabel) {
-              lastLabel.innerHTML = "250+";
+              lastLabel.innerHTML = "300+";
             }
           });
         }
