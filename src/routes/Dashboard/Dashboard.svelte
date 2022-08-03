@@ -16,16 +16,11 @@
   import MapboxMap from "./MapboxMap.svelte";
   import VoltageChart from "./VoltageChart.svelte";
   import TempChart from "./TempChart.svelte";
+  import AQIChart from "./AQIChart.svelte";
   import Recommendation from "./Recommendation.svelte";
   import Speedometer from "./Speedometer.svelte";
   import TOOLTIP_STATES from "./TooltipStates";
-  import {
-    getHeatIndex,
-    getPM2_5Display,
-    getPM10Display,
-    toFahrenheit,
-    toCelsius,
-  } from "../../services/air";
+  import { getHeatIndex, toFahrenheit, toCelsius } from "../../services/air";
   import { getReadings } from "../../services/device";
   import { shareDashboard } from "../../util/share";
   import { NO_DATA_ERROR_HEADING, FETCH_ERROR_HEADING } from "../../constants";
@@ -39,6 +34,7 @@
   let noDataError = false;
   let fetchError = false;
   let loading = true;
+
   let tempDisplay = localStorage.getItem("tempDisplay") || "C";
   let showBanner =
     localStorage.getItem("showBanner") === "false" ? false : true;
@@ -48,6 +44,10 @@
     tempDisplay = tempDisplay == "C" ? "F" : "C";
     localStorage.setItem("tempDisplay", tempDisplay);
   };
+
+  function handleTempDisplayChange(ev) {
+    tempDisplay = ev.detail;
+  }
 
   const getSafecastDashboardLink = (deviceUID) =>
     `http://tt.safecast.org/dashboard/note:${deviceUID}`;
@@ -70,7 +70,14 @@
   onMount(() => {
     getReadings(deviceUID)
       .then((data) => {
-        lastReading = data.readings[0];
+        const hackedAqiReadings = data.readings.map((reading) => ({
+          ...reading,
+          aqi: 110,
+        }));
+        console.log(hackedAqiReadings);
+        console.log(`TODO: remove these hacked aqi readings`);
+        // todo hack the aqi history for the history chart
+        lastReading = hackedAqiReadings[0];
         if (!lastReading) {
           noDataError = true;
         } else {
@@ -79,14 +86,14 @@
             humidity: lastReading.humidity,
           });
           history = data.history;
-          readings = data.readings;
+          readings = hackedAqiReadings;
 
           // This is a hack, but the speedometer plugin doesn’t give any
           // way to customize these labels.
           setTimeout(() => {
             var lastLabel = document.querySelector("text:last-child");
             if (lastLabel) {
-              lastLabel.innerHTML = "300+";
+              lastLabel.innerHTML = "500+";
             }
           });
         }
@@ -195,7 +202,8 @@
       </p>
     </div>
 
-    <div class="all-measurements" in:fade>
+    <div class="all-measurements box" in:fade>
+      <h3 class="current-readings-title">Current Readings</h3>
       <div class="box speedometer-box">
         <h5>
           Air Quality Index
@@ -206,30 +214,26 @@
             <InfoIcon />
           </button>
         </h5>
-        <Speedometer aqi={lastReading.pms_aqi} />
+        <Speedometer aqi={lastReading.aqi} />
       </div>
 
       <div class="box measurement-box">
         <div class="measurement-pm">
-          <!--
           <div>
             <span>
               PM1
-              <button class="svg-button info"
-                on:click={() => tooltipState = TOOLTIP_STATES.PM01_0_HELP }>
+              <button
+                class="svg-button info"
+                on:click={() => (tooltipState = TOOLTIP_STATES.PM01_0_HELP)}
+              >
                 <InfoIcon />
               </button>
             </span>
-            <span>
-              <span
-                title={Math.round(lastReading.pm01_0)}
-                class="circle"
-                style="background-color: {getPM10Display(lastReading.pm01_0)
-                  .color}"
-              />
-            </span>
+            <div>
+              <strong>{Math.round(lastReading.pm01_0)}</strong>
+            </div>
           </div>
-          -->
+
           <div>
             <span>
               PM2.5
@@ -240,14 +244,9 @@
                 <InfoIcon />
               </button>
             </span>
-            <span>
-              <span
-                title={Math.round(lastReading.pm02_5)}
-                class="circle"
-                style="background-color: {getPM2_5Display(lastReading.pm02_5)
-                  .color}"
-              />
-            </span>
+            <div>
+              <strong>{Math.round(lastReading.pm02_5)}</strong>
+            </div>
           </div>
           <div>
             <span>
@@ -259,14 +258,9 @@
                 <InfoIcon />
               </button>
             </span>
-            <span>
-              <span
-                title={Math.round(lastReading.pm10_0)}
-                class="circle"
-                style="background-color: {getPM10Display(lastReading.pm10_0)
-                  .color}"
-              />
-            </span>
+            <div>
+              <strong>{Math.round(lastReading.pm10_0)}</strong>
+            </div>
           </div>
         </div>
 
@@ -308,6 +302,9 @@
           </div>
         </div>
       </div>
+      <div class="map">
+        <MapboxMap {lastReading} />
+      </div>
     </div>
 
     <div class="full-data-link">
@@ -326,19 +323,27 @@
       <History data={history} />
     </div>
 
-    <MapboxMap {lastReading} />
-
     <div class="box" in:fade>
       <h3>Health Recommendations</h3>
       <Recommendation />
     </div>
 
-    <div class="box" in:fade>
-      <VoltageChart {readings} />
-    </div>
+    <div class="all-charts">
+      <div class=" box" in:fade>
+        <VoltageChart {readings} />
+      </div>
 
-    <div class="box" in:fade>
-      <TempChart {readings} />
+      <div class="box" in:fade>
+        <TempChart
+          {tempDisplay}
+          {readings}
+          on:change={handleTempDisplayChange}
+        />
+      </div>
+
+      <div class="box" in:fade>
+        <AQIChart {readings} />
+      </div>
     </div>
   {/if}
 </div>
@@ -451,10 +456,23 @@
   }
 
   .all-measurements {
-    display: flex;
+    display: grid;
+    grid-template-areas:
+      "title title"
+      "speedometer all-measurements"
+      "map map";
+  }
+
+  .current-readings-title {
+    grid-area: title;
+  }
+
+  .map {
+    grid-area: map;
   }
   .speedometer-box {
     margin: 0 1rem 0 0;
+    grid-area: speedometer;
   }
   .speedometer-box h5 {
     margin: 0;
@@ -469,9 +487,18 @@
     padding: 0;
     margin: 0;
     flex-direction: column;
+    justify-content: space-around;
+    grid-area: all-measurements;
+  }
+
+  .all-charts {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
   @media (max-width: 700px) {
-    .all-measurements {
+    .all-measurements,
+    .all-charts {
       display: block;
     }
     .speedometer-box,
@@ -500,7 +527,8 @@
     flex-grow: 1;
     font-size: 0.8rem;
   }
-  .measurement-air strong {
+  .measurement-air strong,
+  .measurement-pm strong {
     display: block;
     font-size: 1.4rem;
   }
@@ -512,13 +540,7 @@
     border: none;
     box-shadow: none;
   }
-  .circle {
-    height: 20px;
-    width: 20px;
-    border-radius: 20px;
-    display: block;
-    margin: 10px auto 0 auto;
-  }
+
   .full-data-link {
     margin-top: 0.5rem;
     overflow: auto;

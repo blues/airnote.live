@@ -5,6 +5,8 @@
   import { DATE_TIME_FORMAT_KEY } from "../../constants";
   import Chart from "chart.js/auto";
 
+  export let readings;
+
   let voltageChart;
   let ctx;
   let voltageData = [];
@@ -22,15 +24,15 @@
         label: "Voltage",
         data: voltageData,
         fill: true,
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgb(75, 192, 192, 0.5)",
+        borderColor: "rgb(104, 159, 56)",
+        backgroundColor: "rgb(104, 159, 56, 0.5)",
         tension: 0.1,
       },
       {
         label: "Charging",
         data: chargingData,
         fill: true,
-        backgroundColor: "rgb(255,255,0,0.4)",
+        backgroundColor: "rgb(255, 224, 130, 0.6)",
         type: "bar",
         categoryPercentage: 1.0,
         barPercentage: 1.0,
@@ -103,8 +105,6 @@
     // Initialize chart using default config set
     voltageChart = new Chart(ctx, config);
   });
-
-  export let readings;
 </script>
 
-<canvas id="voltageChart" bind:this={ctx} width={400} height={200} />
+<canvas id="voltageChart" bind:this={ctx} width={420} height={300} />

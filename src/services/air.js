@@ -1,13 +1,39 @@
-const GOOD = { text: "Good", color: "#8FD2AD" };
-const MODERATE = { text: "Moderate", color: "#F8E890" };
+const GOOD = { text: "Good", color: "#00e400", textColor: "#000" };
+const MODERATE = { text: "Moderate", color: "#ffff00", textColor: "#000" };
 const UNHEALTHY_SENSITIVE = {
   text: "Unhealthy for Sensitive Groups",
-  color: "#FEBB68",
+  color: "#ff7e00",
+  textColor: "#000",
 };
-const UNHEALTHY = { text: "Unhealthy", color: "#D76E81" };
-const VERY_UNHEALTHY = { text: "Very Unhealthy", color: "#9467D2" };
-const HAZARDOUS = { text: "Hazardous", color: "#7E4B4B" };
-const NO_DATA = { text: "No Data", color: "#757575" };
+const UNHEALTHY = { text: "Unhealthy", color: "#ff0000", textColor: "#000" };
+const VERY_UNHEALTHY = {
+  text: "Very Unhealthy",
+  color: "#8f3f97",
+  textColor: "#fff",
+};
+const HAZARDOUS = { text: "Hazardous", color: "#7e0023", textColor: "#fff" };
+const NO_DATA = { text: "No Data", color: "#757575", textColor: "#fff" };
+const PM_DATA = { text: "PM Level", color: "#757575", textColor: "#fff" };
+
+export const aqiColors = [
+  "#00e400",
+  "#ffff00",
+  "#ff7e00",
+  "#ff0000",
+  "#8f3f97",
+  "#7e0023",
+];
+
+export const aqiRanges = [
+  "0 - 50",
+  "51-100",
+  "101-150",
+  "151-200",
+  "201-300",
+  "301 - 500+",
+];
+
+export const aqiTicks = [0, 50, 100, 150, 200, 300, 500];
 
 export const aqiLegend = [
   GOOD,
@@ -21,17 +47,17 @@ export const aqiLegend = [
 export function getDisplay(type, value) {
   if (type == "aqi") {
     return getAQIDisplay(value);
-  } else if (type == "pm2_5") {
-    return getPM2_5Display(value);
+    // } else if (type == "pm2_5") {
+    //   return getPM2_5Display(value);
   } else {
-    return getPM10Display(value);
+    return getPM_Display();
   }
 }
 
 // Based on https://www.airnow.gov/aqi/aqi-basics/
 export function getAQIDisplay(value) {
   switch (true) {
-    case value === undefined:
+    case value === null:
       return NO_DATA;
     case value >= 300:
       return HAZARDOUS;
@@ -43,55 +69,80 @@ export function getAQIDisplay(value) {
       return UNHEALTHY_SENSITIVE;
     case value >= 50:
       return MODERATE;
-    default:
+    case value >= 0:
       return GOOD;
+    default:
+      return NO_DATA;
+  }
+}
+
+export function getAQIColor(value) {
+  switch (true) {
+    case value === undefined:
+      return NO_DATA;
+    case value <= 50:
+      return "#00e400";
+    case value <= 100:
+      return "#ffff00";
+    case value <= 150:
+      return "#ff7e00";
+    case value <= 200:
+      return "#ff0000";
+    case value <= 300:
+      return "#8f3f97";
+    case value <= 301:
+      return "#7e0023";
   }
 }
 
 // Based on https://blissair.com/what-is-pm-2-5.htm
-export function getPM2_5Display(value) {
-  switch (true) {
-    case value === undefined:
-      return NO_DATA;
-    case value >= 250.5:
-      return HAZARDOUS;
-    case value >= 150.5:
-      return VERY_UNHEALTHY;
-    case value >= 55.5:
-      return UNHEALTHY;
-    case value >= 35.5:
-      return UNHEALTHY_SENSITIVE;
-    case value >= 12.1:
-      return MODERATE;
-    default:
-      return GOOD;
-  }
+// export function getPM2_5Display(value) {
+//   switch (true) {
+//     case value === undefined:
+//       return NO_DATA;
+//     case value >= 250.5:
+//       return HAZARDOUS;
+//     case value >= 150.5:
+//       return VERY_UNHEALTHY;
+//     case value >= 55.5:
+//       return UNHEALTHY;
+//     case value >= 35.5:
+//       return UNHEALTHY_SENSITIVE;
+//     case value >= 12.1:
+//       return MODERATE;
+//     default:
+//       return GOOD;
+//   }
+// }
+
+export function getPM_Display() {
+  return PM_DATA;
 }
 
 // Based on https://www.epa.vic.gov.au/for-community/environmental-information/air-quality/pm10-particles-in-the-air
-export function getPM10Display(value) {
-  switch (true) {
-    case value === undefined:
-      return NO_DATA;
-    case value > 300:
-      return HAZARDOUS;
-    case value > 120:
-      return VERY_UNHEALTHY;
-    case value > 80:
-      return UNHEALTHY_SENSITIVE;
-    case value > 40:
-      return MODERATE;
-    default:
-      return GOOD;
-  }
-}
+// export function getPM10Display(value) {
+//   switch (true) {
+//     case value === undefined:
+//       return NO_DATA;
+//     case value > 300:
+//       return HAZARDOUS;
+//     case value > 120:
+//       return VERY_UNHEALTHY;
+//     case value > 80:
+//       return UNHEALTHY_SENSITIVE;
+//     case value > 40:
+//       return MODERATE;
+//     default:
+//       return GOOD;
+//   }
+// }
 
 export function toFahrenheit(celsius) {
   return (9 * celsius) / 5 + 32;
 }
 
-export function toCelsius(fehrenheit) {
-  return (5 * (fehrenheit - 32)) / 9;
+export function toCelsius(fahrenheit) {
+  return (5 * (fahrenheit - 32)) / 9;
 }
 
 // Source: https://github.com/iwanaga/heat-index

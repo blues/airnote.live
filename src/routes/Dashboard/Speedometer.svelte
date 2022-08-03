@@ -1,10 +1,13 @@
 <script>
   import Speedometer from "svelte-speedometer";
-  import { getAQIDisplay, aqiLegend } from "../../services/air";
+  import {
+    getAQIDisplay,
+    aqiLegend,
+    aqiColors,
+    aqiTicks,
+  } from "../../services/air";
 
   export let aqi;
-
-  let segmentLegend = aqiLegend;
 </script>
 
 <div class="speedometer-container">
@@ -14,23 +17,18 @@
     currentValueText=""
     needleHeightRatio={0.8}
     ringWidth={30}
-    customSegmentStops={[0, 50, 100, 150, 200, 250, 300]}
-    segmentColors={[
-      "#8FD2AD",
-      "#F8E890",
-      "#FEBB68",
-      "#D76E81",
-      "#9467D2",
-      "#7E4B4B",
-    ]}
-    maxValue={300}
+    customSegmentStops={aqiTicks}
+    segmentColors={aqiColors}
+    maxValue={500}
     needleColor="black"
     labelFontSize="12px"
-    value={aqi > 300 ? 300 : aqi}
+    value={aqi > 500 ? 500 : aqi}
   />
   <div
     class="speedometer-value"
-    style="background-color: {getAQIDisplay(aqi).color}"
+    style="background-color: {getAQIDisplay(aqi).color}; color: {getAQIDisplay(
+      aqi
+    ).textColor} "
   >
     <div>{aqi}</div>
     <div class={(aqi >= 100) & (aqi < 150) ? "small" : ""}>
@@ -50,6 +48,7 @@
 <style>
   .speedometer-legend {
     display: flex;
+    justify-content: space-evenly;
   }
 
   .legend-item {

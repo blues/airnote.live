@@ -1,6 +1,5 @@
 <script>
   import { format, parse } from "date-fns";
-
   import { DATE_FORMAT_KEY } from "../../constants";
   import { getDisplay } from "../../services/air";
 
@@ -27,17 +26,69 @@
     );
   }
 
-  export let data;
+  // export let data;
+
+  const data = {
+    aqi: {
+      "August 03 2022": 0,
+      "August 02 2022": null,
+      "August 01 2022": 4,
+      "July 31 2022": 101,
+      "July 30 2022": 151,
+      "July 29 2022": 201,
+      "July 28 2022": 301,
+      "July 27 2022": 75,
+      "July 26 2022": null,
+    },
+    pm1_0: {
+      "August 03 2022": 6,
+      "August 02 2022": 6,
+      "August 01 2022": 5,
+      "July 31 2022": null,
+      "July 30 2022": 5,
+      "July 29 2022": 6,
+      "July 28 2022": 5,
+      "July 27 2022": 3,
+      "July 26 2022": null,
+    },
+    pm2_5: {
+      "August 03 2022": 9,
+      "August 02 2022": 9,
+      "August 01 2022": 8,
+      "July 31 2022": 6,
+      "July 30 2022": 8,
+      "July 29 2022": 9,
+      "July 28 2022": 8,
+      "July 27 2022": 5,
+      "July 26 2022": 2,
+    },
+    pm10_0: {
+      "August 03 2022": 9,
+      "August 02 2022": 10,
+      "August 01 2022": 8,
+      "July 31 2022": 6,
+      "July 30 2022": 9,
+      "July 29 2022": 9,
+      "July 28 2022": 8,
+      "July 27 2022": 5,
+      "July 26 2022": 2,
+    },
+  };
+  console.log(JSON.stringify(data));
 
   let historyFilter = "aqi";
 </script>
 
 <h3 class="history-heading">
-  {historyFilter == "aqi"
-    ? "Air Quality Index"
-    : historyFilter == "pm2_5"
-    ? "PM2.5"
-    : "PM10"}
+  {#if historyFilter == "aqi"}
+    Air Quality Index
+  {:else if historyFilter == "pm1_0"}
+    PM1
+  {:else if historyFilter === "pm2_5"}
+    PM2.5
+  {:else}
+    PM10
+  {/if}
   Average (Last 7 Days)
 </h3>
 <div class="history">
@@ -49,10 +100,11 @@
         style="background-color: {getDisplay(
           historyFilter,
           data[historyFilter][day]
-        ).color}"
+        ).color}; color: {getDisplay(historyFilter, data[historyFilter][day])
+          .textColor}; "
       >
         <div class="history-value">
-          {data[historyFilter][day] === undefined
+          {Number.isNaN(data[historyFilter][day])
             ? "-"
             : data[historyFilter][day]}
         </div>
@@ -70,13 +122,14 @@
   >
     Air Quality Index
   </button>
-  <!--
+
   <button
-    class={historyFilter == 'pm1_0' ? 'active' : ''}
-    on:click={() => historyFilter = 'pm1_0'}>
+    class={historyFilter == "pm1_0" ? "active" : ""}
+    on:click={() => (historyFilter = "pm1_0")}
+  >
     PM1
   </button>
-  -->
+
   <button
     class={historyFilter == "pm2_5" ? "active" : ""}
     on:click={() => (historyFilter = "pm2_5")}
@@ -97,21 +150,21 @@
   }
   .history {
     display: grid;
-    grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%;
+    grid-template-columns: repeat(7, 1fr);
     text-align: center;
     font-size: 0.8rem;
   }
 
   @media (max-width: 775px) {
     .history {
-      grid-template-rows: 50% 50%;
-      grid-template-columns: 25% 25% 25% 25%;
+      grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
   }
   @media (max-width: 500px) {
     .history {
-      grid-template-rows: 33% 33% 33%;
-      grid-template-columns: 33% 33% 33%;
+      grid-template-rows: repeat(3, 1fr);
+      grid-template-columns: repeat(3, 1fr);
     }
   }
   .history > div {

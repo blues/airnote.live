@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
   import ExternalLinkIcon from "../../icons/ExternalLinkIcon.svelte";
+  import { aqiColors, aqiRanges, getAQIColor } from "../../services/air";
   import mapboxgl from "mapbox-gl";
 
   export let lastReading;
@@ -14,33 +15,6 @@
   let mapboxToken =
     "pk.eyJ1IjoicGFpZ2VuMTEiLCJhIjoiY2lyemJlZ3A0MDBqZTJ5cGs5ZHJicjI2YyJ9.2-dZqM-k2obDN47BpWq5Lw";
 
-  // todo move these colors, layers and functions out to the air.js file probably
-  const layers = ["< 12", "12-35", "35-55", "55-150", "150-250", "250+"];
-  const colors = [
-    "#6390D4",
-    "#ADCDFF",
-    "#D9B4EB",
-    "#F5818D",
-    "#FEF287",
-    "#FFFFFF",
-  ];
-
-  const determineMarkerColor = (pm2Reading) => {
-    if (pm2Reading < 12) {
-      markerColor = "#6390D4";
-    } else if (pm2Reading > 12 && pm2Reading < 36) {
-      markerColor = "#ADCDFF";
-    } else if (pm2Reading > 36 && pm2Reading < 56) {
-      markerColor = "#D9B4EB";
-    } else if (pm2Reading > 56 && pm2Reading < 150) {
-      markerColor = "#F5818D";
-    } else if (pm2Reading > 150 && pm2Reading < 250) {
-      markerColor = "#FEF287";
-    } else {
-      markerColor = "#f2f1f1";
-    }
-  };
-
   onMount(() => {
     mapboxgl.accessToken = mapboxToken;
     map = new mapboxgl.Map({
@@ -50,8 +24,8 @@
       zoom,
     });
 
-    layers.forEach((layer, i) => {
-      const color = colors[i];
+    aqiRanges.forEach((layer, i) => {
+      const color = aqiColors[i];
       const item = document.createElement("div");
       const key = document.createElement("span");
       item.className = "legend-wrapper";
@@ -71,13 +45,16 @@
     });
 
     popup = new mapboxgl.Popup().setHTML(
-      `<h3>Device ID: ${lastReading.device_uid}</h3>
+      `<h3 style="margin-top:1rem">Device ID: ${lastReading.device_uid}</h3>
+      <p><span class="mapboxgl-pm">AQI:</span> ${parseFloat(
+        lastReading.aqi
+      ).toFixed(2)}</p>
       <p><span class="mapboxgl-pm">PM2.5:</span> ${parseFloat(
         lastReading.pm02_5
       ).toFixed(2)}</p>`
     );
 
-    determineMarkerColor(lastReading.pm02_5);
+    markerColor = getAQIColor(lastReading.aqi);
 
     airnoteMarker = new mapboxgl.Marker({ color: markerColor })
       .setLngLat([lastReading.lon, lastReading.lat])
@@ -139,14 +116,19 @@
     z-index: 2;
     border-radius: 3px;
     grid-area: 1 / 1;
-    width: 100px;
+    width: 110px;
     height: 170px;
     margin: auto 0 15px 15px;
     padding: 10px 0 0 10px;
   }
 
+  :global(.mapboxgl-title) {
+    margin-top: 1rem;
+  }
+
   :global(.mapboxgl-popup-close-button) {
     color: black;
+    padding-bottom: 0.5rem;
   }
 
   :global(.mapboxgl-pm) {
