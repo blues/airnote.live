@@ -56,10 +56,10 @@ export function getReadings(deviceUID) {
     .then((response) => response.json())
     .then((data) => {
       const readings = [];
-      data.reverse().forEach((event) => {
+      data.forEach((event) => {
         const data = event.body;
         data.device_uid = event.device_uid;
-        data.captured = event.captured;
+        data.captured = event.modified;
         data.location = event.gps_location
           ? event.gps_location.name
           : event.tower_location

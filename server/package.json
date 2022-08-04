@@ -13,7 +13,7 @@
     "@hapi/hapi": "^20.1.5",
     "@hapi/inert": "^6.0.4",
     "axios": "^0.21.4",
-    "date-fns": "^2.28.0",
+    "dotenv": "^16.0.1",
     "hapi-pino": "^8.3.0"
   }
 }
