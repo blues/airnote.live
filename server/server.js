@@ -1,5 +1,5 @@
 "use strict";
-const fns = require("date-fns");
+require("dotenv").config();
 const Hapi = require("@hapi/hapi");
 const axios = require("axios");
 
@@ -8,30 +8,24 @@ const server = Hapi.server({
   host: "0.0.0.0", // needed for Render deployment
 });
 
-const NOTEHUB_BASE_URL =
-  "https://api.notefile.net/v1/projects/app:2606f411-dea6-44a0-9743-1130f57d77d8";
+const NOTEHUB_BASE_URL = "https://api.notefile.net";
+const AIRNOTE_PROJECT_UID = "app:2606f411-dea6-44a0-9743-1130f57d77d8";
 const HEADERS = {
   "Content-Type": "application/json",
   "X-SESSION-TOKEN": process.env.HUB_AUTH_TOKEN,
 };
 
-const getEightDaysAgo = () => {
-  const date = new Date();
-  const rawEpochDate = fns.sub(date, { minutes: 60 * 24 * 8 });
-  const formattedEpochDate = Math.round(
-    rawEpochDate.getTime() / 1000
-  ).toString();
-  return formattedEpochDate;
-};
-
-const getEvents = (deviceUID, startDate, since) => {
-  return axios.get(
-    NOTEHUB_BASE_URL + "/events",
+const getEvents = (deviceUID) => {
+  return axios.post(
+    `https://api.notefile.net/req?app=${AIRNOTE_PROJECT_UID}`,
     {
-      params: {
-        deviceUIDs: deviceUID,
-        startDate: startDate,
-        since: since,
+      req: "hub.app.data.query",
+      query: {
+        columns: ".modified;.body;.payload",
+        limit: 1000,
+        order: ".modified",
+        descending: true,
+        where: `.file::text='_air.qo' and .device::text='${deviceUID}' and .modified >= now()-interval '8 days'`,
       },
     },
     {
@@ -42,7 +36,7 @@ const getEvents = (deviceUID, startDate, since) => {
 
 const getEnvironmentVariables = (deviceUID) => {
   return axios.get(
-    `${NOTEHUB_BASE_URL}/devices/${deviceUID}/environment_variables`,
+    `${NOTEHUB_BASE_URL}/v1/projects/${AIRNOTE_PROJECT_UID}/devices/${deviceUID}/environment_variables`,
     {},
     {
       headers: HEADERS,
@@ -74,40 +68,22 @@ const init = async () => {
       },
       handler: async (request, h) => {
         const deviceUID = request.query.device_uid;
-        const startDate = getEightDaysAgo();
         const allEvents = [];
-        let serialNumber;
-        let since = "";
-        let allEventsFound = false;
 
-        try {
-          const response = await getEnvironmentVariables(deviceUID);
-          serialNumber = response.data.environment_variables._sn;
-        } catch (err) {
-          console.log(err);
-          return h.response().code(500);
-        }
-
-        while (!allEventsFound) {
-          try {
-            const response = await getEvents(deviceUID, startDate, since);
-            const filteredData = response.data.events.filter((entry) => {
-              return entry.file === "_air.qo";
-            });
-            filteredData.forEach(
-              (entry) => (entry.serial_number = serialNumber)
-            );
-            allEvents.push(...filteredData);
-            if (response.data.has_more) {
-              since = response.data.through;
-            } else {
-              allEventsFound = true;
-            }
-          } catch (err) {
+        await Promise.all([
+          getEnvironmentVariables(deviceUID),
+          getEvents(deviceUID),
+        ])
+          .then((responses) => {
+            const [envVarResponse, eventsResponse] = responses;
+            let serialNumber = envVarResponse.data.environment_variables._sn;
+            allEvents.push(...eventsResponse.data);
+            allEvents.forEach((entry) => (entry.serial_number = serialNumber));
+          })
+          .catch((err) => {
             console.log(err);
             return h.response().code(500);
-          }
-        }
+          });
 
         return h.response(allEvents).type("application/json").code(200);
       },
