@@ -26,56 +26,7 @@
     );
   }
 
-  // export let data;
-
-  const data = {
-    aqi: {
-      "August 03 2022": 0,
-      "August 02 2022": null,
-      "August 01 2022": 4,
-      "July 31 2022": 101,
-      "July 30 2022": 151,
-      "July 29 2022": 201,
-      "July 28 2022": 301,
-      "July 27 2022": 75,
-      "July 26 2022": null,
-    },
-    pm1_0: {
-      "August 03 2022": 6,
-      "August 02 2022": 6,
-      "August 01 2022": 5,
-      "July 31 2022": null,
-      "July 30 2022": 5,
-      "July 29 2022": 6,
-      "July 28 2022": 5,
-      "July 27 2022": 3,
-      "July 26 2022": null,
-    },
-    pm2_5: {
-      "August 03 2022": 9,
-      "August 02 2022": 9,
-      "August 01 2022": 8,
-      "July 31 2022": 6,
-      "July 30 2022": 8,
-      "July 29 2022": 9,
-      "July 28 2022": 8,
-      "July 27 2022": 5,
-      "July 26 2022": 2,
-    },
-    pm10_0: {
-      "August 03 2022": 9,
-      "August 02 2022": 10,
-      "August 01 2022": 8,
-      "July 31 2022": 6,
-      "July 30 2022": 9,
-      "July 29 2022": 9,
-      "July 28 2022": 8,
-      "July 27 2022": 5,
-      "July 26 2022": 2,
-    },
-  };
-  console.log(JSON.stringify(data));
-
+  export let data;
   let historyFilter = "aqi";
 </script>
 

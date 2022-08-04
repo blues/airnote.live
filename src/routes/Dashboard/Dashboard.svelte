@@ -6,7 +6,6 @@
   import { fade } from "svelte/transition";
 
   import CloseIcon from "../../icons/CloseIcon.svelte";
-  import ExternalLinkIcon from "../../icons/ExternalLinkIcon.svelte";
   import DownloadIcon from "../../icons/DownloadIcon.svelte";
   import InfoIcon from "../../icons/InfoIcon.svelte";
   import ShareIcon from "../../icons/ShareIcon.svelte";
@@ -17,6 +16,7 @@
   import VoltageChart from "./VoltageChart.svelte";
   import TempChart from "./TempChart.svelte";
   import AQIChart from "./AQIChart.svelte";
+  import PMChart from "./PMChart.svelte";
   import Recommendation from "./Recommendation.svelte";
   import Speedometer from "./Speedometer.svelte";
   import TOOLTIP_STATES from "./TooltipStates";
@@ -70,14 +70,7 @@
   onMount(() => {
     getReadings(deviceUID)
       .then((data) => {
-        const hackedAqiReadings = data.readings.map((reading) => ({
-          ...reading,
-          aqi: 110,
-        }));
-        console.log(hackedAqiReadings);
-        console.log(`TODO: remove these hacked aqi readings`);
-        // todo hack the aqi history for the history chart
-        lastReading = hackedAqiReadings[0];
+        lastReading = data.readings[0];
         if (!lastReading) {
           noDataError = true;
         } else {
@@ -86,7 +79,7 @@
             humidity: lastReading.humidity,
           });
           history = data.history;
-          readings = hackedAqiReadings;
+          readings = data.readings;
 
           // This is a hack, but the speedometer plugin doesn’t give any
           // way to customize these labels.
@@ -307,18 +300,6 @@
       </div>
     </div>
 
-    <div class="full-data-link">
-      <a
-        in:fade
-        href={getSafecastDashboardLink(deviceUID)}
-        class="svg-link"
-        target="_blank"
-      >
-        <span>View full data</span>
-        <ExternalLinkIcon />
-      </a>
-    </div>
-
     <div class="box" in:fade>
       <History data={history} />
     </div>
@@ -343,6 +324,10 @@
 
       <div class="box" in:fade>
         <AQIChart {readings} />
+      </div>
+
+      <div class="box" in:fade>
+        <PMChart {readings} />
       </div>
     </div>
   {/if}
@@ -539,20 +524,6 @@
     font-size: 11px;
     border: none;
     box-shadow: none;
-  }
-
-  .full-data-link {
-    margin-top: 0.5rem;
-    overflow: auto;
-  }
-  .full-data-link a {
-    font-size: 12px;
-    display: flex;
-    float: right;
-  }
-  .full-data-link span {
-    display: inline-block;
-    margin-right: 0.1rem;
   }
 
   .tooltip {

@@ -5,7 +5,6 @@
   import Chart from "chart.js/auto";
 
   export let readings;
-  console.log(readings);
 
   let aqiChart;
   let ctx;
@@ -13,7 +12,6 @@
 
   $: if (aqiChart) {
     aqiChart.data.datasets[0].data = aqiData;
-
     aqiChart.update();
   }
 
@@ -23,8 +21,8 @@
         label: "AQI",
         data: aqiData,
         fill: true,
-        backgroundColor: "rgb(89, 210, 255, 0.5)",
-        borderColor: "rgb(89, 210, 255)",
+        backgroundColor: "rgb(186, 104, 200, 0.5)",
+        borderColor: "rgb(186, 104, 200)",
         tension: 0.1,
       },
     ],
@@ -46,7 +44,7 @@
       plugins: {
         title: {
           display: true,
-          text: "AQI",
+          text: "Air Quality Index ",
         },
       },
     },

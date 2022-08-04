@@ -1,8 +1,9 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import ExternalLinkIcon from "../../icons/ExternalLinkIcon.svelte";
+  import { format, parseISO } from "date-fns";
   import { aqiColors, aqiRanges, getAQIColor } from "../../services/air";
+  import { DATE_TIME_FORMAT_KEY, DATE_TIME_KEY } from "../../constants";
   import mapboxgl from "mapbox-gl";
 
   export let lastReading;
@@ -44,14 +45,23 @@
       legend.appendChild(item);
     });
 
+    const d = parseISO(lastReading.captured, DATE_TIME_FORMAT_KEY);
+
     popup = new mapboxgl.Popup().setHTML(
-      `<h3 style="margin-top:1rem">Device ID: ${lastReading.device_uid}</h3>
-      <p><span class="mapboxgl-pm">AQI:</span> ${parseFloat(
+      `<p style="text-align: center; margin:0">${format(d, DATE_TIME_KEY)}</p>
+      <h3 style="margin: 0">Device ID: ${lastReading.device_uid}</h3>
+      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">AQI:</span> ${parseFloat(
         lastReading.aqi
       ).toFixed(2)}</p>
-      <p><span class="mapboxgl-pm">PM2.5:</span> ${parseFloat(
+      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM1.0:</span> ${parseFloat(
+        lastReading.pm01_0
+      ).toFixed(2)} μg/m³</p>
+      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM2.5:</span> ${parseFloat(
         lastReading.pm02_5
-      ).toFixed(2)}</p>`
+      ).toFixed(2)} μg/m³</p>
+      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM10.0:</span> ${parseFloat(
+        lastReading.pm10_0
+      ).toFixed(2)} μg/m³</p>`
     );
 
     markerColor = getAQIColor(lastReading.aqi);
@@ -73,19 +83,11 @@
 {#if lastReading.lon && lastReading.lat}
   <div in:fade>
     <div class="map-heading">
-      <h3>Map</h3>
-      <a
-        href="https://grafana.safecast.cc/d/t_Z6DlbGz/safecast-all-airnotes"
-        class="svg-link"
-        target="_blank"
-      >
-        View all Airnotes on the Safecast global map
-        <ExternalLinkIcon />
-      </a>
+      <h3 style="margin-top: 1rem">Map</h3>
     </div>
     <div class="map-wrapper">
-      <div id="map" style="height:300px;max-width:960px" />
-      <div id="legend" class="map-overlay" />
+      <div id="map" style="height:320px;max-width:960px" />
+      <div id="legend" class="map-overlay">AQI Levels</div>
     </div>
   </div>
 {/if}
@@ -95,12 +97,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  a {
-    font-size: 0.8rem;
-    font-weight: normal;
-    display: flex;
   }
 
   .map-wrapper {
@@ -117,7 +113,7 @@
     border-radius: 3px;
     grid-area: 1 / 1;
     width: 110px;
-    height: 170px;
+    height: 185px;
     margin: auto 0 15px 15px;
     padding: 10px 0 0 10px;
   }
