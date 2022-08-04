@@ -21,7 +21,8 @@ const getEvents = (deviceUID) => {
     {
       req: "hub.app.data.query",
       query: {
-        columns: ".modified;.body;.payload",
+        columns:
+          ".body;.when;lat:(events.value->'best_lat');lon:(events.value->'best_lon');location:(events.value->'best_location')",
         limit: 1000,
         order: ".modified",
         descending: true,

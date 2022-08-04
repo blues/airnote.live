@@ -59,14 +59,10 @@ export function getReadings(deviceUID) {
       data.forEach((event) => {
         const data = event.body;
         data.device_uid = event.device_uid;
-        data.captured = event.modified;
-        data.location = event.gps_location
-          ? event.gps_location.name
-          : event.tower_location
-          ? event.tower_location.name
-          : "";
-        data.lat = event.gps_location?.latitude;
-        data.lon = event.gps_location?.longitude;
+        data.captured = event.when;
+        data.location = event.location;
+        data.lat = event.lat;
+        data.lon = event.lon;
         data.serial_number = event.serial_number;
         readings.push(data);
       });
