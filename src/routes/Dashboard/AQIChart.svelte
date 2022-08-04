@@ -44,7 +44,7 @@
       plugins: {
         title: {
           display: true,
-          text: "Air Quality Index ",
+          text: "AQI",
         },
       },
     },

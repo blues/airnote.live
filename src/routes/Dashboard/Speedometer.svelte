@@ -49,6 +49,7 @@
   .speedometer-legend {
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
   }
 
   .legend-item {

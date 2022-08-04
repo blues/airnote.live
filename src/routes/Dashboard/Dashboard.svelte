@@ -310,11 +310,11 @@
     </div>
 
     <div class="all-charts">
-      <div class=" box" in:fade>
+      <div class="box chart1" in:fade>
         <VoltageChart {readings} />
       </div>
 
-      <div class="box" in:fade>
+      <div class="box chart2" in:fade>
         <TempChart
           {tempDisplay}
           {readings}
@@ -322,11 +322,11 @@
         />
       </div>
 
-      <div class="box" in:fade>
+      <div class="box chart3" in:fade>
         <AQIChart {readings} />
       </div>
 
-      <div class="box" in:fade>
+      <div class="box chart4" in:fade>
         <PMChart {readings} />
       </div>
     </div>
@@ -477,11 +477,32 @@
   }
 
   .all-charts {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-areas:
+      "chart1 chart1 chart2 chart2 "
+      ". chart3 chart3 . "
+      "chart4 chart4 chart4 chart4";
+    column-gap: 0.5rem;
   }
-  @media (max-width: 700px) {
+
+  .chart1 {
+    grid-area: chart1;
+  }
+
+  .chart2 {
+    grid-area: chart2;
+  }
+
+  .chart3 {
+    grid-area: chart3;
+    justify-self: center;
+  }
+
+  .chart4 {
+    grid-area: chart4;
+  }
+
+  @media (max-width: 780px) {
     .all-measurements,
     .all-charts {
       display: block;

@@ -140,6 +140,7 @@
   .button-group {
     text-align: center;
     margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
   }
   .button-group button.active {
     border: 1px solid transparent;
