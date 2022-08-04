@@ -17,6 +17,7 @@
   import TempChart from "./TempChart.svelte";
   import AQIChart from "./AQIChart.svelte";
   import PMChart from "./PMChart.svelte";
+  import HumidityChart from "./HumidityChart.svelte";
   import Recommendation from "./Recommendation.svelte";
   import Speedometer from "./Speedometer.svelte";
   import TOOLTIP_STATES from "./TooltipStates";
@@ -164,7 +165,7 @@
       </div>
     {/if}
 
-    <div in:fade>
+    <div class="air-quality-wrapper" in:fade>
       <h2 class="air-quality-heading">
         <span>
           Air Quality {lastReading.location ? "in " + lastReading.location : ""}
@@ -172,31 +173,27 @@
         </span>
       </h2>
 
-      <p class="provided-by">
-        Courtesy of <a href="https://safecast.org/">Safecast</a>
-      </p>
+      <span class="actions">
+        <button class="svg-button" on:click={downloadData}>
+          <DownloadIcon />
+        </button>
+        <button class="svg-button" on:click={() => window.print()}>
+          <PrintIcon />
+        </button>
+        <button class="svg-button" on:click={() => shareDashboard(deviceUID)}>
+          <ShareIcon />
+        </button>
+      </span>
+    </div>
 
+    <div class="all-measurements box" in:fade>
+      <h3 class="current-readings-title">Current Reading</h3>
       <p class="last-update">
         Last Update:
         <span>
           {format(new Date(lastReading.captured), "MMMM dd yyyy 'at' h:mm aaa")}
         </span>
-        <span class="actions">
-          <button class="svg-button" on:click={downloadData}>
-            <DownloadIcon />
-          </button>
-          <button class="svg-button" on:click={() => window.print()}>
-            <PrintIcon />
-          </button>
-          <button class="svg-button" on:click={() => shareDashboard(deviceUID)}>
-            <ShareIcon />
-          </button>
-        </span>
       </p>
-    </div>
-
-    <div class="all-measurements box" in:fade>
-      <h3 class="current-readings-title">Current Readings</h3>
       <div class="box speedometer-box">
         <h5>
           Air Quality Index
@@ -309,6 +306,8 @@
       <Recommendation />
     </div>
 
+    <h3>Historical Readings (Last 7 Days)</h3>
+
     <div class="all-charts">
       <div class="box chart1" in:fade>
         <VoltageChart {readings} />
@@ -326,7 +325,9 @@
         <AQIChart {readings} />
       </div>
 
-      <div class="box chart4" in:fade>
+      <div class="box chart4" in:fade><HumidityChart {readings} /></div>
+
+      <div class="box chart5" in:fade>
         <PMChart {readings} />
       </div>
     </div>
@@ -413,22 +414,19 @@
     align-self: center;
   }
 
-  .air-quality-heading {
-    margin-bottom: 0;
+  .air-quality-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-  .provided-by,
+
   .last-update {
     font-size: 0.8rem;
     margin-top: 0.25rem;
     font-weight: 500;
-  }
-  .provided-by {
-    color: rgb(166, 188, 207);
-    margin-bottom: 0;
-  }
-  .last-update {
     color: rgb(69, 129, 172);
     display: flex;
+    grid-area: last-update;
   }
   .last-update span {
     color: rgb(166, 188, 207);
@@ -444,12 +442,14 @@
     display: grid;
     grid-template-areas:
       "title title"
+      "last-update last-update"
       "speedometer all-measurements"
       "map map";
   }
 
   .current-readings-title {
     grid-area: title;
+    margin-bottom: 0;
   }
 
   .map {
@@ -479,9 +479,9 @@
   .all-charts {
     display: grid;
     grid-template-areas:
-      "chart1 chart1 chart2 chart2 "
-      ". chart3 chart3 . "
-      "chart4 chart4 chart4 chart4";
+      "chart1 chart2"
+      "chart3 chart4"
+      "chart5 chart5";
     column-gap: 0.5rem;
   }
 
@@ -495,11 +495,14 @@
 
   .chart3 {
     grid-area: chart3;
-    justify-self: center;
   }
 
   .chart4 {
     grid-area: chart4;
+  }
+
+  .chart5 {
+    grid-area: chart5;
   }
 
   @media (max-width: 780px) {
@@ -522,7 +525,7 @@
   .measurement-air {
     display: flex;
     text-align: center;
-    padding: 1.9rem 0;
+    padding: 3rem 0;
   }
 
   .measurement-air {

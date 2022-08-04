@@ -67,9 +67,9 @@
             label: function (context) {
               let label;
               if (context.dataset.label === "Charging") {
-                label = `Current voltage (V): ${context.raw.voltage}`;
+                label = `Voltage (V): ${context.raw.voltage}`;
               } else {
-                label = `Current Voltage (V): ${context.raw.y}`;
+                label = `Voltage (V): ${context.raw.y}`;
               }
               return label;
             },

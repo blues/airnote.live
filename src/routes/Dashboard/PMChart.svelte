@@ -5,7 +5,6 @@
   import Chart from "chart.js/auto";
 
   export let readings;
-  console.log(readings);
 
   let pmChart;
   let ctx;

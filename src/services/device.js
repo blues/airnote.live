@@ -58,7 +58,7 @@ export function getReadings(deviceUID) {
       const readings = [];
       data.forEach((event) => {
         const data = event.body;
-        data.device_uid = event.device_uid;
+        data.device_uid = deviceUID;
         data.captured = event.when;
         data.location = event.location;
         data.lat = event.lat;

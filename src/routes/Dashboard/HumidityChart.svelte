@@ -6,23 +6,23 @@
 
   export let readings;
 
-  let aqiChart;
+  let humdityChart;
   let ctx;
-  let aqiData = [];
+  let humidityData = [];
 
-  $: if (aqiChart) {
-    aqiChart.data.datasets[0].data = aqiData;
-    aqiChart.update();
+  $: if (humdityChart) {
+    humdityChart.data.datasets[0].data = humidityData;
+    humdityChart.update();
   }
 
   const data = {
     datasets: [
       {
-        label: "AQI",
-        data: aqiData,
+        label: "Humidity (%)",
+        data: humidityData,
         fill: true,
-        backgroundColor: "rgb(186, 104, 200, 0.5)",
-        borderColor: "rgb(186, 104, 200)",
+        backgroundColor: "rgb(255, 126, 109, 0.5)",
+        borderColor: "rgb(255, 126, 109)",
         tension: 0.1,
       },
     ],
@@ -44,27 +44,27 @@
       plugins: {
         title: {
           display: true,
-          text: "Air Quality Index",
+          text: "Humidity (%)",
         },
       },
     },
   };
 
   onMount(async () => {
-    function getAQIData(readings) {
-      aqiData = readings.map((reading) => {
+    function getHumidityData(readings) {
+      humidityData = readings.map((reading) => {
         const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
         return {
           x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(reading.aqi).toFixed(2),
+          y: parseFloat(reading.humidity).toFixed(2),
         };
       });
     }
 
-    getAQIData(readings);
+    getHumidityData(readings);
 
-    aqiChart = new Chart(ctx, config);
+    humdityChart = new Chart(ctx, config);
   });
 </script>
 
-<canvas id="aqiChart" bind:this={ctx} width={420} height={300} />
+<canvas id="humdityChart" bind:this={ctx} width={420} height={300} />
