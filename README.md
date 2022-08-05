@@ -6,31 +6,31 @@ open-source reference implementation of a web-based
 
 ## Local Development
 
-First install the [Node.js runtime](https://nodejs.org/en/).
+The airnote.live site runs on top of Node.js, so as such you’ll need to start by [installing Node.js](https://nodejs.org/en/download/) if you haven’t already.
 
-```sh
-npm install # get dependencies
-npm run dev # start a dev server
+Next, run the site’s `npm run setup` script, which installs all of the site’s dependencies.
+
+```
+npm run setup
 ```
 
-airnote.live uses the [Svelte](https://svelte.dev/) web framework. The entry-point is [./src/App.svelte](./src/App.svelte).
+Finally, run `npm run dev`, which starts up a development server.
+
+```sh
+npm run dev
+```
+
+## Web App
+
+You can access the airnote.live locally at `http://localhost:5555/`. To view a specific device’s dashboard, you’ll need to use a URL of `http://localhost:5555/dashboard/<device_uid>`.
+
+The airnote.live site uses the [Svelte](https://svelte.dev/) web framework, and the entry-point is [./src/App.svelte](./src/App.svelte).
 
 ## Server
 
-This app includes a Node.js server for fetching data. You can run that server by running `node server/server.js` in a new command prompt or terminal.
+This repo includes a Node.js server for fetching data. The repo’s main `npm run dev` script starts the server, and automatically updates the server whenever you make changes.
 
-```sh
-cd server
-node server.js
-```
-
-To make development easier, you may want to additionally install [nodemon](https://www.npmjs.com/package/nodemon), and use it to run the server so you automatically see updates after you save changes.
-
-```sh
-nodemon server.js
-```
-
-The server also depends on a [Notehub API](https://dev.blues.io/reference/notehub-api/api-introduction/) authentication token, `HUB_AUTH_TOKEN`, as an environment variable. You can set this up locally by creating a `server/.env` file, and pasting in the contents below.
+The server depends on a [Notehub API](https://dev.blues.io/reference/notehub-api/api-introduction/) authentication token, `HUB_AUTH_TOKEN`, as an environment variable. You can set this up locally by creating a `server/.env` file, and pasting in the contents below.
 
 ```
 HUB_AUTH_TOKEN=<your token>
