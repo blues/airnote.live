@@ -70,6 +70,8 @@
       .setLngLat([lastReading.lon, lastReading.lat])
       .setPopup(popup)
       .addTo(map);
+
+    map.scrollZoom.disable();
   });
 </script>
 
