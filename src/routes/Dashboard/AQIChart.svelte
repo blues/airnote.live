@@ -24,6 +24,7 @@
         backgroundColor: "rgb(186, 104, 200, 0.5)",
         borderColor: "rgb(186, 104, 200)",
         tension: 0.1,
+        borderWidth: 1,
       },
     ],
   };

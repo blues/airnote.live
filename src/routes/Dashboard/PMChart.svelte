@@ -22,7 +22,7 @@
   const data = {
     datasets: [
       {
-        label: "PM1",
+        label: "PM1 (μg/m³)",
         data: pm1Data,
         borderColor: "rgb(104, 159, 56)",
         backgroundColor: "rgb(104, 159, 56, 0.5)",
@@ -30,7 +30,7 @@
         borderWidth: 1,
       },
       {
-        label: "PM2.5",
+        label: "PM2.5 (μg/m³)",
         data: pm2_5Data,
         borderColor: "rgb(89, 210, 255)",
         backgroundColor: "rgb(89, 210, 255, 0.5)",
@@ -38,7 +38,7 @@
         borderWidth: 1,
       },
       {
-        label: "PM10",
+        label: "PM10 (μg/m³)",
         data: pm10Data,
         borderColor: "rgb(255, 126, 109)",
         backgroundColor: "rgb(255, 126, 109, 0.5)",

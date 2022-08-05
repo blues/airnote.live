@@ -27,6 +27,7 @@
         borderColor: "rgb(104, 159, 56)",
         backgroundColor: "rgb(104, 159, 56, 0.5)",
         tension: 0.1,
+        borderWidth: 1,
       },
       {
         label: "Charging",

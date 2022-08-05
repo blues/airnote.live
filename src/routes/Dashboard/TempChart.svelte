@@ -48,6 +48,7 @@
         backgroundColor: "rgb(89, 210, 255, 0.5)",
         borderColor: "rgb(89, 210, 255)",
         tension: 0.1,
+        borderWidth: 1,
       },
       {
         label: "Temperature (°F)",
@@ -56,6 +57,7 @@
         backgroundColor: "rgb(255, 160, 0, 0.5)",
         borderColor: "rgb(255, 160, 0)",
         tension: 0.1,
+        borderWidth: 1,
       },
     ],
   };
