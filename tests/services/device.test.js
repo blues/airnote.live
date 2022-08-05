@@ -20,7 +20,7 @@ test("Calculate daily averages for aqi, pm2.5, and pm10", () => {
               pm02_5: 10,
               pm10_0: 10,
             },
-            captured: "2021-01-01T10:01:01Z",
+            when: "2021-01-01T10:01:01Z",
           },
           {
             body: {
@@ -28,7 +28,7 @@ test("Calculate daily averages for aqi, pm2.5, and pm10", () => {
               pm02_5: 20,
               pm10_0: 20,
             },
-            captured: "2021-01-01T10:01:01Z",
+            when: "2021-01-01T10:01:01Z",
           },
         ]),
     })
