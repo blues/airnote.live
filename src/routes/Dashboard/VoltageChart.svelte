@@ -52,8 +52,8 @@
           },
         },
         y: {
-          min: 3.8,
-          max: 4.2,
+          min: 2.5,
+          max: 5,
         },
       },
       borderRadius: "30",

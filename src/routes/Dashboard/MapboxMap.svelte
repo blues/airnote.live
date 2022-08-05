@@ -118,6 +118,10 @@
     padding: 10px 0 0 10px;
   }
 
+  :global(.mapboxgl-popup) {
+    z-index: 3;
+  }
+
   :global(.mapboxgl-title) {
     margin-top: 1rem;
   }

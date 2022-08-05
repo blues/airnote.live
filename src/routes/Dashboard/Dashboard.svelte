@@ -173,7 +173,7 @@
         </span>
       </h2>
 
-      <span class="actions">
+      <div class="actions">
         <button class="svg-button" on:click={downloadData}>
           <DownloadIcon />
         </button>
@@ -183,7 +183,7 @@
         <button class="svg-button" on:click={() => shareDashboard(deviceUID)}>
           <ShareIcon />
         </button>
-      </span>
+      </div>
     </div>
 
     <div class="all-measurements box" in:fade>
@@ -487,22 +487,42 @@
 
   .chart1 {
     grid-area: chart1;
+    max-width: 475px;
   }
 
   .chart2 {
     grid-area: chart2;
+    max-width: 475px;
   }
 
   .chart3 {
     grid-area: chart3;
+    max-width: 475px;
   }
 
   .chart4 {
     grid-area: chart4;
+    max-width: 475px;
   }
 
   .chart5 {
     grid-area: chart5;
+  }
+
+  @media (max-width: 1000px) {
+    .all-charts {
+      display: block;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .chart1,
+    .chart2,
+    .chart3,
+    .chart4,
+    .chart5 {
+      max-width: initial;
+    }
   }
 
   @media (max-width: 780px) {
@@ -565,6 +585,16 @@
       top: 100px;
       left: 15%;
       width: 70%;
+    }
+
+    @media (max-width: 376px) {
+      .air-quality-wrapper {
+        display: block;
+      }
+
+      .box {
+        padding: 1.5rem 0.5rem;
+      }
     }
   }
 </style>

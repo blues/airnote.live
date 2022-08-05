@@ -140,6 +140,9 @@
   .button-group {
     text-align: center;
     margin-top: 1.5rem;
+  }
+
+  .button-group button {
     margin-bottom: 0.5rem;
   }
   .button-group button.active {
