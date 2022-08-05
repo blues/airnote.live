@@ -22,7 +22,7 @@ npm run dev
 
 ## Web App
 
-You can access the airnote.live locally at `http://localhost:5555/`. To view a specific device’s dashboard, you’ll need to use a URL of `http://localhost:5555/dashboard/<device_uid>`.
+You can access the airnote.live site locally at `http://localhost:5555/`. To view a specific device’s dashboard, you’ll need to use a URL of `http://localhost:5555/dashboard/<device_uid>`.
 
 The airnote.live site uses the [Svelte](https://svelte.dev/) web framework, and the entry-point is [./src/App.svelte](./src/App.svelte).
 
