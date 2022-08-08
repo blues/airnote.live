@@ -21,7 +21,7 @@
   const data = {
     datasets: [
       {
-        label: "Voltage",
+        label: "Voltage (V)",
         data: voltageData,
         fill: true,
         borderColor: "rgb(104, 159, 56)",

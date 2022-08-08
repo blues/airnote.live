@@ -57,7 +57,7 @@
         const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
         return {
           x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(reading.aqi).toFixed(2),
+          y: reading.aqi,
         };
       });
     }
@@ -68,4 +68,10 @@
   });
 </script>
 
-<canvas id="aqiChart" bind:this={ctx} width={420} height={300} />
+<canvas
+  id="aqiChart"
+  data-testid="aqiChart"
+  bind:this={ctx}
+  width={420}
+  height={300}
+/>

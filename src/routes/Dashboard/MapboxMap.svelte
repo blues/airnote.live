@@ -50,18 +50,18 @@
     popup = new mapboxgl.Popup().setHTML(
       `<p style="text-align: center; margin:0">${format(d, DATE_TIME_KEY)}</p>
       <h3 style="margin: 0">Device ID: ${lastReading.device_uid}</h3>
-      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">AQI:</span> ${parseFloat(
+      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">AQI:</span> ${Math.round(
         lastReading.aqi
-      ).toFixed(2)}</p>
-      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM1.0:</span> ${parseFloat(
+      )}</p>
+      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM1.0:</span> ${Math.round(
         lastReading.pm01_0
-      ).toFixed(2)} μg/m³</p>
-      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM2.5:</span> ${parseFloat(
+      )} μg/m³</p>
+      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM2.5:</span> ${Math.round(
         lastReading.pm02_5
-      ).toFixed(2)} μg/m³</p>
-      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM10.0:</span> ${parseFloat(
+      )} μg/m³</p>
+      <p style="margin: 0; display: flex; justify-content: space-between"><span class="mapboxgl-pm">PM10.0:</span> ${Math.round(
         lastReading.pm10_0
-      ).toFixed(2)} μg/m³</p>`
+      )} μg/m³</p>`
     );
 
     markerColor = getAQIColor(lastReading.aqi);
@@ -88,7 +88,7 @@
       <h3 style="margin-top: 1rem">Map</h3>
     </div>
     <div class="map-wrapper">
-      <div id="map" style="height:320px;max-width:960px" />
+      <div id="map" data-testid="map" style="height:320px;max-width:960px" />
       <div id="legend" class="map-overlay">AQI Levels</div>
     </div>
   </div>
@@ -118,6 +118,7 @@
     height: 185px;
     margin: auto 0 15px 15px;
     padding: 10px 0 0 10px;
+    font-weight: 600;
   }
 
   :global(.mapboxgl-popup) {
