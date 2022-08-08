@@ -3,7 +3,7 @@
 </svelte:head>
 
 <section>
-  <h1>Welcome to Airnote!</h1>
+  <h1 data-cy="page-title">Welcome to Airnote!</h1>
 
   <p>
     A global partnership between
@@ -18,7 +18,9 @@
     >.
   </p>
 
-  <a href="https://start.airnote.live" class="btn">Set up my Airnote</a>
+  <a href="https://start.airnote.live" class="btn" data-cy="setup-airnote-btn"
+    >Set up my Airnote</a
+  >
 </section>
 
 <hr />
@@ -31,7 +33,10 @@
     > to purchase your own cellular-powered air quality monitoring device.
   </p>
 
-  <a href="https://shop.blues.io/products/airnote" class="btn">Buy an Airnote</a
+  <a
+    href="https://shop.blues.io/products/airnote"
+    class="btn"
+    data-cy="buy-airnote-btn">Buy an Airnote</a
   >
 </section>
 

@@ -1,11 +1,7 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  import Slider from './Slider.svelte';
-  import {
-    deviceName,
-    displayValue,
-    indoorDevice,
-  } from '../../settingsStore';
+  import { createEventDispatcher } from "svelte";
+  import Slider from "./Slider.svelte";
+  import { deviceName, displayValue, indoorDevice } from "../../settingsStore";
 
   const dispatch = createEventDispatcher();
 
@@ -14,53 +10,55 @@
 
   const save = (event) => {
     event.preventDefault();
-    dispatch('submit');
-  }
+    dispatch("submit");
+  };
 </script>
 
-<h4>Device Settings</h4>
+<h4 data-cy="device-settings-title">Device Settings</h4>
 
 <form on:submit={save}>
   <div>
     <label for="deviceName">Device name</label>
     <input
-      disabled={enableFields ? null : 'disabled'}
+      disabled={enableFields ? null : "disabled"}
       type="text"
       name="name"
       id="deviceName"
       bind:value={$deviceName}
-      placeholder="my-airnote-name" />
+      placeholder="my-airnote-name"
+    />
   </div>
 
   <div>
-    <label for="displayValue">
-      Airnote screen display value
-    </label>
+    <label for="displayValue"> Airnote screen display value </label>
     <select
-      disabled={enableFields ? null : 'disabled'}
+      disabled={enableFields ? null : "disabled"}
       bind:value={$displayValue}
-      name="display" id="displayValue">
+      name="display"
+      id="displayValue"
+    >
       {#each displayOptions as option}
-        <option value="{option["value"]}">{option["text"]}</option>
+        <option value={option["value"]}>{option["text"]}</option>
       {/each}
     </select>
   </div>
 
   <div>
     <label for="sampleFrequency">Sample frequency (minutes)</label>
-    <Slider enableFields={enableFields} />
+    <Slider {enableFields} />
   </div>
 
   <div>
     <label class="checkbox-label">
       <input
-        disabled={enableFields ? null : 'disabled'}
+        disabled={enableFields ? null : "disabled"}
         bind:checked={$indoorDevice}
-        type="checkbox" name="indoor" id="indoorDevice"
+        type="checkbox"
+        name="indoor"
+        id="indoorDevice"
       />
       <span>
-        Indoor device (Will not be visible on the
-        Safecast global map)
+        Indoor device (Will not be visible on the Safecast global map)
       </span>
     </label>
   </div>

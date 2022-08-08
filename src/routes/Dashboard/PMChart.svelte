@@ -101,4 +101,10 @@
   });
 </script>
 
-<canvas id="pmChart" bind:this={ctx} width={420} height={300} />
+<canvas
+  id="pmChart"
+  bind:this={ctx}
+  width={420}
+  height={300}
+  data-cy="pm-chart"
+/>

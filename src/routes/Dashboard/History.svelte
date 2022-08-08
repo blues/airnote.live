@@ -30,7 +30,7 @@
   let historyFilter = "aqi";
 </script>
 
-<h3 class="history-heading">
+<h3 class="history-heading" data-cy="history-heading">
   {#if historyFilter == "aqi"}
     Air Quality Index
   {:else if historyFilter == "pm1_0"}

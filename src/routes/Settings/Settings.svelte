@@ -228,7 +228,7 @@
 
 <section>
   <p>
-    <a href={eventsUrl} target="_new">
+    <a href={eventsUrl} target="_new" data-cy="notehub-link">
       View live Airnote events on Notehub.io
     </a>
   </p>

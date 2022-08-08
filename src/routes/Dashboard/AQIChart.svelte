@@ -70,8 +70,8 @@
 
 <canvas
   id="aqiChart"
-  data-testid="aqiChart"
   bind:this={ctx}
   width={420}
   height={300}
+  data-cy="aqi-chart"
 />

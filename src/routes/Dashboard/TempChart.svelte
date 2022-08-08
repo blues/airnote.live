@@ -108,7 +108,13 @@
   });
 </script>
 
-<canvas id="temperatureChart" bind:this={ctx} width={420} height={300} />
+<canvas
+  id="temperatureChart"
+  bind:this={ctx}
+  width={420}
+  height={300}
+  data-cy="temperature-chart"
+/>
 <div class="button-group">
   <button on:click={() => fetchTempChartDisplay(tempDisplay)}>
     Change to °{tempDisplay == "C" ? "F" : "C"}

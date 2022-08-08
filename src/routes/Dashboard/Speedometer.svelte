@@ -10,7 +10,7 @@
   export let aqi;
 </script>
 
-<div class="speedometer-container">
+<div class="speedometer-container" data-cy="aqi-speedometer">
   <Speedometer
     width={300}
     height={180}

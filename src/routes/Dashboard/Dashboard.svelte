@@ -50,9 +50,6 @@
     tempDisplay = ev.detail;
   }
 
-  const getSafecastDashboardLink = (deviceUID) =>
-    `http://tt.safecast.org/dashboard/note:${deviceUID}`;
-
   const downloadData = () => {
     const csv = "data:text/csv;charset=utf-8," + unparse(readings);
     const encodedURI = encodeURI(csv);
@@ -130,12 +127,9 @@
       </p>
 
       <p>
-        If this is a device that has previously reported readings, you can view
-        historical data on
-        <a href={getSafecastDashboardLink(deviceUID)}
-          >this device’s Safecast dashboard</a
-        >, and <a href="https://discuss.blues.io">reach out on our forum</a> if you
-        need help getting your Airnote back up and running.
+        If this is a device that has previously reported readings, you can <a
+          href="https://discuss.blues.io">reach out on our forum</a
+        > if you need help getting your Airnote back up and running.
       </p>
     </div>
   {/if}
@@ -166,7 +160,7 @@
     {/if}
 
     <div class="air-quality-wrapper" in:fade>
-      <h2 class="air-quality-heading">
+      <h2 class="air-quality-heading" data-cy="dashboard-title">
         <span>
           Air Quality {lastReading.location ? "in " + lastReading.location : ""}
           {lastReading.serial_number ? "—" + lastReading.serial_number : ""}
@@ -208,7 +202,7 @@
       </div>
 
       <div class="box measurement-box">
-        <div class="measurement-pm">
+        <div class="measurement-pm" data-cy="measurement-pm">
           <div>
             <span>
               PM1
@@ -254,7 +248,7 @@
           </div>
         </div>
 
-        <div class="measurement-air">
+        <div class="measurement-air" data-cy="measurement-air">
           <div>
             Temperature
             <strong>

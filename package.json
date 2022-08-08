@@ -9,7 +9,9 @@
     "dev": "npx concurrently --raw \"cd server && npx nodemon server.js\" \"rollup -c -w\"",
     "start": "sirv public --single --port 5555",
     "test": "jest",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "cypress:run": "cypress install && cypress run",
+    "cypress:open": "cypress install && cypress open --e2e"
   },
   "jest": {
     "setupFilesAfterEnv": [
@@ -40,6 +42,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/svelte": "^3.0.3",
     "babel-jest": "^28.1.2",
+    "cypress": "^10.4.0",
     "jest": "^28.1.2",
     "jest-environment-jsdom": "^28.1.2",
     "rollup": "^2.76.0",

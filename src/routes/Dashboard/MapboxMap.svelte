@@ -88,7 +88,7 @@
       <h3 style="margin-top: 1rem">Map</h3>
     </div>
     <div class="map-wrapper">
-      <div id="map" data-testid="map" style="height:320px;max-width:960px" />
+      <div id="map" data-cy="map" style="height:320px;max-width:960px" />
       <div id="legend" class="map-overlay">AQI Levels</div>
     </div>
   </div>
