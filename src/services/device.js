@@ -1,4 +1,4 @@
-import { DATE_FORMAT_KEY, airnoteProductUID } from "../constants";
+import { DATE_FORMAT_KEY, SERVER_URL, airnoteProductUID } from "../constants";
 import { format } from "date-fns";
 import queryString from "query-string";
 
@@ -48,7 +48,7 @@ function getHistory(readings) {
 
 export function getReadings(deviceUID) {
   return fetch(
-    "http://localhost:3001/?" +
+    `${SERVER_URL}/?` +
       new URLSearchParams({
         device_uid: deviceUID,
       })
