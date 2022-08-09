@@ -54,11 +54,7 @@
         ).color}; color: {getDisplay(historyFilter, data[historyFilter][day])
           .textColor}; "
       >
-        <div class="history-value">
-          {Number.isNaN(data[historyFilter][day])
-            ? "-"
-            : data[historyFilter][day]}
-        </div>
+        <div class="history-value">{data[historyFilter][day]}</div>
         <div class="history-description">
           {getDisplay(historyFilter, data[historyFilter][day]).text}
         </div>

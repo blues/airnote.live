@@ -9,7 +9,7 @@ beforeEach(() => {
   fetch.mockClear();
 });
 
-test("Calculate daily averages for aqi, pm2.5, and pm10", () => {
+test("Calculate daily averages for aqi, pm1, pm2.5, and pm10", () => {
   fetch.mockImplementationOnce(() =>
     Promise.resolve({
       json: () =>
@@ -25,6 +25,7 @@ test("Calculate daily averages for aqi, pm2.5, and pm10", () => {
           {
             body: {
               aqi: 20,
+              pm01_0: 7,
               pm02_5: 20,
               pm10_0: 20,
             },
@@ -36,6 +37,7 @@ test("Calculate daily averages for aqi, pm2.5, and pm10", () => {
 
   getReadings().then((data) => {
     expect(data.history.aqi["January 01 2021"]).toBe(15);
+    expect(data.history.pm1_0["January 01 2021"]).toBe(4);
     expect(data.history.pm2_5["January 01 2021"]).toBe(15);
     expect(data.history.pm10_0["January 01 2021"]).toBe(15);
   });

@@ -53,7 +53,7 @@
         },
         y: {
           min: 2.5,
-          max: 5,
+          max: 5.5,
         },
       },
       borderRadius: "30",
@@ -95,7 +95,7 @@
           const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
           return {
             x: format(d, DATE_TIME_FORMAT_KEY),
-            y: 5,
+            y: 6,
             voltage: parseFloat(reading.voltage).toFixed(2),
           };
         });

@@ -13,11 +13,11 @@
 
   import History from "./History.svelte";
   import MapboxMap from "./MapboxMap.svelte";
-  import VoltageChart from "./VoltageChart.svelte";
-  import TempChart from "./TempChart.svelte";
-  import AQIChart from "./AQIChart.svelte";
-  import PMChart from "./PMChart.svelte";
-  import HumidityChart from "./HumidityChart.svelte";
+  import VoltageChart from "../../components/charts/VoltageChart.svelte";
+  import TempChart from "../../components/charts/TempChart.svelte";
+  import AQIChart from "../../components/charts/AQIChart.svelte";
+  import PMChart from "../../components/charts/PMChart.svelte";
+  import HumidityChart from "../../components/charts/HumidityChart.svelte";
   import Recommendation from "./Recommendation.svelte";
   import Speedometer from "./Speedometer.svelte";
   import TOOLTIP_STATES from "./TooltipStates";
@@ -78,15 +78,6 @@
           });
           history = data.history;
           readings = data.readings;
-
-          // This is a hack, but the speedometer plugin doesn’t give any
-          // way to customize these labels.
-          setTimeout(() => {
-            var lastLabel = document.querySelector("text:last-child");
-            if (lastLabel) {
-              lastLabel.innerHTML = "500+";
-            }
-          });
         }
         loading = false;
       })
@@ -479,24 +470,27 @@
     column-gap: 0.5rem;
   }
 
+  .chart1,
+  .chart2,
+  .chart3,
+  .chart4 {
+    max-width: 475px;
+  }
+
   .chart1 {
     grid-area: chart1;
-    max-width: 475px;
   }
 
   .chart2 {
     grid-area: chart2;
-    max-width: 475px;
   }
 
   .chart3 {
     grid-area: chart3;
-    max-width: 475px;
   }
 
   .chart4 {
     grid-area: chart4;
-    max-width: 475px;
   }
 
   .chart5 {

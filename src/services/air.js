@@ -26,11 +26,11 @@ export const aqiColors = [
 
 export const aqiRanges = [
   "0 - 50",
-  "51-100",
-  "101-150",
-  "151-200",
-  "201-300",
-  "301 - 500+",
+  "51 - 100",
+  "101 - 150",
+  "151 - 200",
+  "201 - 300",
+  "301 - 500",
 ];
 
 export const aqiTicks = [0, 50, 100, 150, 200, 300, 500];
@@ -47,8 +47,6 @@ export const aqiLegend = [
 export function getDisplay(type, value) {
   if (type == "aqi") {
     return getAQIDisplay(value);
-    // } else if (type == "pm2_5") {
-    //   return getPM2_5Display(value);
   } else {
     return getPM_Display();
   }
@@ -95,47 +93,9 @@ export function getAQIColor(value) {
   }
 }
 
-// Based on https://blissair.com/what-is-pm-2-5.htm
-// export function getPM2_5Display(value) {
-//   switch (true) {
-//     case value === undefined:
-//       return NO_DATA;
-//     case value >= 250.5:
-//       return HAZARDOUS;
-//     case value >= 150.5:
-//       return VERY_UNHEALTHY;
-//     case value >= 55.5:
-//       return UNHEALTHY;
-//     case value >= 35.5:
-//       return UNHEALTHY_SENSITIVE;
-//     case value >= 12.1:
-//       return MODERATE;
-//     default:
-//       return GOOD;
-//   }
-// }
-
 export function getPM_Display() {
   return PM_DATA;
 }
-
-// Based on https://www.epa.vic.gov.au/for-community/environmental-information/air-quality/pm10-particles-in-the-air
-// export function getPM10Display(value) {
-//   switch (true) {
-//     case value === undefined:
-//       return NO_DATA;
-//     case value > 300:
-//       return HAZARDOUS;
-//     case value > 120:
-//       return VERY_UNHEALTHY;
-//     case value > 80:
-//       return UNHEALTHY_SENSITIVE;
-//     case value > 40:
-//       return MODERATE;
-//     default:
-//       return GOOD;
-//   }
-// }
 
 export function toFahrenheit(celsius) {
   return (9 * celsius) / 5 + 32;

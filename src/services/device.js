@@ -64,17 +64,16 @@ export function getReadings(deviceUID) {
         data.lat = event.lat;
         data.lon = event.lon;
         data.serial_number = event.serial_number;
+        data.aqi = event.body.aqi ? event.body.aqi : 0;
+        data.pm01_0 = event.body.pm01_0 ? event.body.pm01_0 : 0;
+        data.pm02_5 = event.body.pm02_5 ? event.body.pm02_5 : 0;
+        data.pm10_0 = event.body.pm10_0 ? event.body.pm10_0 : 0;
         readings.push(data);
       });
 
-      // Exclude readings with no AQI / PM information
-      let filteredReadings = readings.filter((reading) => {
-        return reading.pm02_5 !== undefined;
-      });
-
       return {
-        readings: filteredReadings,
-        history: getHistory(filteredReadings),
+        readings: readings,
+        history: getHistory(readings),
       };
     });
 }
