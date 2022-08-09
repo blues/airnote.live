@@ -8,6 +8,8 @@ open-source reference implementation of a web-based
 
 The airnote.live site runs on top of Node.js, so as such you’ll need to start by [installing Node.js](https://nodejs.org/en/download/) if you haven’t already.
 
+It also uses npm as its package manager, so [add npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) as well if it's not already installed locally.
+
 Next, run the site’s `npm run setup` script, which installs all of the site’s dependencies.
 
 ```
