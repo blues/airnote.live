@@ -70,7 +70,7 @@ const init = async () => {
       handler: async (request, h) => {
         const deviceUID = request.query.device_uid;
         const allEvents = [];
-        let erred = false;
+        let errorMessage;
 
         await Promise.all([
           getEnvironmentVariables(deviceUID),
@@ -83,12 +83,11 @@ const init = async () => {
             allEvents.forEach((entry) => (entry.serial_number = serialNumber));
           })
           .catch((err) => {
-            console.log(err);
-            erred = true;
+            errorMessage = err;
           });
 
         if (erred) {
-          return h.response().code(500);
+          return h.response(errorMessage).code(500);
         } else {
           return h.response(allEvents).type("application/json").code(200);
         }

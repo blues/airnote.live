@@ -39,5 +39,7 @@ services:
         sync: false
       - key: SAFECAST_PASSWORD
         sync: false
+      - key: HUB_AUTH_TOKEN
+        sync: false
       - key: PORT
         value: 3000
