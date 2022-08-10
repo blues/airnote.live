@@ -68,31 +68,29 @@ const init = async () => {
         origin: ["http://localhost:5555", "https://airnote.live"],
       },
       handler: async (request, h) => {
-        try {
-          const deviceUID = request.query.device_uid;
-          const allEvents = [];
-          let errorMessage;
+        const deviceUID = request.query.device_uid;
+        const allEvents = [];
+        let erred;
 
-          await Promise.all([
-            getEnvironmentVariables(deviceUID),
-            getEvents(deviceUID),
-          ]).then((responses) => {
+        await Promise.all([
+          getEnvironmentVariables(deviceUID),
+          getEvents(deviceUID),
+        ])
+          .then((responses) => {
             const [envVarResponse, eventsResponse] = responses;
             let serialNumber = envVarResponse.data.environment_variables._sn;
             allEvents.push(...eventsResponse.data);
             allEvents.forEach((entry) => (entry.serial_number = serialNumber));
+          })
+          .catch((err) => {
+            console.error(err);
+            erred = true;
           });
-          /*.catch((err) => {
-            errorMessage = err;
-          });*/
 
-          if (erred) {
-            return h.response(errorMessage).code(500);
-          } else {
-            return h.response(allEvents).type("application/json").code(200);
-          }
-        } catch (err) {
-          h.response("I am here").code(200);
+        if (erred) {
+          return h.response().code(500);
+        } else {
+          return h.response(allEvents).type("application/json").code(200);
         }
       },
     },
