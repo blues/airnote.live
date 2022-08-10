@@ -68,6 +68,8 @@ const init = async () => {
         origin: ["http://localhost:5555", "https://airnote.live"],
       },
       handler: async (request, h) => {
+        return h.response(process.env.HUB_AUTH_TOKEN).code(200);
+        /*
         const deviceUID = request.query.device_uid;
         const allEvents = [];
         let errorMessage;
@@ -87,10 +89,11 @@ const init = async () => {
           });
 
         if (erred) {
-          return h.response(process.env.HUB_AUTH_TOKEN).code(500);
+          return h.response(errorMessage).code(500);
         } else {
           return h.response(allEvents).type("application/json").code(200);
         }
+        */
       },
     },
   });
