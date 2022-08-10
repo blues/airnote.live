@@ -40,4 +40,4 @@ services:
       - key: SAFECAST_PASSWORD
         sync: false
       - key: PORT
-        value: 3001
+        value: 3000

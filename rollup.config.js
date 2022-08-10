@@ -51,7 +51,7 @@ export default {
       "process.env.SERVER_URL": JSON.stringify(
         production
           ? "https://airnote-api.onrender.com"
-          : "http://localhost:3001"
+          : "http://localhost:3000"
       ),
     }),
     svelte({
