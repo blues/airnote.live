@@ -1,5 +1,5 @@
 "use strict";
-// require("dotenv").config();
+require("dotenv").config();
 const Hapi = require("@hapi/hapi");
 const axios = require("axios");
 
@@ -68,7 +68,7 @@ const init = async () => {
         origin: ["http://localhost:5555", "https://airnote.live"],
       },
       handler: async (request, h) => {
-        return h.response(request.query.device_uid).code(200);
+        return h.response(process.env.HUB_AUTH_TOKEN).code(200);
         /*
         const deviceUID = request.query.device_uid;
         const allEvents = [];
