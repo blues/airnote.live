@@ -92,7 +92,7 @@ const init = async () => {
             return h.response(allEvents).type("application/json").code(200);
           }
         } catch (err) {
-          h.response(err).code(500);
+          h.response("I am here").code(200);
         }
       },
     },
