@@ -48,7 +48,7 @@ export function getDisplay(type, value) {
   if (type == "aqi") {
     return getAQIDisplay(value);
   } else {
-    return getPM_Display();
+    return getPM_Display(value);
   }
 }
 
@@ -77,7 +77,7 @@ export function getAQIDisplay(value) {
 export function getAQIColor(value) {
   switch (true) {
     case value === undefined:
-      return NO_DATA;
+      return "#757575";
     case value <= 50:
       return "#00e400";
     case value <= 100:
@@ -90,11 +90,20 @@ export function getAQIColor(value) {
       return "#8f3f97";
     case value <= 301:
       return "#7e0023";
+    default:
+      return "#757575";
   }
 }
 
-export function getPM_Display() {
-  return PM_DATA;
+export function getPM_Display(value) {
+  switch (true) {
+    case value === undefined:
+      return NO_DATA;
+    case value !== undefined:
+      return PM_DATA;
+    default:
+      return NO_DATA;
+  }
 }
 
 export function toFahrenheit(celsius) {

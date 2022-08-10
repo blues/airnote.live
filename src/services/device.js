@@ -72,7 +72,7 @@ export function getReadings(deviceUID) {
       });
 
       return {
-        readings: readings,
+        readings,
         history: getHistory(readings),
       };
     });
