@@ -65,7 +65,11 @@ const init = async () => {
     path: "/",
     options: {
       cors: {
-        origin: ["http://localhost:5555", "https://airnote.live"],
+        origin: [
+          "http://localhost:5555",
+          "https://airnote.live",
+          "https://airnote-live-pr-44.onrender.com",
+        ],
       },
       handler: async (request, h) => {
         const deviceUID = request.query.device_uid;
