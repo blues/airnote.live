@@ -1,5 +1,5 @@
 "use strict";
-require("dotenv").config();
+// require("dotenv").config();
 const Hapi = require("@hapi/hapi");
 const axios = require("axios");
 
