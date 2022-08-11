@@ -196,84 +196,94 @@
         <div class="measurement-pm" data-cy="measurement-pm">
           <div>
             <span>
-              PM1
-              <button
-                class="svg-button info"
-                on:click={() => (tooltipState = TOOLTIP_STATES.PM01_0_HELP)}
-              >
-                <InfoIcon />
-              </button>
+              <strong>
+                PM1
+                <button
+                  class="svg-button info"
+                  on:click={() => (tooltipState = TOOLTIP_STATES.PM01_0_HELP)}
+                >
+                  <InfoIcon />
+                </button>
+              </strong>
             </span>
-            <div>
-              <strong>{Math.round(lastReading.pm01_0)}</strong>
+            <div class="measurement-value">
+              {Math.round(lastReading.pm01_0)}
             </div>
           </div>
 
           <div>
             <span>
-              PM2.5
-              <button
-                class="svg-button info"
-                on:click={() => (tooltipState = TOOLTIP_STATES.PM02_5_HELP)}
-              >
-                <InfoIcon />
-              </button>
+              <strong>
+                PM2.5
+                <button
+                  class="svg-button info"
+                  on:click={() => (tooltipState = TOOLTIP_STATES.PM02_5_HELP)}
+                >
+                  <InfoIcon />
+                </button>
+              </strong>
             </span>
-            <div>
-              <strong>{Math.round(lastReading.pm02_5)}</strong>
+            <div class="measurement-value">
+              {Math.round(lastReading.pm02_5)}
             </div>
           </div>
           <div>
             <span>
-              PM10
-              <button
-                class="svg-button info"
-                on:click={() => (tooltipState = TOOLTIP_STATES.PM10_0_HELP)}
-              >
-                <InfoIcon />
-              </button>
+              <strong>
+                PM10
+                <button
+                  class="svg-button info"
+                  on:click={() => (tooltipState = TOOLTIP_STATES.PM10_0_HELP)}
+                >
+                  <InfoIcon />
+                </button>
+              </strong>
             </span>
-            <div>
-              <strong>{Math.round(lastReading.pm10_0)}</strong>
+            <div class="measurement-value">
+              {Math.round(lastReading.pm10_0)}
             </div>
           </div>
         </div>
 
         <div class="measurement-air" data-cy="measurement-air">
           <div>
-            Temperature
-            <strong>
+            <strong>Temperature</strong>
+            <div class="measurement-value">
               {tempDisplay == "C"
                 ? Math.round(lastReading.temperature) + "°C"
                 : Math.round(toFahrenheit(lastReading.temperature)) + "°F"}
-            </strong>
+            </div>
             <button on:click={toggleTempDisplay}>
               Change to °{tempDisplay == "C" ? "F" : "C"}
             </button>
           </div>
           <div>
-            Humidity
-            <strong>{Math.round(lastReading.humidity)}%</strong>
+            <strong>Humidity</strong>
+            <div class="measurement-value">
+              {Math.round(lastReading.humidity)}%
+            </div>
           </div>
           <div>
-            Heat Index
-            <strong>
+            <strong>Heat Index</strong>
+            <div class="measurement-value">
               {tempDisplay == "F"
                 ? Math.round(lastReading.heatIndex) + "°F"
                 : Math.round(toCelsius(lastReading.heatIndex)) + "°C"}
-            </strong>
+            </div>
           </div>
           <div>
-            Voltage
-            <button
-              class="svg-button info"
-              on:click={() => (tooltipState = TOOLTIP_STATES.VOLTAGE_HELP)}
-            >
-              <InfoIcon />
-            </button>
             <strong>
-              {Number(lastReading.voltage).toFixed(1)}V
+              Voltage
+              <button
+                class="svg-button info"
+                on:click={() => (tooltipState = TOOLTIP_STATES.VOLTAGE_HELP)}
+              >
+                <InfoIcon />
+              </button>
             </strong>
+            <div class="measurement-value">
+              {Number(lastReading.voltage).toFixed(1)}V
+            </div>
           </div>
         </div>
       </div>
@@ -414,7 +424,7 @@
     grid-area: last-update;
   }
   .last-update span {
-    color: rgb(166, 188, 207);
+    color: rgb(102, 149, 180);
     font-weight: normal;
     padding-left: 0.25rem;
   }
@@ -449,6 +459,7 @@
     text-align: center;
     position: relative;
     top: -0.5rem;
+    font-size: 1.1rem;
   }
 
   .measurement-box {
@@ -459,6 +470,10 @@
     flex-direction: column;
     justify-content: space-around;
     grid-area: all-measurements;
+  }
+
+  .measurement-value {
+    font-size: 1.2rem;
   }
 
   .all-charts {
@@ -542,12 +557,11 @@
   .measurement-pm > div,
   .measurement-air > div {
     flex-grow: 1;
-    font-size: 0.8rem;
   }
   .measurement-air strong,
   .measurement-pm strong {
     display: block;
-    font-size: 1.4rem;
+    font-weight: 600;
   }
   .measurement-air button {
     background: none;

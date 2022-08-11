@@ -79,7 +79,7 @@
     bottom: 30px;
     position: absolute;
     color: white;
-    height: 83px;
+    height: 81px;
     width: 166px;
     border-top-left-radius: 166px;
     border-top-right-radius: 166px;

@@ -201,7 +201,6 @@ button:hover, .btn:hover {
   border: none;
   padding: 0;
   vertical-align: middle;
-  height: 20px;
   width: 20px;
 }
 .svg-button:hover {
