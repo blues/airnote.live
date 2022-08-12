@@ -48,9 +48,7 @@ function getHistory(readings) {
 
 export function getReadings(deviceUID) {
   return fetch(
-    // Temporarily hit the server on the PR
-    "https://airnote-api-pr-44.onrender.com/?" +
-      //`${SERVER_URL}/?` +
+    `${SERVER_URL}/?` +
       new URLSearchParams({
         device_uid: deviceUID,
       })
