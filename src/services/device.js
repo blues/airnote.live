@@ -1,12 +1,13 @@
-import { DATE_FORMAT_KEY, airnoteProductUID } from '../constants';
-import { format } from 'date-fns';
-import queryString from 'query-string';
+import { DATE_FORMAT_KEY, SERVER_URL, airnoteProductUID } from "../constants";
+import { format } from "date-fns";
+import queryString from "query-string";
 
 function getHistory(readings) {
   // Group the readings into the calendar day they occurred on
   const groupedReadings = {};
-  readings.forEach(reading => {
-    const formattedDate = format(new Date(reading['@timestamp']), DATE_FORMAT_KEY);
+
+  readings.forEach((reading) => {
+    const formattedDate = format(new Date(reading.captured), DATE_FORMAT_KEY);
     if (groupedReadings[formattedDate]) {
       groupedReadings[formattedDate].push(reading);
     } else {
@@ -19,17 +20,17 @@ function getHistory(readings) {
   const pm01_0History = {};
   const pm02_5History = {};
   const pm10_0History = {};
-  Object.keys(groupedReadings).forEach(date => {
+  Object.keys(groupedReadings).forEach((date) => {
     let aqiTotal = 0;
     let pm01_0Total = 0;
     let pm02_5Total = 0;
     let pm10_0Total = 0;
     let totalReadings = groupedReadings[date].length;
-    groupedReadings[date].forEach(reading => {
-      aqiTotal += reading.pms_aqi;
-      pm01_0Total += reading.pms_pm01_0;
-      pm02_5Total += reading.pms_pm02_5;
-      pm10_0Total += reading.pms_pm10_0;
+    groupedReadings[date].forEach((reading) => {
+      aqiTotal += reading.aqi;
+      pm01_0Total += reading.pm01_0;
+      pm02_5Total += reading.pm02_5;
+      pm10_0Total += reading.pm10_0;
     });
     aqiHistory[date] = Math.round(aqiTotal / totalReadings);
     pm01_0History[date] = Math.round(pm01_0Total / totalReadings);
@@ -46,31 +47,42 @@ function getHistory(readings) {
 }
 
 export function getReadings(deviceUID) {
-  var eightDaysAgo = new Date(new Date().setDate(new Date().getDate() - 8));
-
-  return fetch('https://airnote-api.onrender.com/?' + new URLSearchParams({
-    device_uid: deviceUID,
-    from: eightDaysAgo.toISOString(),
-    to: new Date().toISOString()
-  }))
-    .then(response => response.json())
-    .then(data => {
+  return fetch(
+    `${SERVER_URL}/?` +
+      new URLSearchParams({
+        device_uid: deviceUID,
+      })
+  )
+    .then((response) => response.json())
+    .then((data) => {
       const readings = [];
-      data.hits.hits.forEach(reading => {
-        readings.push(reading._source);
+      data.forEach((event) => {
+        const data = event.body;
+        data.device_uid = deviceUID;
+        data.captured = event.when;
+        data.location = event.location;
+        data.lat = event.lat;
+        data.lon = event.lon;
+        data.serial_number = event.serial_number;
+        data.aqi = event.body.aqi ? event.body.aqi : 0;
+        data.pm01_0 = event.body.pm01_0 ? event.body.pm01_0 : 0;
+        data.pm02_5 = event.body.pm02_5 ? event.body.pm02_5 : 0;
+        data.pm10_0 = event.body.pm10_0 ? event.body.pm10_0 : 0;
+        readings.push(data);
       });
+
       return {
-        readings: readings,
-        history: getHistory(readings)
-      }
+        readings,
+        history: getHistory(readings),
+      };
     });
 }
 
 function saveLastViewedDevice(data) {
-  localStorage.setItem('device', JSON.stringify(data));
+  localStorage.setItem("device", JSON.stringify(data));
 }
 function readLastViewedDevice() {
-  return JSON.parse(localStorage.getItem('device')) || {};
+  return JSON.parse(localStorage.getItem("device")) || {};
 }
 
 export function getCurrentDeviceFromUrl(location) {
@@ -78,9 +90,9 @@ export function getCurrentDeviceFromUrl(location) {
   const currentDevice = {};
 
   const query = queryString.parse(location.search);
-  let pin = query['pin'] || '';
-  let productUID = query['product'] || airnoteProductUID;
-  let deviceUID = location.pathname.match(/dev:\d*/)?.[0] || '';
+  let pin = query["pin"] || "";
+  let productUID = query["product"] || airnoteProductUID;
+  let deviceUID = location.pathname.match(/dev:\d*/)?.[0] || "";
 
   // If there is no device in the query string default to the
   // last viewed device.

@@ -1,4 +1,5 @@
 "use strict";
+require("dotenv").config();
 const Hapi = require("@hapi/hapi");
 const axios = require("axios");
 
@@ -7,55 +8,41 @@ const server = Hapi.server({
   host: "0.0.0.0", // needed for Render deployment
 });
 
-const buildBody = (device_uid, to, from) => {
-  return {
-    size: 500,
-    sort: [
-      {
-        when_captured: {
-          order: "desc",
-        },
-      },
-    ],
-    query: {
-      bool: {
-        must: [],
-        filter: [
-          {
-            bool: {
-              should: [
-                {
-                  match_phrase: {
-                    device_urn: "note:" + device_uid,
-                  },
-                },
-              ],
-            },
-          },
-          {
-            range: {
-              service_uploaded: {
-                format: "strict_date_optional_time",
-                gte: from,
-                lte: to,
-              },
-            },
-          },
-        ],
-      },
-    },
-  };
+const NOTEHUB_BASE_URL = "https://api.notefile.net";
+const AIRNOTE_PROJECT_UID = "app:2606f411-dea6-44a0-9743-1130f57d77d8";
+const HEADERS = {
+  "Content-Type": "application/json",
+  "X-SESSION-TOKEN": process.env.HUB_AUTH_TOKEN,
 };
 
-const url =
-  "https://40ad140d461d810ac41ed710b5c7a5b6.us-west-2.aws.found.io:9243/_search";
-const headers = {
-  "Content-Type": "application/json",
-  Authorization:
-    "Basic " +
-    new Buffer(
-      process.env.SAFECAST_USERNAME + ":" + process.env.SAFECAST_PASSWORD
-    ).toString("base64"),
+const getEvents = (deviceUID) => {
+  return axios.post(
+    `https://api.notefile.net/req?app=${AIRNOTE_PROJECT_UID}`,
+    {
+      req: "hub.app.data.query",
+      query: {
+        columns:
+          ".body;.when;lat:(events.value->'best_lat');lon:(events.value->'best_lon');location:(events.value->'best_location')",
+        limit: 1000,
+        order: ".modified",
+        descending: true,
+        where: `.file::text='_air.qo' and .device::text='${deviceUID}' and .modified >= now()-interval '8 days'`,
+      },
+    },
+    {
+      headers: HEADERS,
+    }
+  );
+};
+
+const getEnvironmentVariables = (deviceUID) => {
+  return axios.get(
+    `${NOTEHUB_BASE_URL}/v1/projects/${AIRNOTE_PROJECT_UID}/devices/${deviceUID}/environment_variables`,
+    {},
+    {
+      headers: HEADERS,
+    }
+  );
 };
 
 const init = async () => {
@@ -81,21 +68,29 @@ const init = async () => {
         origin: ["http://localhost:5555", "https://airnote.live"],
       },
       handler: async (request, h) => {
-        const device_uid = request.query.device_uid;
-        const to = request.query.to;
-        const from = request.query.from;
+        const deviceUID = request.query.device_uid;
+        const allEvents = [];
+        let erred;
 
-        try {
-          const response = await axios.post(
-            url,
-            buildBody(device_uid, to, from),
-            {
-              headers: headers,
-            }
-          );
-          return h.response(response.data).type("application/json").code(200);
-        } catch (err) {
+        await Promise.all([
+          getEnvironmentVariables(deviceUID),
+          getEvents(deviceUID),
+        ])
+          .then((responses) => {
+            const [envVarResponse, eventsResponse] = responses;
+            let serialNumber = envVarResponse.data.environment_variables._sn;
+            allEvents.push(...eventsResponse.data);
+            allEvents.forEach((entry) => (entry.serial_number = serialNumber));
+          })
+          .catch((err) => {
+            console.error(err);
+            erred = true;
+          });
+
+        if (erred) {
           return h.response().code(500);
+        } else {
+          return h.response(allEvents).type("application/json").code(200);
         }
       },
     },

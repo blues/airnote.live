@@ -6,14 +6,39 @@ open-source reference implementation of a web-based
 
 ## Local Development
 
-First install the [Node.js runtime](https://nodejs.org/en/).
+The airnote.live site runs on top of Node.js, so as such you’ll need to start by [installing Node.js](https://nodejs.org/en/download/) if you haven’t already.
 
-```sh
-npm install # get dependencies
-npm run dev # start a dev server
+It also uses npm as its package manager, so [add npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) as well if it's not already installed locally.
+
+Next, run the site’s `npm run setup` script, which installs all of the site’s dependencies.
+
+```
+npm run setup
 ```
 
-airnote.live uses the [Svelte](https://svelte.dev/) web framework. The entry-point is [./src/App.svelte](./src/App.svelte).
+Finally, run `npm run dev`, which starts up a development server.
+
+```sh
+npm run dev
+```
+
+## Web App
+
+You can access the airnote.live site locally at `http://localhost:5555/`. To view a specific device’s dashboard, you’ll need to use a URL of `http://localhost:5555/<device_uid>/dashboard`.
+
+The airnote.live site uses the [Svelte](https://svelte.dev/) web framework, and the entry-point is [./src/App.svelte](./src/App.svelte).
+
+## Server
+
+This repo includes a Node.js server for fetching data. The repo’s main `npm run dev` script starts the server, and automatically updates the server whenever you make changes.
+
+The server depends on a [Notehub API](https://dev.blues.io/reference/notehub-api/api-introduction/) authentication token, `HUB_AUTH_TOKEN`, as an environment variable. You can set this up locally by creating a `server/.env` file, and pasting in the contents below.
+
+```
+HUB_AUTH_TOKEN=<your token>
+```
+
+You can refer to [the Notehub API’s authentication documentation](https://dev.blues.io/reference/notehub-api/api-introduction/#authentication) for steps on how to generate your own token.
 
 ## Testing
 

@@ -1,33 +1,72 @@
 <script>
-  import Speedometer from 'svelte-speedometer';
-  import { getAQIDisplay } from '../../services/air';
+  import Speedometer from "svelte-speedometer";
+  import {
+    getAQIDisplay,
+    aqiLegend,
+    aqiColors,
+    aqiTicks,
+  } from "../../services/air";
 
   export let aqi;
 </script>
 
-<div class="speedometer-container">
+<div class="speedometer-container" data-cy="aqi-speedometer">
   <Speedometer
     width={300}
     height={180}
     currentValueText=""
     needleHeightRatio={0.8}
     ringWidth={30}
-    customSegmentStops={[0, 50, 100, 150, 200, 250]}
-    segmentColors={['#00CC00', '#F8B52A', '#EB8A14', '#FF0000', '#A10649', '#7E0023']}
-    maxValue={250}
+    customSegmentStops={aqiTicks}
+    segmentColors={aqiColors}
+    maxValue={500}
     needleColor="black"
     labelFontSize="12px"
-    value={aqi > 250 ? 250 : aqi}
+    value={aqi > 500 ? 500 : aqi}
   />
-  <div class="speedometer-value" style="background-color: {getAQIDisplay(aqi).color}">
+  <div
+    class="speedometer-value"
+    style="background-color: {getAQIDisplay(aqi).color}; color: {getAQIDisplay(
+      aqi
+    ).textColor} "
+  >
     <div>{aqi}</div>
-    <div class={aqi >= 100 & aqi < 150 ? 'small' : ''}>
+    <div class={(aqi >= 100) & (aqi < 150) ? "small" : ""}>
       {getAQIDisplay(aqi).text}
     </div>
   </div>
 </div>
+<div class="speedometer-legend">
+  {#each aqiLegend as item}
+    <div class="legend-item">
+      <span class="circle" style="background-color: {item.color}" />
+      <span style="text-align: center">{item.text}</span>
+    </div>
+  {/each}
+</div>
 
 <style>
+  .speedometer-legend {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    inline-size: 70px;
+    overflow-wrap: break-word;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .circle {
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    display: block;
+    margin: 10px auto 0 auto;
+  }
   .speedometer-container {
     position: relative;
     width: 300px;
@@ -40,7 +79,7 @@
     bottom: 30px;
     position: absolute;
     color: white;
-    height: 83px;
+    height: 81px;
     width: 166px;
     border-top-left-radius: 166px;
     border-top-right-radius: 166px;
@@ -64,7 +103,7 @@
     width: 260px;
     height: 1px;
     background: rgb(166, 188, 207);
-    content: '';
+    content: "";
     position: absolute;
     left: -49px;
     top: 80px;
@@ -73,7 +112,7 @@
     width: 260px;
     height: 10px;
     background: white;
-    content: '';
+    content: "";
     position: absolute;
     left: -50px;
     top: 81px;
