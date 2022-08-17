@@ -10,6 +10,18 @@
   let ctx;
   let aqiData = [];
 
+  $: getAQIData(readings);
+
+  function getAQIData(readings) {
+    aqiData = readings.map((reading) => {
+      const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+      return {
+        x: format(d, DATE_TIME_FORMAT_KEY),
+        y: reading.aqi,
+      };
+    });
+  }
+
   $: if (aqiChart) {
     aqiChart.data.datasets[0].data = aqiData;
     aqiChart.update();
@@ -51,19 +63,7 @@
     },
   };
 
-  onMount(async () => {
-    function getAQIData(readings) {
-      aqiData = readings.map((reading) => {
-        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-        return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
-          y: reading.aqi,
-        };
-      });
-    }
-
-    getAQIData(readings);
-
+  onMount(() => {
     aqiChart = new Chart(ctx, config);
   });
 </script>

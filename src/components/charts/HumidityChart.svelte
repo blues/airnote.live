@@ -10,6 +10,18 @@
   let ctx;
   let humidityData = [];
 
+  $: getHumidityData(readings);
+
+  function getHumidityData(readings) {
+    humidityData = readings.map((reading) => {
+      const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+      return {
+        x: format(d, DATE_TIME_FORMAT_KEY),
+        y: parseFloat(reading.humidity).toFixed(2),
+      };
+    });
+  }
+
   $: if (humdityChart) {
     humdityChart.data.datasets[0].data = humidityData;
     humdityChart.update();
@@ -51,19 +63,7 @@
     },
   };
 
-  onMount(async () => {
-    function getHumidityData(readings) {
-      humidityData = readings.map((reading) => {
-        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-        return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(reading.humidity).toFixed(2),
-        };
-      });
-    }
-
-    getHumidityData(readings);
-
+  onMount(() => {
     humdityChart = new Chart(ctx, config);
   });
 </script>

@@ -12,7 +12,29 @@
   let voltageData = [];
   let chargingData = [];
 
-  $: if (voltageChart && voltageData && chargingData) {
+  $: getVoltageData(readings);
+
+  function getVoltageData(readings) {
+    voltageData = readings.reverse().map((reading) => {
+      const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+      return {
+        x: format(d, DATE_TIME_FORMAT_KEY),
+        y: parseFloat(reading.voltage).toFixed(2),
+      };
+    });
+    chargingData = readings
+      .filter((reading) => reading.charging)
+      .map((reading) => {
+        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+        return {
+          x: format(d, DATE_TIME_FORMAT_KEY),
+          y: 6,
+          voltage: parseFloat(reading.voltage).toFixed(2),
+        };
+      });
+  }
+
+  $: if (voltageChart) {
     voltageChart.data.datasets[0].data = voltageData;
     voltageChart.data.datasets[1].data = chargingData;
     voltageChart.update();
@@ -80,29 +102,7 @@
     },
   };
 
-  onMount(async () => {
-    function getVoltageData(readings) {
-      voltageData = readings.reverse().map((reading) => {
-        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-        return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(reading.voltage).toFixed(2),
-        };
-      });
-      chargingData = readings
-        .filter((reading) => reading.charging)
-        .map((reading) => {
-          const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-          return {
-            x: format(d, DATE_TIME_FORMAT_KEY),
-            y: 6,
-            voltage: parseFloat(reading.voltage).toFixed(2),
-          };
-        });
-    }
-
-    getVoltageData(readings);
-
+  onMount(() => {
     // Initialize chart using default config set
     voltageChart = new Chart(ctx, config);
   });

@@ -46,11 +46,12 @@ function getHistory(readings) {
   };
 }
 
-export function getReadings(deviceUID) {
+export function getReadings(deviceUID, timeframe) {
   return fetch(
     `${SERVER_URL}/?` +
       new URLSearchParams({
         device_uid: deviceUID,
+        timeframe,
       })
   )
     .then((response) => response.json())

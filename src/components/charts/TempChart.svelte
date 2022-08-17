@@ -15,6 +15,25 @@
 
   const dispatch = createEventDispatcher();
 
+  $: getTempData(readings);
+
+  function getTempData(readings) {
+    tempDataCelsius = readings.map((reading) => {
+      const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+      return {
+        x: format(d, DATE_TIME_FORMAT_KEY),
+        y: parseFloat(reading.temperature).toFixed(2),
+      };
+    });
+    tempDataFahrenheit = readings.map((reading) => {
+      const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+      return {
+        x: format(d, DATE_TIME_FORMAT_KEY),
+        y: parseFloat(toFahrenheit(reading.temperature)).toFixed(2),
+      };
+    });
+  }
+
   const fetchTempChartDisplay = (tempDisplay) => {
     if (tempDisplay == "C") {
       temperatureChart.data.datasets[0].data = tempDataCelsius;
@@ -84,26 +103,7 @@
     },
   };
 
-  onMount(async () => {
-    function getTempData(readings) {
-      tempDataCelsius = readings.map((reading) => {
-        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-        return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(reading.temperature).toFixed(2),
-        };
-      });
-      tempDataFahrenheit = readings.map((reading) => {
-        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-        return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(toFahrenheit(reading.temperature)).toFixed(2),
-        };
-      });
-    }
-
-    getTempData(readings);
-
+  onMount(() => {
     temperatureChart = new Chart(ctx, config);
   });
 </script>
