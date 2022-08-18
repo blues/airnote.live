@@ -502,6 +502,11 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
+  .date-selector select {
+    margin-bottom: 0.5rem;
+    height: inherit;
+  }
+
   .all-charts {
     display: grid;
     grid-template-areas:

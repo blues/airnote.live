@@ -64,7 +64,7 @@
         label: "Temperature (°C)",
         data: tempDataCelsius,
         fill: true,
-        backgroundColor: "rgb(89, 210, 255, 0.5)",
+        backgroundColor: "rgb(89, 210, 255, 0.6)",
         borderColor: "rgb(89, 210, 255)",
         tension: 0.1,
         borderWidth: 1,
