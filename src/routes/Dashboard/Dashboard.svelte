@@ -315,7 +315,7 @@
     <h3>Historical Readings ({selectedDateRange})</h3>
 
     <div class="date-selector">
-      <select bind:value={selectedDateRange}>
+      <select bind:value={selectedDateRange} data-cy="chart-date-selector">
         {#each dateRanges as dateRange}
           <option value={dateRange}>
             {dateRange}
