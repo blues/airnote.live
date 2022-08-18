@@ -3,6 +3,10 @@ export default {
     displayText: "Last Day",
     queryText: "1 days",
   },
+  TWO_DAYS: {
+    displayText: "Last 2 Days",
+    queryText: "2 days",
+  },
   THREE_DAYS: {
     displayText: "Last 3 Days",
     queryText: "3 days",
