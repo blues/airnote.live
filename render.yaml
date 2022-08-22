@@ -10,19 +10,14 @@ services:
     autoDeploy: true
     buildCommand: npm run build
     staticPublishPath: public
-    # pullRequestPreviewsEnabled: true
     envVars:
       - key: NOTEHUB_API_URL
         value: https://api.notefile.net
+
     routes:
       - type: rewrite # Because we're a Single Page App (i.e. uses Client-Side Routing)
         source: /* # every page on the site...
         destination: /index.html # is handled by index.html
-    key: AIRNOTE_API
-    fromService:
-      name: airnote-api
-      type: web
-      envVarKey: RENDER_EXTERNAL_URL
 
   # start.airnote.live is just a simple redirect to the airnote.live quickstart.
   - type: web
@@ -33,14 +28,12 @@ services:
     autoDeploy: true
     buildCommand: "true" # no build needed to serve files verbatim
     staticPublishPath: ./start.airnote.live
-    # pullRequestPreviewsEnabled: true
 
   - type: web
     name: airnote-api
     env: node
     buildCommand: cd server && npm install
     startCommand: node server/server.js
-    # pullRequestPreviewsEnabled: true
     envVars:
       - key: SAFECAST_USERNAME
         sync: false
