@@ -1,7 +1,6 @@
 "use strict";
 require("dotenv").config();
 const Hapi = require("@hapi/hapi");
-const DATE_RANGE_OPTIONS = require("../src/constants/DateRangeOptions");
 const axios = require("axios");
 
 const server = Hapi.server({
@@ -15,13 +14,14 @@ const HEADERS = {
   "Content-Type": "application/json",
   "X-SESSION-TOKEN": process.env.HUB_AUTH_TOKEN,
 };
+const INITIAL_TIMEFRAME = "8 days";
 
 const getEvents = (deviceUID, timeframe) => {
   if (timeframe === "undefined") {
     /* this function is originally fetched on mount with 8 days' worth of data to
     populate the AQI average history with the previous week's data AND
     display today's most current reading as well */
-    timeframe = DATE_RANGE_OPTIONS.EIGHT_DAYS;
+    timeframe = INITIAL_TIMEFRAME;
   }
 
   return axios.post(

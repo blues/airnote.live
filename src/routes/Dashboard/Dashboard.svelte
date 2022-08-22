@@ -22,7 +22,7 @@
   import Speedometer from "./Speedometer.svelte";
   import TOOLTIP_STATES from "../../constants/TooltipStates";
   import DATE_RANGE_OPTIONS from "../../constants/DateRangeOptions";
-  import { convertDateRange, dateRanges } from "../../util/dates";
+  import { convertDateRange, dateRangeDisplayText } from "../../util/dates";
   import { getHeatIndex, toFahrenheit, toCelsius } from "../../services/air";
   import { getReadings } from "../../services/device";
   import { shareDashboard } from "../../util/share";
@@ -315,7 +315,7 @@
 
     <div class="date-selector">
       <select bind:value={selectedDateRange} data-cy="chart-date-selector">
-        {#each dateRanges as dateRange}
+        {#each dateRangeDisplayText as dateRange}
           <option value={dateRange}>
             {dateRange}
           </option>

@@ -15,6 +15,9 @@
   $: getPMData(readings);
 
   function getPMData(readings) {
+    /* reading.captured comes in as something like 2022-08-22T06:27:38Z, 
+    then parseISO() turns it into Mon Aug 22 2022 02:27:38 GMT-0400 (Eastern Daylight Time),
+    and we take that date object and format() for the particular component (MM-dd HH:mm) */
     pm1Data = readings.map((reading) => {
       const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
       return {

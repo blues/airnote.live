@@ -12,6 +12,10 @@
   let voltageData = [];
   let chargingData = [];
 
+  /* this gives a bar the height of the chart to indicate
+  if an Airnote was charging during the time period */
+  const MAX_VOLTAGE = 6;
+
   $: getVoltageData(readings);
 
   function getVoltageData(readings) {
@@ -28,7 +32,7 @@
         const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
         return {
           x: format(d, DATE_TIME_FORMAT_KEY),
-          y: 6,
+          y: MAX_VOLTAGE,
           voltage: parseFloat(reading.voltage).toFixed(2),
         };
       });
