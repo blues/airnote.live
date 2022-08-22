@@ -88,7 +88,6 @@
             humidity: lastReading.humidity,
           });
           history = data.history;
-          readings = data.readings;
         }
         loading = false;
       })

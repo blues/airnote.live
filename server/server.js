@@ -1,6 +1,7 @@
 "use strict";
 require("dotenv").config();
 const Hapi = require("@hapi/hapi");
+const DATE_RANGE_OPTIONS = require("../src/constants/DateRangeOptions");
 const axios = require("axios");
 
 const server = Hapi.server({
@@ -17,7 +18,10 @@ const HEADERS = {
 
 const getEvents = (deviceUID, timeframe) => {
   if (timeframe === "undefined") {
-    timeframe = "8 days";
+    /* this function is originally fetched on mount with 8 days' worth of data to
+    populate the AQI average history with the previous week's data AND
+    display today's most current reading as well */
+    timeframe = DATE_RANGE_OPTIONS.EIGHT_DAYS;
   }
 
   return axios.post(
@@ -69,11 +73,7 @@ const init = async () => {
     path: "/",
     options: {
       cors: {
-        origin: [
-          "http://localhost:5555",
-          "https://airnote.live",
-          "https://airnote-live-pr-45.onrender.com",
-        ],
+        origin: ["http://localhost:5555", "https://airnote.live"],
       },
       handler: async (request, h) => {
         const deviceUID = request.query.device_uid;

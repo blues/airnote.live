@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   ONE_DAY: {
     displayText: "Last Day",
     queryText: "1 days",
@@ -18,5 +18,9 @@ export default {
   SEVEN_DAYS: {
     displayText: "Last 7 Days",
     queryText: "7 days",
+  },
+  EIGHT_DAYS: {
+    displayText: "Last 8 Days",
+    queryText: "8 days",
   },
 };
