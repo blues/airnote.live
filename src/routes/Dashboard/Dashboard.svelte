@@ -20,7 +20,9 @@
   import HumidityChart from "../../components/charts/HumidityChart.svelte";
   import Recommendation from "./Recommendation.svelte";
   import Speedometer from "./Speedometer.svelte";
-  import TOOLTIP_STATES from "./TooltipStates";
+  import TOOLTIP_STATES from "../../constants/TooltipStates";
+  import DATE_RANGE_OPTIONS from "../../constants/DateRangeOptions";
+  import { convertDateRange, dateRangeDisplayText } from "../../util/dates";
   import { getHeatIndex, toFahrenheit, toCelsius } from "../../services/air";
   import { getReadings } from "../../services/device";
   import { shareDashboard } from "../../util/share";
@@ -40,6 +42,7 @@
   let showBanner =
     localStorage.getItem("showBanner") === "false" ? false : true;
   let tooltipState = TOOLTIP_STATES.CLOSED;
+  let selectedDateRange = DATE_RANGE_OPTIONS.SEVEN_DAYS.displayText;
 
   const toggleTempDisplay = () => {
     tempDisplay = tempDisplay == "C" ? "F" : "C";
@@ -65,6 +68,14 @@
     localStorage.setItem("showBanner", "false");
   };
 
+  $: if (selectedDateRange) {
+    const convertedTimeframe = convertDateRange(selectedDateRange);
+    getReadings(deviceUID, convertedTimeframe).then((data) => {
+      // only update the data for the charts, not the AQI average history component
+      readings = data.readings;
+    });
+  }
+
   onMount(() => {
     getReadings(deviceUID)
       .then((data) => {
@@ -77,7 +88,6 @@
             humidity: lastReading.humidity,
           });
           history = data.history;
-          readings = data.readings;
         }
         loading = false;
       })
@@ -301,7 +311,17 @@
       <Recommendation />
     </div>
 
-    <h3>Historical Readings (Last 7 Days)</h3>
+    <h3>Historical Readings ({selectedDateRange})</h3>
+
+    <div class="date-selector">
+      <select bind:value={selectedDateRange} data-cy="chart-date-selector">
+        {#each dateRangeDisplayText as dateRange}
+          <option value={dateRange}>
+            {dateRange}
+          </option>
+        {/each}
+      </select>
+    </div>
 
     <div class="all-charts">
       <div class="box chart1" in:fade>
@@ -476,6 +496,16 @@
     font-size: 1.2rem;
   }
 
+  .date-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .date-selector select {
+    margin-bottom: 0.5rem;
+    height: inherit;
+  }
+
   .all-charts {
     display: grid;
     grid-template-areas:
@@ -529,6 +559,9 @@
   }
 
   @media (max-width: 780px) {
+    .date-selector {
+      grid-template-columns: repeat(2, 1fr);
+    }
     .all-measurements,
     .all-charts {
       display: block;

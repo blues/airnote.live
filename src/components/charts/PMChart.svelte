@@ -12,6 +12,35 @@
   let pm2_5Data = [];
   let pm10Data = [];
 
+  $: getPMData(readings);
+
+  function getPMData(readings) {
+    /* reading.captured comes in as something like 2022-08-22T06:27:38Z, 
+    then parseISO() turns it into Mon Aug 22 2022 02:27:38 GMT-0400 (Eastern Daylight Time),
+    and we take that date object and format() for the particular component (MM-dd HH:mm) */
+    pm1Data = readings.map((reading) => {
+      const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+      return {
+        x: format(d, DATE_TIME_FORMAT_KEY),
+        y: parseFloat(reading.pm01_0).toFixed(2),
+      };
+    });
+    pm2_5Data = readings.map((reading) => {
+      const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+      return {
+        x: format(d, DATE_TIME_FORMAT_KEY),
+        y: parseFloat(reading.pm02_5).toFixed(2),
+      };
+    });
+    pm10Data = readings.map((reading) => {
+      const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
+      return {
+        x: format(d, DATE_TIME_FORMAT_KEY),
+        y: parseFloat(reading.pm10_0).toFixed(2),
+      };
+    });
+  }
+
   $: if (pmChart) {
     pmChart.data.datasets[0].data = pm1Data;
     pmChart.data.datasets[1].data = pm2_5Data;
@@ -70,33 +99,7 @@
     },
   };
 
-  onMount(async () => {
-    function getPMData(readings) {
-      pm1Data = readings.map((reading) => {
-        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-        return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(reading.pm01_0).toFixed(2),
-        };
-      });
-      pm2_5Data = readings.map((reading) => {
-        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-        return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(reading.pm02_5).toFixed(2),
-        };
-      });
-      pm10Data = readings.map((reading) => {
-        const d = parseISO(reading.captured, DATE_TIME_FORMAT_KEY);
-        return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
-          y: parseFloat(reading.pm10_0).toFixed(2),
-        };
-      });
-    }
-
-    getPMData(readings);
-
+  onMount(() => {
     pmChart = new Chart(ctx, config);
   });
 </script>

@@ -14,8 +14,16 @@ const HEADERS = {
   "Content-Type": "application/json",
   "X-SESSION-TOKEN": process.env.HUB_AUTH_TOKEN,
 };
+const INITIAL_TIMEFRAME = "8 days";
 
-const getEvents = (deviceUID) => {
+const getEvents = (deviceUID, timeframe) => {
+  if (timeframe === "undefined") {
+    /* this function is originally fetched on mount with 8 days' worth of data to
+    populate the AQI average history with the previous week's data AND
+    display today's most current reading as well */
+    timeframe = INITIAL_TIMEFRAME;
+  }
+
   return axios.post(
     `https://api.notefile.net/req?app=${AIRNOTE_PROJECT_UID}`,
     {
@@ -26,7 +34,7 @@ const getEvents = (deviceUID) => {
         limit: 1000,
         order: ".modified",
         descending: true,
-        where: `.file::text='_air.qo' and .device::text='${deviceUID}' and .modified >= now()-interval '8 days'`,
+        where: `.file::text='_air.qo' and .device::text='${deviceUID}' and .modified >= now()-interval '${timeframe}'`,
       },
     },
     {
@@ -69,12 +77,13 @@ const init = async () => {
       },
       handler: async (request, h) => {
         const deviceUID = request.query.device_uid;
+        const timeframe = request.query.timeframe;
         const allEvents = [];
         let erred;
 
         await Promise.all([
           getEnvironmentVariables(deviceUID),
-          getEvents(deviceUID),
+          getEvents(deviceUID, timeframe),
         ])
           .then((responses) => {
             const [envVarResponse, eventsResponse] = responses;
