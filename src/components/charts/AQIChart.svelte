@@ -10,7 +10,9 @@
   let ctx;
   let aqiData = [];
 
-  $: getAQIData(readings);
+  $: if (readings) {
+    getAQIData(readings);
+  }
 
   function getAQIData(readings) {
     aqiData = readings.map((reading) => {

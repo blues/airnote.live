@@ -16,7 +16,9 @@
   if an Airnote was charging during the time period */
   const MAX_VOLTAGE = 6;
 
-  $: getVoltageData(readings);
+  $: if (readings) {
+    getVoltageData(readings);
+  }
 
   function getVoltageData(readings) {
     voltageData = readings.reverse().map((reading) => {

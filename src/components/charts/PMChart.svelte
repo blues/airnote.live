@@ -12,7 +12,9 @@
   let pm2_5Data = [];
   let pm10Data = [];
 
-  $: getPMData(readings);
+  $: if (readings) {
+    getPMData(readings);
+  }
 
   function getPMData(readings) {
     /* reading.captured comes in as something like 2022-08-22T06:27:38Z, 

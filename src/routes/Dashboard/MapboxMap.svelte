@@ -75,13 +75,6 @@
   });
 </script>
 
-<svelte:head>
-  <link
-    href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css"
-    rel="stylesheet"
-  />
-</svelte:head>
-
 {#if lastReading.lon && lastReading.lat}
   <div in:fade>
     <div class="map-heading">
