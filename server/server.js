@@ -53,6 +53,16 @@ const getEnvironmentVariables = (deviceUID) => {
   );
 };
 
+// set the page size to an arbitrarily large number to fetch all devices with one HTTP call
+// reference docs: https://dev.blues.io/reference/notehub-api/device-api/#get-devices
+const getAllDevices = () => {
+  return axios.get(
+    `${NOTEHUB_BASE_URL}/v1/projects/${AIRNOTE_PROJECT_UID}/devices?pageSize=1000`,
+    {},
+    { headers: HEADERS }
+  );
+};
+
 const init = async () => {
   await server.register([
     {
@@ -100,6 +110,35 @@ const init = async () => {
           return h.response().code(500);
         } else {
           return h.response(allEvents).type("application/json").code(200);
+        }
+      },
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: "/all-devices",
+    options: {
+      cors: {
+        origin: ["http://localhost:5555", "https://airnote.live"],
+      },
+      handler: async (request, h) => {
+        let allDevices = [];
+        let erred;
+
+        await getAllDevices()
+          .then((res) => {
+            allDevices = res.data.devices;
+          })
+          .catch((err) => {
+            console.error(err);
+            erred = true;
+          });
+
+        if (erred) {
+          return h.response().code(500);
+        } else {
+          return h.response(allDevices).type("application/json").code(200);
         }
       },
     },

@@ -6,6 +6,7 @@
   import MenuIcon from "./icons/MenuIcon.svelte";
   import Settings from "./routes/Settings/Settings.svelte";
   import Dashboard from "./routes/Dashboard/Dashboard.svelte";
+  import WorldMap from "./routes/WorldMap/WorldMap.svelte";
   import Home from "./routes/Home/Home.svelte";
   import { getCurrentDeviceFromUrl } from "./services/device";
 
@@ -50,6 +51,7 @@
             Dashboard
           </a>
         </li>
+        <li><a href="/world-map">World Map</a></li>
       </ul>
       <button class="svg-button" on:click={toggleMenu}>
         {#if menuOpen}<CloseIcon />{/if}
@@ -62,6 +64,7 @@
       <Route path="/:deviceUID" component={Settings} {pin} {productUID} />
       <Route path="/:deviceUID/dashboard" component={Dashboard} />
       <Route path="/" component={Home} />
+      <Route path="/world-map" component={WorldMap} />
 
       <hr />
 

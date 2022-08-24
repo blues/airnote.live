@@ -118,3 +118,15 @@ export function getCurrentDeviceFromUrl(location) {
 
   return currentDevice;
 }
+
+export function getAllDevices() {
+  return fetch(`${SERVER_URL}/all-devices`)
+    .then((response) => response.json())
+    .then((data) => {
+      const allDevices = data;
+
+      return {
+        allDevices,
+      };
+    });
+}
