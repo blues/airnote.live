@@ -70,10 +70,15 @@
 
   $: if (selectedDateRange) {
     const convertedTimeframe = convertDateRange(selectedDateRange);
-    getReadings(deviceUID, convertedTimeframe).then((data) => {
-      // only update the data for the charts, not the AQI average history component
-      readings = data.readings;
-    });
+    getReadings(deviceUID, convertedTimeframe)
+      .then((data) => {
+        // only update the data for the charts, not the AQI average history component
+        readings = data.readings;
+      })
+      .catch((err) => {
+        console.error(err);
+        fetchError = true;
+      });
   }
 
   onMount(() => {

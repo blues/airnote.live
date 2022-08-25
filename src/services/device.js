@@ -79,6 +79,35 @@ export function getReadings(deviceUID, timeframe) {
     });
 }
 
+export function getDeviceEnvVars(deviceUID) {
+  return fetch(
+    `${SERVER_URL}/settings?` + new URLSearchParams({ device_uid: deviceUID })
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
+    });
+}
+
+export function checkDeviceEnvVarModificationAccess(
+  airnoteProductUID,
+  deviceUID,
+  pin
+) {
+  return fetch(
+    `${SERVER_URL}/settings-modification-access?` +
+      new URLSearchParams({
+        airnote_product_uid: airnoteProductUID,
+        device_uid: deviceUID,
+        pin,
+      })
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      return { canModify: data };
+    });
+}
+
 function saveLastViewedDevice(data) {
   localStorage.setItem("device", JSON.stringify(data));
 }

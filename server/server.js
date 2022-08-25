@@ -14,6 +14,9 @@ const HEADERS = {
   "Content-Type": "application/json",
   "X-SESSION-TOKEN": process.env.HUB_AUTH_TOKEN,
 };
+const CORS_OPTIONS = {
+  origin: ["http://localhost:5555", "https://airnote.live"],
+};
 const INITIAL_TIMEFRAME = "8 days";
 
 const getEvents = (deviceUID, timeframe) => {
@@ -43,6 +46,15 @@ const getEvents = (deviceUID, timeframe) => {
   );
 };
 
+const getEnvVarsReadWrite = (airnoteProductUID, deviceUID, pin) => {
+  return axios.get(
+    `${NOTEHUB_BASE_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`,
+    {},
+    { headers: { "Content-Type": "application/json", "X-Auth-Token": pin } }
+  );
+};
+
+// read only env vars
 const getEnvironmentVariables = (deviceUID) => {
   return axios.get(
     `${NOTEHUB_BASE_URL}/v1/projects/${AIRNOTE_PROJECT_UID}/devices/${deviceUID}/environment_variables`,
@@ -72,9 +84,7 @@ const init = async () => {
     method: "GET",
     path: "/",
     options: {
-      cors: {
-        origin: ["http://localhost:5555", "https://airnote.live"],
-      },
+      cors: CORS_OPTIONS,
       handler: async (request, h) => {
         const deviceUID = request.query.device_uid;
         const timeframe = request.query.timeframe;
@@ -100,6 +110,76 @@ const init = async () => {
           return h.response().code(500);
         } else {
           return h.response(allEvents).type("application/json").code(200);
+        }
+      },
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: "/settings",
+    options: {
+      cors: CORS_OPTIONS,
+      handler: async (request, h) => {
+        const deviceUID = request.query.device_uid;
+        let deviceDetails = {};
+        let erred;
+        await getEnvironmentVariables(deviceUID)
+          .then((response) => {
+            deviceDetails = response.data.environment_variables;
+          })
+          .catch((err) => {
+            console.error(err);
+            erred = true;
+          });
+
+        if (erred) {
+          return h.response().code(500);
+        } else {
+          return h.response(deviceDetails).type("application/json").code(200);
+        }
+      },
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: "/settings-modification-access",
+    options: {
+      cors: CORS_OPTIONS,
+      handler: async (request, h) => {
+        const airnoteProductUID = request.query.airnote_product_uid;
+        const deviceUID = request.query.device_uid;
+        const pin = request.query.pin;
+        let canModify = false;
+        let unauthorized = false;
+        let erred;
+        await getEnvVarsReadWrite(airnoteProductUID, deviceUID, pin)
+          .then((response) => {
+            console.log("Notehub Response");
+            console.log(response);
+            canModify = true;
+          })
+          .catch((err) => {
+            /* if server throws a 401 unauthorized error in particular, 
+            accept it and push to the client instead of erroring out */
+            if (
+              err.response.data.code === 401 &&
+              err.response.data.err === "PIN is incorrect"
+            ) {
+              unauthorized = true;
+              return;
+            } else {
+              erred = true;
+            }
+          });
+
+        if (unauthorized) {
+          return h.response(canModify).type("application/json").code(401);
+        } else if (erred) {
+          return h.response().code(500);
+        } else {
+          return h.response(canModify).type("application/json").code(200);
         }
       },
     },
