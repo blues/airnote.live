@@ -26,7 +26,8 @@
   import { getHeatIndex, toFahrenheit, toCelsius } from "../../services/air";
   import { getReadings } from "../../services/device";
   import { shareDashboard } from "../../util/share";
-  import { NO_DATA_ERROR_HEADING, FETCH_ERROR_HEADING } from "../../constants";
+  import { ERROR_TYPE } from "../../constants/ErrorTypes";
+  import { renderErrorMessage } from "../../util/errors";
 
   export let deviceUID;
 
@@ -34,8 +35,8 @@
   let readings;
   let history;
 
-  let noDataError = false;
-  let fetchError = false;
+  let error = false;
+  let errorType;
   let loading = true;
 
   let tempDisplay = localStorage.getItem("tempDisplay") || "C";
@@ -77,7 +78,8 @@
       })
       .catch((err) => {
         console.error(err);
-        fetchError = true;
+        error = true;
+        errorType = ERROR_TYPE.NOTEHUB_ERROR;
       });
   }
 
@@ -86,7 +88,8 @@
       .then((data) => {
         lastReading = data.readings[0];
         if (!lastReading) {
-          noDataError = true;
+          error = true;
+          errorType = ERROR_TYPE.NO_DATA_ERROR;
         } else {
           lastReading.heatIndex = getHeatIndex({
             temperature: toFahrenheit(lastReading.temperature),
@@ -98,7 +101,8 @@
       })
       .catch((err) => {
         console.error(err);
-        fetchError = true;
+        error = true;
+        errorType = ERROR_TYPE.NOTEHUB_ERROR;
         loading = false;
       });
   });
@@ -126,31 +130,8 @@
     <div class="loading" />
   {/if}
 
-  {#if noDataError}
-    <div class="alert">
-      <h4 class="alert-heading">{NO_DATA_ERROR_HEADING}</h4>
-      <p>
-        This Airnote has not reported data in the last seven days. If this is a
-        new Airnote, it may take several hours for your device to report its
-        first readings. For help setting up your Airnote, visit
-        <a href="https://start.airnote.live">start.airnote.live</a>.
-      </p>
-
-      <p>
-        If this is a device that has previously reported readings, you can <a
-          href="https://discuss.blues.io">reach out on our forum</a
-        > if you need help getting your Airnote back up and running.
-      </p>
-    </div>
-  {/if}
-
-  {#if fetchError}
-    <div class="alert">
-      <h4 class="alert-heading">{FETCH_ERROR_HEADING}</h4>
-      Please make sure your Airnote is online and connected before visiting this
-      page. For help getting started, visit
-      <a href="https://start.airnote.live" target="_new">start.airnote.live</a>.
-    </div>
+  {#if error}
+    {@html renderErrorMessage(errorType)}
   {/if}
 
   {#if lastReading}

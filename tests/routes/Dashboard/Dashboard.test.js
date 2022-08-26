@@ -1,14 +1,13 @@
 import { render, waitFor } from "@testing-library/svelte";
 
 import Dashboard from "../../../src/routes/Dashboard/Dashboard.svelte";
-import {
-  NO_DATA_ERROR_HEADING,
-  FETCH_ERROR_HEADING,
-} from "../../../src/constants";
+import { ERROR_TYPE } from "../../../src/constants/ErrorTypes";
 
 beforeEach(() => {
   fetch.mockClear();
 });
+
+const FETCH_ERROR_HEADING_TEXT = "Unable to fetch device details.";
 
 test("If there’s an error getting readings the user should see an error", async () => {
   fetch.mockImplementationOnce(() => Promise.reject());
@@ -16,11 +15,11 @@ test("If there’s an error getting readings the user should see an error", asyn
     deviceUID: "...",
   });
 
-  let errorHeading = await waitFor(() => getByText(FETCH_ERROR_HEADING));
+  let errorHeading = await waitFor(() => getByText(FETCH_ERROR_HEADING_TEXT));
   expect(errorHeading).toBeInTheDocument();
 
   // Do NOT show the no data error
-  errorHeading = queryByText(NO_DATA_ERROR_HEADING);
+  errorHeading = queryByText(ERROR_TYPE.NO_DATA_ERROR);
   expect(errorHeading).toBe(null);
 });
 
@@ -34,11 +33,11 @@ test("If the API returns no data the user should see a no-data error", async () 
     deviceUID: "...",
   });
 
-  let errorHeading = await waitFor(() => getByText(NO_DATA_ERROR_HEADING));
+  let errorHeading = await waitFor(() => getByText(ERROR_TYPE.NO_DATA_ERROR));
   expect(errorHeading).toBeInTheDocument();
 
   // Do NOT show the fetch error
-  errorHeading = queryByText(FETCH_ERROR_HEADING);
+  errorHeading = queryByText(FETCH_ERROR_HEADING_TEXT);
   expect(errorHeading).toBe(null);
 });
 
@@ -68,6 +67,6 @@ appropriately.
 
 //   await waitFor(() => getByText("Air Quality"));
 
-//   expect(queryByText(FETCH_ERROR_HEADING)).toBe(null);
-//   expect(queryByText(NO_DATA_ERROR_HEADING)).toBe(null);
+//   expect(queryByText(FETCH_ERROR_HEADING_TEXT)).toBe(null);
+//   expect(queryByText(ERROR_TYPE.NO_DATA_ERROR)).toBe(null);
 // });

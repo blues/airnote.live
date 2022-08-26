@@ -46,7 +46,8 @@ const getEvents = (deviceUID, timeframe) => {
   );
 };
 
-const getEnvVarsReadWrite = (airnoteProductUID, deviceUID, pin) => {
+// get Airnote env vars by device with PIN - READ WRITE
+const getAirnoteEnvVars = (airnoteProductUID, deviceUID, pin) => {
   return axios.get(
     `${NOTEHUB_BASE_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`,
     {},
@@ -54,7 +55,16 @@ const getEnvVarsReadWrite = (airnoteProductUID, deviceUID, pin) => {
   );
 };
 
-// read only env vars
+// update Airnote env vars by device with PIN - READ WRITE
+const updateAirnoteEnvVars = (airnoteProductUID, deviceUID, pin, varsBody) => {
+  return axios.put(
+    `${NOTEHUB_BASE_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`,
+    varsBody,
+    { headers: { "Content-Type": "application/json", "X-Auth-Token": pin } }
+  );
+};
+
+// get env vars by device READ ONLY
 const getEnvironmentVariables = (deviceUID) => {
   return axios.get(
     `${NOTEHUB_BASE_URL}/v1/projects/${AIRNOTE_PROJECT_UID}/devices/${deviceUID}/environment_variables`,
@@ -154,7 +164,7 @@ const init = async () => {
         let canModify = false;
         let unauthorized = false;
         let erred;
-        await getEnvVarsReadWrite(airnoteProductUID, deviceUID, pin)
+        await getAirnoteEnvVars(airnoteProductUID, deviceUID, pin)
           .then((response) => {
             console.log("Notehub Response");
             console.log(response);
@@ -180,6 +190,56 @@ const init = async () => {
           return h.response().code(500);
         } else {
           return h.response(canModify).type("application/json").code(200);
+        }
+      },
+    },
+  });
+
+  server.route({
+    method: "PUT",
+    path: "/settings-update",
+    options: {
+      cors: CORS_OPTIONS,
+      handler: async (request, h) => {
+        const airnoteProductUID = request.query.airnote_product_uid;
+        const deviceUID = request.query.device_uid;
+        const pin = request.query.pin;
+        const varsBody = request.payload;
+        let unauthorized = false;
+        let successfullyUpdated = false;
+        let erred;
+        await updateAirnoteEnvVars(airnoteProductUID, deviceUID, pin, varsBody)
+          .then((response) => {
+            console.log("Notehub Response");
+            console.log(response);
+            successfullyUpdated = true;
+          })
+          .catch((err) => {
+            /* if server throws a 401 unauthorized error in particular, 
+            accept it and push to the client instead of erroring out */
+            if (
+              err.response.data.code === 401 &&
+              err.response.data.err === "PIN is incorrect"
+            ) {
+              unauthorized = true;
+              return;
+            } else {
+              erred = true;
+            }
+          });
+
+        if (unauthorized) {
+          return h
+            .response(successfullyUpdated)
+            .type("application/json")
+            .code(401);
+        } else if (erred) {
+          return h.response().code(500);
+        } else {
+          return h
+            .response(successfullyUpdated)
+            .type("application/json")
+            .code(200);
         }
       },
     },

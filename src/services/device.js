@@ -94,18 +94,45 @@ export function checkDeviceEnvVarModificationAccess(
   deviceUID,
   pin
 ) {
-  return fetch(
-    `${SERVER_URL}/settings-modification-access?` +
-      new URLSearchParams({
-        airnote_product_uid: airnoteProductUID,
-        device_uid: deviceUID,
-        pin,
+  return (
+    fetch(
+      `${SERVER_URL}/settings-modification-access?` +
+        new URLSearchParams({
+          airnote_product_uid: airnoteProductUID,
+          device_uid: deviceUID,
+          pin,
+        })
+    )
+      .then((response) => response.json())
+      // this returns a true/false bool
+      .then((data) => {
+        return { canModify: data };
       })
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      return { canModify: data };
-    });
+  );
+}
+
+export function updateDeviceEnvVars(
+  airnoteProductUID,
+  deviceUID,
+  pin,
+  varsBody
+) {
+  return (
+    fetch(
+      `${SERVER_URL}/settings-update?` +
+        new URLSearchParams({
+          airnote_product_uid: airnoteProductUID,
+          device_uid: deviceUID,
+          pin,
+        }),
+      { method: "PUT", body: JSON.stringify(varsBody) }
+    )
+      .then((response) => response.json())
+      // this returns a true/false bool
+      .then((data) => {
+        return { successfullyUpdated: data };
+      })
+  );
 }
 
 function saveLastViewedDevice(data) {

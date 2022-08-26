@@ -3,7 +3,18 @@
   import { NotificationDisplay, notifier } from "@beyonk/svelte-notifications";
   import DeviceSettings from "./DeviceSettings.svelte";
   import DeviceOwner from "./DeviceOwner.svelte";
-  import { airnoteProductUID, NOTEHUB_API_URL, appUID } from "../../constants";
+  import {
+    airnoteProductUID,
+    appUID,
+    radnoteProductUID,
+  } from "../../constants";
+  import { ERROR_TYPE } from "../../constants/ErrorTypes";
+  import { renderErrorMessage } from "../../util/errors";
+  import {
+    getDeviceEnvVars,
+    checkDeviceEnvVarModificationAccess,
+    updateDeviceEnvVars,
+  } from "../../services/device";
   import {
     deviceName,
     displayValue,
@@ -18,12 +29,12 @@
 
   export let pin;
   export let productUID;
-  let fetchError = false;
-  let saveError = false;
+  export let deviceUID;
+  let enableFields = false;
+  let error = false;
+  let errorType;
   let notify;
 
-  export let deviceUID;
-  export let enableFields = true;
   let eventsUrl = `https://notehub.io/project/${appUID}/events?queryMode=devices&queryDevices=${deviceUID}`;
 
   const displayOptions = [
@@ -33,7 +44,7 @@
     { value: "press", text: "Barometric Pressue" },
   ];
 
-  if (productUID === "product:org.airnote.solar.rad.v1") {
+  if (productUID === radnoteProductUID) {
     $displayValue = "usv";
 
     displayOptions.splice(0, 0, {
@@ -96,68 +107,61 @@
       $contactAffiliation = data["_contact_affiliation"];
   };
 
-  const handleSettingsSave = async () => {
+  const handleSettingsSave = () => {
     const varsBody = createBodyFromStore();
 
-    const url = `${NOTEHUB_API_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
-    const headers = {
-      "Content-Type": "application/json",
-      "X-Auth-Token": pin,
-    };
-
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify(varsBody),
-    });
-    if (response.status !== 200) {
-      saveError = true;
-    } else {
-      notifier.success("Settings saved.");
-    }
+    updateDeviceEnvVars(airnoteProductUID, deviceUID, pin, varsBody)
+      .then((data) => {
+        if (data.successfullyUpdated) {
+          notifier.success("Settings saved.");
+        } else {
+          error = true;
+          errorType = ERROR_TYPE.UPDATE_ERROR;
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        error = true;
+        errorType = ERROR_TYPE.NOTEHUB_ERROR;
+      });
   };
 
-  onMount(async () => {
-    // If no Pin, Get Env Vars using legacy req API
-    if (pin === "") {
-      enableFields = false;
-      const envVarsReadOnlyUrl = `${NOTEHUB_API_URL}/req?product="${airnoteProductUID}"&device="${deviceUID}"`;
-      const envVarsReadOnlyPayload = '{"req":"hub.env.get","scope":"device"}';
-
-      const response = await fetch(envVarsReadOnlyUrl, {
-        method: "POST",
-        body: envVarsReadOnlyPayload,
+  onMount(() => {
+    // fetch the device env variables to display in inputs
+    getDeviceEnvVars(deviceUID)
+      .then((data) => {
+        updateSettingsFromEnvVars(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        error = true;
+        errorType = ERROR_TYPE.NOTEHUB_ERROR;
       });
-      const data = await response.json();
 
-      // Get current Env Vars from response
-      const envVars = data["env"];
-      // Populate settings object
-      updateSettingsFromEnvVars(envVars);
+    // check for pin and display message if it does not exist
+    if (pin === "") {
+      error = true;
+      errorType = ERROR_TYPE.MISSING_PIN;
     } else {
-      // If Pin, Get Env Vars using new V1 API
-      const envVarsReadWriteUrl = `${NOTEHUB_API_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`;
-      const envVarsReadWriteHeader = { "X-Auth-Token": pin };
-
-      try {
-        const response = await fetch(envVarsReadWriteUrl, {
-          headers: envVarsReadWriteHeader,
+      // if pin exists, check its validity to change device settings
+      checkDeviceEnvVarModificationAccess(airnoteProductUID, deviceUID, pin)
+        .then((data) => {
+          // if pin is valid, enable inputs
+          if (data.canModify) {
+            error = false;
+            enableFields = true;
+          } else {
+            // if pin is invalid, display message it is invalid
+            error = true;
+            errorType = ERROR_TYPE.INVALID_PIN;
+            enableFields = false;
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          error = true;
+          errorType = ERROR_TYPE.NOTEHUB_ERROR;
         });
-        if (response.status !== 200) {
-          fetchError = true;
-          enableFields = false;
-        } else {
-          const data = await response.json();
-
-          // Get current Env Vars from response
-          const envVars = data["environment_variables"];
-          // Populate settings object
-          updateSettingsFromEnvVars(envVars);
-        }
-      } catch (error) {
-        fetchError = true;
-        enableFields = false;
-      }
     }
   });
 </script>
@@ -166,22 +170,8 @@
   <title>Airnote Device Configuration</title>
 </svelte:head>
 
-{#if fetchError}
-  <div class="alert">
-    <h4 class="alert-heading">Unable to fetch device details.</h4>
-    Please make sure your Airnote is
-    <a href={eventsUrl} target="_new">online and connected to Notehub.io</a>
-    before visiting this page. For help getting started, visit
-    <a href="https://start.airnote.live" target="_new">start.airnote.live</a>.
-  </div>
-{/if}
-
-{#if saveError}
-  <div>
-    <h4 class="alert-heading">
-      Unable to safe configuration settings. Please try again later.
-    </h4>
-  </div>
+{#if error}
+  {@html renderErrorMessage(errorType)}
 {/if}
 
 <section>
@@ -252,7 +242,7 @@
     text-align: center;
   }
   a {
-    text-align: cetner;
+    text-align: center;
   }
   p {
     text-align: center;
