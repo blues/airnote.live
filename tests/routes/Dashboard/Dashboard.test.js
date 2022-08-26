@@ -10,12 +10,12 @@ beforeEach(() => {
 const FETCH_ERROR_HEADING_TEXT = "Unable to fetch device details.";
 
 test("If there’s an error getting readings the user should see an error", async () => {
-  fetch.mockImplementationOnce(() => Promise.reject());
-  const { getByText, queryByText } = render(Dashboard, {
+  fetch.mockImplementation(() => Promise.reject());
+  const { findByText, queryByText } = render(Dashboard, {
     deviceUID: "...",
   });
 
-  let errorHeading = await waitFor(() => getByText(FETCH_ERROR_HEADING_TEXT));
+  let errorHeading = await findByText(FETCH_ERROR_HEADING_TEXT);
   expect(errorHeading).toBeInTheDocument();
 
   // Do NOT show the no data error
@@ -24,16 +24,16 @@ test("If there’s an error getting readings the user should see an error", asyn
 });
 
 test("If the API returns no data the user should see a no-data error", async () => {
-  fetch.mockImplementationOnce(() =>
+  fetch.mockImplementation(() =>
     Promise.resolve({
       json: () => Promise.resolve([]),
     })
   );
-  const { getByText, queryByText } = render(Dashboard, {
+  const { findByText, queryByText } = render(Dashboard, {
     deviceUID: "...",
   });
 
-  let errorHeading = await waitFor(() => getByText(ERROR_TYPE.NO_DATA_ERROR));
+  let errorHeading = await findByText(ERROR_TYPE.NO_DATA_ERROR);
   expect(errorHeading).toBeInTheDocument();
 
   // Do NOT show the fetch error

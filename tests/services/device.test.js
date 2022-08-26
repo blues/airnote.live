@@ -1,6 +1,7 @@
 import { airnoteProductUID } from "../../src/constants";
 import {
   getCurrentDeviceFromUrl,
+  getDeviceEnvVars,
   getReadings,
 } from "../../src/services/device";
 
@@ -127,4 +128,27 @@ test("If the device is removed from the URL the last device viewed should persis
   expect(device.deviceUID).toBe("dev:111");
   expect(device.pin).toBe("111111");
   expect(device.productUID).toBe("product:org.airnote.solar.v1");
+});
+
+test("It should return the device's environment variables if device ID is supplied", () => {
+  fetch.mockImplementationOnce(() =>
+    Promise.resolve({
+      json: () =>
+        Promise.resolve({
+          _air_indoors: "0",
+          _air_mins: "usb:15;high:30;normal:30;low:720;0",
+          _air_status: "pm2.5",
+          _contact_affiliation: "Test Account",
+          _contact_email: "test@test.com",
+          _contact_name: "Tester",
+          _sn: "test-airnote",
+        }),
+    })
+  );
+
+  getDeviceEnvVars("dev:864475044215258").then((data) => {
+    expect(data._air_indoors).toBe("0");
+    expect(data._contact_email).toBe("test@test.com");
+    expect(data._sn).toBe("test-airnote");
+  });
 });
