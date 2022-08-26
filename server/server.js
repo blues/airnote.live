@@ -166,8 +166,6 @@ const init = async () => {
         let erred;
         await getAirnoteEnvVars(airnoteProductUID, deviceUID, pin)
           .then((response) => {
-            console.log("Notehub Response");
-            console.log(response);
             canModify = true;
           })
           .catch((err) => {
@@ -210,8 +208,6 @@ const init = async () => {
         let erred;
         await updateAirnoteEnvVars(airnoteProductUID, deviceUID, pin, varsBody)
           .then((response) => {
-            console.log("Notehub Response");
-            console.log(response);
             successfullyUpdated = true;
           })
           .catch((err) => {
