@@ -1,5 +1,4 @@
-import { render, waitFor } from "@testing-library/svelte";
-
+import { render } from "@testing-library/svelte";
 import Dashboard from "../../../src/routes/Dashboard/Dashboard.svelte";
 import { ERROR_TYPE } from "../../../src/constants/ErrorTypes";
 
