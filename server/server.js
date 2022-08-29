@@ -47,20 +47,19 @@ const getEvents = (deviceUID, timeframe) => {
 };
 
 // get Airnote env vars by device with PIN - READ WRITE
-const getAirnoteEnvVars = (airnoteProductUID, deviceUID, pin) => {
+const getAirnoteEnvVars = (productUID, deviceUID, pin) => {
   return axios.get(
-    `${NOTEHUB_BASE_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`,
-    {},
-    { headers: { "Content-Type": "application/json", "X-Auth-Token": pin } }
+    `${NOTEHUB_BASE_URL}/v1/products/${productUID}/devices/${deviceUID}/environment_variables_with_pin`,
+    { headers: { "X-Auth-Token": pin } }
   );
 };
 
 // update Airnote env vars by device with PIN - READ WRITE
-const updateAirnoteEnvVars = (airnoteProductUID, deviceUID, pin, varsBody) => {
+const updateAirnoteEnvVars = (productUID, deviceUID, pin, varsBody) => {
   return axios.put(
-    `${NOTEHUB_BASE_URL}/v1/products/${airnoteProductUID}/devices/${deviceUID}/environment_variables_with_pin`,
+    `${NOTEHUB_BASE_URL}/v1/products/${productUID}/devices/${deviceUID}/environment_variables_with_pin`,
     varsBody,
-    { headers: { "Content-Type": "application/json", "X-Auth-Token": pin } }
+    { headers: { "X-Auth-Token": pin } }
   );
 };
 
@@ -158,13 +157,13 @@ const init = async () => {
     options: {
       cors: CORS_OPTIONS,
       handler: async (request, h) => {
-        const airnoteProductUID = request.query.airnote_product_uid;
+        const productUID = request.query.product_uid;
         const deviceUID = request.query.device_uid;
         const pin = request.query.pin;
         let canModify = false;
         let unauthorized = false;
         let erred;
-        await getAirnoteEnvVars(airnoteProductUID, deviceUID, pin)
+        await getAirnoteEnvVars(productUID, deviceUID, pin)
           .then((response) => {
             canModify = true;
           })
@@ -199,14 +198,14 @@ const init = async () => {
     options: {
       cors: CORS_OPTIONS,
       handler: async (request, h) => {
-        const airnoteProductUID = request.query.airnote_product_uid;
+        const productUID = request.query.product_uid;
         const deviceUID = request.query.device_uid;
         const pin = request.query.pin;
         const varsBody = request.payload;
         let unauthorized = false;
         let successfullyUpdated = false;
         let erred;
-        await updateAirnoteEnvVars(airnoteProductUID, deviceUID, pin, varsBody)
+        await updateAirnoteEnvVars(productUID, deviceUID, pin, varsBody)
           .then((response) => {
             successfullyUpdated = true;
           })

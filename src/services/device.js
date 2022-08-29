@@ -1,4 +1,4 @@
-import { DATE_FORMAT_KEY, SERVER_URL, airnoteProductUID } from "../constants";
+import { DATE_FORMAT_KEY, SERVER_URL, AIRNOTE_PRODUCT_UID } from "../constants";
 import { format } from "date-fns";
 import queryString from "query-string";
 
@@ -90,7 +90,7 @@ export function getDeviceEnvVars(deviceUID) {
 }
 
 export function checkDeviceEnvVarModificationAccess(
-  airnoteProductUID,
+  productUID,
   deviceUID,
   pin
 ) {
@@ -98,7 +98,7 @@ export function checkDeviceEnvVarModificationAccess(
     fetch(
       `${SERVER_URL}/settings-modification-access?` +
         new URLSearchParams({
-          airnote_product_uid: airnoteProductUID,
+          product_uid: productUID,
           device_uid: deviceUID,
           pin,
         })
@@ -111,17 +111,12 @@ export function checkDeviceEnvVarModificationAccess(
   );
 }
 
-export function updateDeviceEnvVars(
-  airnoteProductUID,
-  deviceUID,
-  pin,
-  varsBody
-) {
+export function updateDeviceEnvVars(productUID, deviceUID, pin, varsBody) {
   return (
     fetch(
       `${SERVER_URL}/settings-update?` +
         new URLSearchParams({
-          airnote_product_uid: airnoteProductUID,
+          product_uid: productUID,
           device_uid: deviceUID,
           pin,
         }),
@@ -148,7 +143,7 @@ export function getCurrentDeviceFromUrl(location) {
 
   const query = queryString.parse(location.search);
   let pin = query["pin"] || "";
-  let productUID = query["product"] || airnoteProductUID;
+  let productUID = query["product"] || AIRNOTE_PRODUCT_UID;
   let deviceUID = location.pathname.match(/dev:\d*/)?.[0] || "";
 
   // If there is no device in the query string default to the

@@ -138,7 +138,6 @@
     if (pin === "") {
       error = true;
       errorType = ERROR_TYPE.MISSING_PIN;
-      enableFields = true;
     } else {
       // if pin exists, check its validity to change device settings
       checkDeviceEnvVarModificationAccess(productUID, deviceUID, pin)
