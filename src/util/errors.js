@@ -35,17 +35,17 @@ export function renderErrorMessage(errorType) {
     case errorType === ERROR_TYPE.INVALID_PIN:
       return `
         <div class="alert">
-          <h4 class="alert-heading">No PIN or invalid PIN detected.</h4>
-          You can view but not change any of these device settings. This error
-          message needs more actionable steps to resolve an issue but I don't
-          know what to say.
+          <h4 class="alert-heading">Unauthorized</h4>
+          It appears you do not have permission to edit settings, just view. 
+          If you believe you are receiving this message in error, please try 
+          scanning your Airnote QR code on the back of the device or 
+          reviewing our documentation on how to setup your Airnote, 
+          <a href="https://start.airnote.live" target="_new">here</a>.
         </div>`;
     case errorType === ERROR_TYPE.UPDATE_ERROR:
       return `
          <div class="warning">
-          <h4 class="alert-heading">
             Unable to save new configuration settings. Please try again later.
-          </h4>
         </div>`;
     default:
       return `

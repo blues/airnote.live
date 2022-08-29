@@ -1,6 +1,6 @@
-export const airnoteProductUID = "product:org.airnote.solar.v1";
-export const radnoteProductUID = "product:org.airnote.solar.rad.v1";
-export const appUID = "app:2606f411-dea6-44a0-9743-1130f57d77d8";
+export const AIRNOTE_PRODUCT_UID = "product:org.airnote.solar.v1";
+export const RADNOTE_PRODUCT_UID = "product:org.airnote.solar.rad.v1";
+export const APP_UID = "app:2606f411-dea6-44a0-9743-1130f57d77d8";
 
 export const DATE_FORMAT_KEY = "MMMM dd yyyy";
 export const DATE_TIME_FORMAT_KEY = "MM-dd HH:mm";

@@ -1,4 +1,4 @@
-import { airnoteProductUID } from "../../src/constants";
+import { AIRNOTE_PRODUCT_UID } from "../../src/constants";
 import {
   checkDeviceEnvVarModificationAccess,
   getCurrentDeviceFromUrl,
@@ -114,7 +114,7 @@ test("If the device changes in the URL the data should change as well", () => {
   });
   expect(thirdDevice.deviceUID).toBe("dev:333");
   expect(thirdDevice.pin).toBe("");
-  expect(thirdDevice.productUID).toBe(airnoteProductUID);
+  expect(thirdDevice.productUID).toBe(AIRNOTE_PRODUCT_UID);
 });
 
 test("If the device is removed from the URL the last device viewed should persist", () => {

@@ -3,11 +3,7 @@
   import { NotificationDisplay, notifier } from "@beyonk/svelte-notifications";
   import DeviceSettings from "./DeviceSettings.svelte";
   import DeviceOwner from "./DeviceOwner.svelte";
-  import {
-    airnoteProductUID,
-    appUID,
-    radnoteProductUID,
-  } from "../../constants";
+  import { APP_UID, RADNOTE_PRODUCT_UID } from "../../constants";
   import { ERROR_TYPE } from "../../constants/ErrorTypes";
   import { renderErrorMessage } from "../../util/errors";
   import {
@@ -35,7 +31,7 @@
   let errorType;
   let notify;
 
-  let eventsUrl = `https://notehub.io/project/${appUID}/events?queryMode=devices&queryDevices=${deviceUID}`;
+  let eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryMode=devices&queryDevices=${deviceUID}`;
 
   const displayOptions = [
     { value: "tempc", text: "Temp (°C)" },
@@ -44,7 +40,7 @@
     { value: "press", text: "Barometric Pressue" },
   ];
 
-  if (productUID === radnoteProductUID) {
+  if (productUID === RADNOTE_PRODUCT_UID) {
     $displayValue = "usv";
 
     displayOptions.splice(0, 0, {
@@ -110,7 +106,7 @@
   const handleSettingsSave = () => {
     const varsBody = createBodyFromStore();
 
-    updateDeviceEnvVars(airnoteProductUID, deviceUID, pin, varsBody)
+    updateDeviceEnvVars(productUID, deviceUID, pin, varsBody)
       .then((data) => {
         if (data.successfullyUpdated) {
           notifier.success("Settings saved.");
@@ -142,9 +138,10 @@
     if (pin === "") {
       error = true;
       errorType = ERROR_TYPE.MISSING_PIN;
+      enableFields = true;
     } else {
       // if pin exists, check its validity to change device settings
-      checkDeviceEnvVarModificationAccess(airnoteProductUID, deviceUID, pin)
+      checkDeviceEnvVarModificationAccess(productUID, deviceUID, pin)
         .then((data) => {
           // if pin is valid, enable inputs
           if (data.canModify) {
