@@ -21,9 +21,15 @@
   export let deviceUID = currentDevice.deviceUID;
 
   onMount(() => {
-    /* if the Airnote device ID is available the Airnote has most likely been 
-    set up, redirect the user automatically to their dashboard page */
-    if (deviceUID && location.pathname === "/") {
+    /* Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
+    and we want Notehub users to view the device’s dashboard, and not the
+    settings page. */
+    if (
+      deviceUID &&
+      location.pathname === "/" + deviceUID &&
+      !pin &&
+      document.referrer.includes("qrgo")
+    ) {
       navigate(`/${deviceUID}/dashboard`, { replace: true });
     }
   });
