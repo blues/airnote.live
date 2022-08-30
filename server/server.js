@@ -14,6 +14,9 @@ const HEADERS = {
   "Content-Type": "application/json",
   "X-SESSION-TOKEN": process.env.HUB_AUTH_TOKEN,
 };
+const CORS_OPTIONS = {
+  origin: ["http://localhost:5555", "https://airnote.live"],
+};
 const INITIAL_TIMEFRAME = "8 days";
 
 const getEvents = (deviceUID, timeframe) => {
@@ -43,6 +46,24 @@ const getEvents = (deviceUID, timeframe) => {
   );
 };
 
+// get Airnote env vars by device with PIN - READ WRITE
+const getAirnoteEnvVars = (productUID, deviceUID, pin) => {
+  return axios.get(
+    `${NOTEHUB_BASE_URL}/v1/products/${productUID}/devices/${deviceUID}/environment_variables_with_pin`,
+    { headers: { "X-Auth-Token": pin } }
+  );
+};
+
+// update Airnote env vars by device with PIN - READ WRITE
+const updateAirnoteEnvVars = (productUID, deviceUID, pin, varsBody) => {
+  return axios.put(
+    `${NOTEHUB_BASE_URL}/v1/products/${productUID}/devices/${deviceUID}/environment_variables_with_pin`,
+    varsBody,
+    { headers: { "X-Auth-Token": pin } }
+  );
+};
+
+// get env vars by device READ ONLY
 const getEnvironmentVariables = (deviceUID) => {
   return axios.get(
     `${NOTEHUB_BASE_URL}/v1/projects/${AIRNOTE_PROJECT_UID}/devices/${deviceUID}/environment_variables`,
@@ -72,9 +93,7 @@ const init = async () => {
     method: "GET",
     path: "/",
     options: {
-      cors: {
-        origin: ["http://localhost:5555", "https://airnote.live"],
-      },
+      cors: CORS_OPTIONS,
       handler: async (request, h) => {
         const deviceUID = request.query.device_uid;
         const timeframe = request.query.timeframe;
@@ -100,6 +119,122 @@ const init = async () => {
           return h.response().code(500);
         } else {
           return h.response(allEvents).type("application/json").code(200);
+        }
+      },
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: "/settings",
+    options: {
+      cors: CORS_OPTIONS,
+      handler: async (request, h) => {
+        const deviceUID = request.query.device_uid;
+        let deviceDetails = {};
+        let erred;
+        await getEnvironmentVariables(deviceUID)
+          .then((response) => {
+            deviceDetails = response.data.environment_variables;
+          })
+          .catch((err) => {
+            console.error(err);
+            erred = true;
+          });
+
+        if (erred) {
+          return h.response().code(500);
+        } else {
+          return h.response(deviceDetails).type("application/json").code(200);
+        }
+      },
+    },
+  });
+
+  server.route({
+    method: "GET",
+    path: "/settings-modification-access",
+    options: {
+      cors: CORS_OPTIONS,
+      handler: async (request, h) => {
+        const productUID = request.query.product_uid;
+        const deviceUID = request.query.device_uid;
+        const pin = request.query.pin;
+        let canModify = false;
+        let unauthorized = false;
+        let erred;
+        await getAirnoteEnvVars(productUID, deviceUID, pin)
+          .then((response) => {
+            canModify = true;
+          })
+          .catch((err) => {
+            /* if server throws a 401 unauthorized error in particular, 
+            accept it and push to the client instead of erroring out */
+            if (
+              err.response.data.code === 401 &&
+              err.response.data.err === "PIN is incorrect"
+            ) {
+              unauthorized = true;
+              return;
+            } else {
+              erred = true;
+            }
+          });
+
+        if (unauthorized) {
+          return h.response(canModify).type("application/json").code(401);
+        } else if (erred) {
+          return h.response().code(500);
+        } else {
+          return h.response(canModify).type("application/json").code(200);
+        }
+      },
+    },
+  });
+
+  server.route({
+    method: "PUT",
+    path: "/settings-update",
+    options: {
+      cors: CORS_OPTIONS,
+      handler: async (request, h) => {
+        const productUID = request.query.product_uid;
+        const deviceUID = request.query.device_uid;
+        const pin = request.query.pin;
+        const varsBody = request.payload;
+        let unauthorized = false;
+        let successfullyUpdated = false;
+        let erred;
+        await updateAirnoteEnvVars(productUID, deviceUID, pin, varsBody)
+          .then((response) => {
+            successfullyUpdated = true;
+          })
+          .catch((err) => {
+            /* if server throws a 401 unauthorized error in particular, 
+            accept it and push to the client instead of erroring out */
+            if (
+              err.response.data.code === 401 &&
+              err.response.data.err === "PIN is incorrect"
+            ) {
+              unauthorized = true;
+              return;
+            } else {
+              erred = true;
+            }
+          });
+
+        if (unauthorized) {
+          return h
+            .response(successfullyUpdated)
+            .type("application/json")
+            .code(401);
+        } else if (erred) {
+          return h.response().code(500);
+        } else {
+          return h
+            .response(successfullyUpdated)
+            .type("application/json")
+            .code(200);
         }
       },
     },

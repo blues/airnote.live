@@ -1,4 +1,4 @@
-import { DATE_FORMAT_KEY, SERVER_URL, airnoteProductUID } from "../constants";
+import { DATE_FORMAT_KEY, SERVER_URL, AIRNOTE_PRODUCT_UID } from "../constants";
 import { format } from "date-fns";
 import queryString from "query-string";
 
@@ -79,6 +79,57 @@ export function getReadings(deviceUID, timeframe) {
     });
 }
 
+export function getDeviceEnvVars(deviceUID) {
+  return fetch(
+    `${SERVER_URL}/settings?` + new URLSearchParams({ device_uid: deviceUID })
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
+    });
+}
+
+export function checkDeviceEnvVarModificationAccess(
+  productUID,
+  deviceUID,
+  pin
+) {
+  return (
+    fetch(
+      `${SERVER_URL}/settings-modification-access?` +
+        new URLSearchParams({
+          product_uid: productUID,
+          device_uid: deviceUID,
+          pin,
+        })
+    )
+      .then((response) => response.json())
+      // this returns a true/false bool
+      .then((data) => {
+        return { canModify: data };
+      })
+  );
+}
+
+export function updateDeviceEnvVars(productUID, deviceUID, pin, varsBody) {
+  return (
+    fetch(
+      `${SERVER_URL}/settings-update?` +
+        new URLSearchParams({
+          product_uid: productUID,
+          device_uid: deviceUID,
+          pin,
+        }),
+      { method: "PUT", body: JSON.stringify(varsBody) }
+    )
+      .then((response) => response.json())
+      // this returns a true/false bool
+      .then((data) => {
+        return { successfullyUpdated: data };
+      })
+  );
+}
+
 function saveLastViewedDevice(data) {
   localStorage.setItem("device", JSON.stringify(data));
 }
@@ -92,7 +143,7 @@ export function getCurrentDeviceFromUrl(location) {
 
   const query = queryString.parse(location.search);
   let pin = query["pin"] || "";
-  let productUID = query["product"] || airnoteProductUID;
+  let productUID = query["product"] || AIRNOTE_PRODUCT_UID;
   let deviceUID = location.pathname.match(/dev:\d*/)?.[0] || "";
 
   // If there is no device in the query string default to the

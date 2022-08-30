@@ -1,7 +1,10 @@
-import { airnoteProductUID } from "../../src/constants";
+import { AIRNOTE_PRODUCT_UID } from "../../src/constants";
 import {
+  checkDeviceEnvVarModificationAccess,
   getCurrentDeviceFromUrl,
+  getDeviceEnvVars,
   getReadings,
+  updateDeviceEnvVars,
 } from "../../src/services/device";
 
 beforeEach(() => {
@@ -111,7 +114,7 @@ test("If the device changes in the URL the data should change as well", () => {
   });
   expect(thirdDevice.deviceUID).toBe("dev:333");
   expect(thirdDevice.pin).toBe("");
-  expect(thirdDevice.productUID).toBe(airnoteProductUID);
+  expect(thirdDevice.productUID).toBe(AIRNOTE_PRODUCT_UID);
 });
 
 test("If the device is removed from the URL the last device viewed should persist", () => {
@@ -127,4 +130,72 @@ test("If the device is removed from the URL the last device viewed should persis
   expect(device.deviceUID).toBe("dev:111");
   expect(device.pin).toBe("111111");
   expect(device.productUID).toBe("product:org.airnote.solar.v1");
+});
+
+test("It should return the device's environment variables if device ID is supplied", () => {
+  fetch.mockImplementationOnce(() =>
+    Promise.resolve({
+      json: () =>
+        Promise.resolve({
+          _air_indoors: "0",
+          _air_mins: "usb:15;high:30;normal:30;low:720;0",
+          _air_status: "pm2.5",
+          _contact_affiliation: "Test Account",
+          _contact_email: "test@test.com",
+          _contact_name: "Tester",
+          _sn: "test-airnote",
+        }),
+    })
+  );
+
+  getDeviceEnvVars("dev:testAirnote").then((data) => {
+    expect(data._air_indoors).toBe("0");
+    expect(data._contact_email).toBe("test@test.com");
+    expect(data._sn).toBe("test-airnote");
+  });
+});
+
+test("It should check if a user is authorized to modify device settings when device ID, product ID and PIN are provided", () => {
+  fetch.mockImplementationOnce(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(false),
+    })
+  );
+
+  checkDeviceEnvVarModificationAccess(
+    "faux.airnote",
+    "dev.testAirnote",
+    1234
+  ).then((data) => {
+    expect(data).toStrictEqual({ canModify: false });
+  });
+});
+
+test("It should attempt to update device environment variables when product ID, device ID, PIN, and variable body are provided", () => {
+  fetch.mockImplementationOnce(() =>
+    Promise.resolve({
+      json: () => Promise.resolve(false),
+    })
+  );
+
+  const fauxVarsBody = {
+    environment_variables: {
+      _air_indoors: "0",
+      _air_mins: "usb:15;high:30;normal:30;low:720;0",
+      _air_status: "pm2.5",
+      _contact_affiliation: "Test Account",
+      _contact_email: "test@test.com",
+      _contact_name: "Tester",
+      _sn: "test-airnote",
+    },
+  };
+
+  updateDeviceEnvVars(
+    "faut.airnote",
+    "dev.testAirnote",
+    1234,
+    fauxVarsBody
+  ).then((data) => {
+    expect(data).toStrictEqual({ successfullyUpdated: false });
+  });
 });

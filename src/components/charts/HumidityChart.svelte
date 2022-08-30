@@ -10,7 +10,9 @@
   let ctx;
   let humidityData = [];
 
-  $: getHumidityData(readings);
+  $: if (readings) {
+    getHumidityData(readings);
+  }
 
   function getHumidityData(readings) {
     humidityData = readings.map((reading) => {

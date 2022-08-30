@@ -15,7 +15,9 @@
 
   const dispatch = createEventDispatcher();
 
-  $: getTempData(readings);
+  $: if (readings) {
+    getTempData(readings);
+  }
 
   function getTempData(readings) {
     tempDataCelsius = readings.map((reading) => {
