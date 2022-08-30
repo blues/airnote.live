@@ -39,7 +39,7 @@ export function renderErrorMessage(errorType) {
           It appears you do not have permission to edit settings, just view. 
           If you believe you are receiving this message in error, please try 
           scanning your Airnote QR code on the back of the device or 
-          reviewing our documentation on how to setup your Airnote, 
+          reviewing our documentation on how to set up your Airnote, 
           <a href="https://start.airnote.live" target="_new">here</a>.
         </div>`;
     case errorType === ERROR_TYPE.UPDATE_ERROR:

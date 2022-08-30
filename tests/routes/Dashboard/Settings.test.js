@@ -7,7 +7,7 @@ beforeEach(() => {
 });
 
 const FETCH_ERROR_HEADING_TEXT = "Unable to fetch device details.";
-const NO_PIN_INVALID_PIN = "No PIN or invalid PIN detected.";
+const UNAUTHORIZED = "Unauthorized";
 const UNABLE_TO_SAVE_SETTINGS = "Unable to save new configuration settings.";
 
 test("If there is an error fetching device settings data, the user should see an appropriate error message", async () => {
@@ -36,7 +36,7 @@ test("If the user is not allowed to update the input fields because of a missing
     pin: "",
   });
 
-  let errorHeading = await findByText(NO_PIN_INVALID_PIN);
+  let errorHeading = await findByText(UNAUTHORIZED);
   let deviceSettingsUpdateButton = queryByText("Update Device Settings");
   let deviceOwnerInfoUpdateButton = queryByText("Update Device Owner");
 
