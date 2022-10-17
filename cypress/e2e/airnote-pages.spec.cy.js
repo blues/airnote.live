@@ -50,6 +50,26 @@ describe("Airnote application", () => {
       .and("include", "https://notehub.io");
   });
 
+  it("Redirects Notehub 'Dashboard' links to the Airnote dashboard", () => {
+    // visit the settings page with no pin
+    cy.visit(
+      "/dev:864475044215258?product=product%3Aorg.airnote.solar.air.v1&pin="
+    );
+    // should redirect to the dashboard
+    cy.url().should("include", "dashboard");
+  });
+
+  it("Does NOT redirect internal navigation back to the dashboard", () => {
+    // visit the dashboard page with no pin
+    cy.visit(
+      "/dev:864475044215258/dashboard?product=product%3Aorg.airnote.solar.air.v1&pin="
+    );
+    // navigate to settings page
+    cy.get('[data-cy="settings-link"]').click();
+    //should not redirect back to the dashboard
+    cy.url().should("not.contain", "dashboard");
+  });
+
   it("should navigate to the Airnote dashboard page and render the correct data", () => {
     cy.setLocalStorage();
     cy.visit("/");

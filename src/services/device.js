@@ -145,6 +145,7 @@ export function getCurrentDeviceFromUrl(location) {
   let pin = query["pin"] || "";
   let productUID = query["product"] || AIRNOTE_PRODUCT_UID;
   let deviceUID = location.pathname.match(/dev:\d*/)?.[0] || "";
+  let internalNav = query["internalNav"];
 
   // If there is no device in the query string default to the
   // last viewed device.
@@ -166,6 +167,9 @@ export function getCurrentDeviceFromUrl(location) {
   if (deviceUID) {
     saveLastViewedDevice(currentDevice);
   }
+
+  // Don’t save whether this was internal navigation in local storage
+  currentDevice.internalNav = internalNav;
 
   return currentDevice;
 }
