@@ -19,6 +19,7 @@
   export let pin = currentDevice.pin;
   export let productUID = currentDevice.productUID;
   export let deviceUID = currentDevice.deviceUID;
+  export let internalNav = currentDevice.internalNav;
 
   onMount(() => {
     /* Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
@@ -28,7 +29,7 @@
       deviceUID &&
       location.pathname === "/" + deviceUID &&
       !pin &&
-      document.referrer.includes("qrgo")
+      !internalNav
     ) {
       navigate(`/${deviceUID}/dashboard`, { replace: true });
     }
@@ -44,7 +45,7 @@
       <ul class={menuOpen ? "open" : ""}>
         <li>
           <a
-            href="/{deviceUID}?product={productUID}&pin={pin}"
+            href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true"
             data-cy="settings-link"
           >
             Settings
