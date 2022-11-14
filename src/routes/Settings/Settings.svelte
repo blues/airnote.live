@@ -167,7 +167,7 @@
 </svelte:head>
 
 {#if error}
-  {@html renderErrorMessage(errorType)}
+  {@html renderErrorMessage(errorType, deviceUID)}
 {/if}
 
 <section>
@@ -225,11 +225,12 @@
 <section>
   <p>
     <i>
-      By using your Airnote device, or completing the optional fields on this page, you
-      consent to openly sharing your device data and the optional contact information
-      under Creative Commons CC0. For the benefit of the community, all devices' data,
-      maps, dashboards, and contact information are openly published to the public.
-      If you do not wish your contact information to be published, please do not supply it.
+      By using your Airnote device, or completing the optional fields on this
+      page, you consent to openly sharing your device data and the optional
+      contact information under Creative Commons CC0. For the benefit of the
+      community, all devices' data, maps, dashboards, and contact information
+      are openly published to the public. If you do not wish your contact
+      information to be published, please do not supply it.
     </i>
   </p>
 </section>

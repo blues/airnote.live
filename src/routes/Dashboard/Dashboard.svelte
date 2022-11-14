@@ -131,7 +131,7 @@
   {/if}
 
   {#if error}
-    {@html renderErrorMessage(errorType)}
+    {@html renderErrorMessage(errorType, deviceUID)}
   {/if}
 
   {#if lastReading}
