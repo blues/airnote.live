@@ -167,7 +167,7 @@
 </svelte:head>
 
 {#if error}
-  {@html renderErrorMessage(errorType, eventsUrl)}
+  {@html renderErrorMessage(errorType, deviceUID)}
 {/if}
 
 <section>

@@ -26,7 +26,6 @@
   import { getHeatIndex, toFahrenheit, toCelsius } from "../../services/air";
   import { getReadings } from "../../services/device";
   import { shareDashboard } from "../../util/share";
-  import { APP_UID } from "../../constants";
   import { ERROR_TYPE } from "../../constants/ErrorTypes";
   import { renderErrorMessage } from "../../util/errors";
 
@@ -39,8 +38,6 @@
   let error = false;
   let errorType;
   let loading = true;
-
-  let eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryMode=devices&queryDevices=${deviceUID}`;
 
   let tempDisplay = localStorage.getItem("tempDisplay") || "C";
   let showBanner =
@@ -134,7 +131,7 @@
   {/if}
 
   {#if error}
-    {@html renderErrorMessage(errorType, eventsUrl)}
+    {@html renderErrorMessage(errorType, deviceUID)}
   {/if}
 
   {#if lastReading}

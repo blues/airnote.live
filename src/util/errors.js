@@ -1,13 +1,14 @@
 import { ERROR_TYPE } from "../constants/ErrorTypes";
+import { APP_UID } from "../constants";
 
-export function renderErrorMessage(errorType, eventsUrl) {
+export function renderErrorMessage(errorType, deviceUID) {
   switch (true) {
     case errorType === ERROR_TYPE.NOTEHUB_ERROR:
       return `
         <div class="alert">
           <h4 class="alert-heading">Unable to fetch device details.</h4>
           Please make sure your Airnote is
-          <a href=${eventsUrl} target="_new"> online and connected to Notehub.io </a>
+          <a href="https://notehub.io/project/${APP_UID}/events?queryMode=devices&queryDevices=${deviceUID}" target="_new"> online and connected to Notehub.io </a>
           before visiting this page. For help getting started, visit
           <a href="https://start.airnote.live" target="_new">
             start.airnote.live
@@ -52,7 +53,7 @@ export function renderErrorMessage(errorType, eventsUrl) {
         <div class="alert">
           <h4 class="alert-heading">Unable to fetch device details.</h4>
           Please make sure your Airnote is
-          <a href=${eventsUrl} target="_new"> online and connected to Notehub.io </a>
+          <a href="https://notehub.io/project/${APP_UID}/events?queryMode=devices&queryDevices=${deviceUID}" target="_new"> online and connected to Notehub.io </a>
           before visiting this page. For help getting started, visit
           <a href="https://start.airnote.live" target="_new">
             start.airnote.live
