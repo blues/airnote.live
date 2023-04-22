@@ -8,7 +8,7 @@ export function renderErrorMessage(errorType, deviceUID) {
         <div class="alert">
           <h4 class="alert-heading">Unable to fetch device details.</h4>
           Please make sure your Airnote is
-          <a href="https://notehub.io/project/${APP_UID}/events?queryMode=devices&queryDevices=${deviceUID}" target="_new"> online and connected to Notehub.io </a>
+          <a href="https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}" target="_new"> online and connected to Notehub.io </a>
           before visiting this page. For help getting started, visit
           <a href="https://start.airnote.live" target="_new">
             start.airnote.live
@@ -53,7 +53,7 @@ export function renderErrorMessage(errorType, deviceUID) {
         <div class="alert">
           <h4 class="alert-heading">Unable to fetch device details.</h4>
           Please make sure your Airnote is
-          <a href="https://notehub.io/project/${APP_UID}/events?queryMode=devices&queryDevices=${deviceUID}" target="_new"> online and connected to Notehub.io </a>
+          <a href="https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}" target="_new"> online and connected to Notehub.io </a>
           before visiting this page. For help getting started, visit
           <a href="https://start.airnote.live" target="_new">
             start.airnote.live
