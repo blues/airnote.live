@@ -31,7 +31,7 @@
   let errorType;
   let notify;
 
-  let eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryMode=devices&queryDevices=${deviceUID}`;
+  let eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}`;
 
   const displayOptions = [
     { value: "tempc", text: "Temp (°C)" },
