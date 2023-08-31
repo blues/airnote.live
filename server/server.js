@@ -54,8 +54,27 @@ const getAirnoteEnvVars = (productUID, deviceUID, pin) => {
   );
 };
 
+// Delete the _air_mins environment variable from the device
+const deleteAirMinsEnvVar = (deviceUID) => {
+  return axios.delete(
+    `${NOTEHUB_BASE_URL}/v1/projects/${AIRNOTE_PROJECT_UID}/devices/${deviceUID}/environment_variables/_air_mins`,
+    { headers: HEADERS }
+  );
+};
+
 // update Airnote env vars by device with PIN - READ WRITE
-const updateAirnoteEnvVars = (productUID, deviceUID, pin, varsBody) => {
+const updateAirnoteEnvVars = async (productUID, deviceUID, pin, varsBody) => {
+  const varsBodyJSON = JSON.parse(varsBody);
+
+  // If the _air_mins environment variable is set to the default, don't save the value so
+  // the device defaults to the project-level _air_mins. Also, delete the environment variable
+  // on the device in case it already exists.
+  if (varsBodyJSON.environment_variables._air_mins.includes("high:30")) {
+    delete varsBodyJSON.environment_variables._air_mins;
+    await deleteAirMinsEnvVar(deviceUID);
+    varsBody = JSON.stringify(varsBodyJSON);
+  }
+
   return axios.put(
     `${NOTEHUB_BASE_URL}/v1/products/${productUID}/devices/${deviceUID}/environment_variables_with_pin`,
     varsBody,
