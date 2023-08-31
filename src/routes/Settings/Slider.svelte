@@ -1,10 +1,10 @@
 <script>
-  import { onMount } from 'svelte';
-  import { sampleFrequencyFull } from '../../settingsStore';
+  import { onMount } from "svelte";
+  import { sampleFrequencyFull } from "../../settingsStore";
 
   export let enableFields;
 
-  sampleFrequencyFull.subscribe(value => {
+  sampleFrequencyFull.subscribe((value) => {
     const allRanges = document.querySelectorAll(".frequency-wrap");
     if (allRanges.length > 0) {
       const frequency = allRanges[0].querySelector("#sampleFrequency");
@@ -26,7 +26,7 @@
 
   onMount(() => {
     const allRanges = document.querySelectorAll(".frequency-wrap");
-    allRanges.forEach(wrap => {
+    allRanges.forEach((wrap) => {
       const frequency = wrap.querySelector("#sampleFrequency");
       const popup = wrap.querySelector(".frequencyPopup");
 
@@ -39,14 +39,17 @@
 </script>
 
 <div class="frequency-wrap">
-  <input type="range"
+  <input
+    type="range"
     name="frequency"
     id="sampleFrequency"
-    disabled={enableFields ? null : 'disabled'}
-    min="15" max="1440"
+    disabled={enableFields ? null : "disabled"}
+    min="15"
+    max="1440"
     bind:value={$sampleFrequencyFull}
-    step="5" />
-  <output class="frequencyPopup"></output>
+    step="5"
+  />
+  <output class="frequencyPopup" />
 </div>
 <span class="min-val">15 min</span>
 <span class="max-val">1440 min</span>
@@ -65,7 +68,7 @@
   }
 
   .frequencyPopup {
-    color: #1B3A52;
+    color: #1b3a52;
     font-weight: 600;
     padding: 4px 12px;
     position: absolute;
@@ -78,13 +81,14 @@
     position: absolute;
     width: 2px;
     height: 2px;
-    color: #1B3A52;
+    color: #1b3a52;
     top: 4px;
     right: 15%;
   }
 
-  .min-val, .max-val {
-    color: #A0AFB9;
+  .min-val,
+  .max-val {
+    color: #a0afb9;
   }
   .max-val {
     float: right;

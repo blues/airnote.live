@@ -61,7 +61,7 @@
     return {
       environment_variables: {
         _sn: $deviceName,
-        _air_mins: `usb:${$sampleFrequencyUSB};high:${$sampleFrequencyFull};normal:${$sampleFrequencyFull};low:${$sampleFrequencyLow};0`,
+        _air_mins: `usb:${$sampleFrequencyUSB};high:${$sampleFrequencyFull};normal:${$sampleFrequencyFull};low:${$sampleFrequencyLow};43200`,
         _air_indoors: !!$indoorDevice ? "1" : "0",
         _air_status: $displayValue,
         _contact_name: $contactName,
