@@ -20,6 +20,7 @@
   import HumidityChart from "../../components/charts/HumidityChart.svelte";
   import Recommendation from "./Recommendation.svelte";
   import Speedometer from "./Speedometer.svelte";
+  import { APP_UID } from "../../constants";
   import TOOLTIP_STATES from "../../constants/TooltipStates";
   import DATE_RANGE_OPTIONS from "../../constants/DateRangeOptions";
   import { convertDateRange, dateRangeDisplayText } from "../../util/dates";
@@ -44,6 +45,8 @@
     localStorage.getItem("showBanner") === "false" ? false : true;
   let tooltipState = TOOLTIP_STATES.CLOSED;
   let selectedDateRange = DATE_RANGE_OPTIONS.SEVEN_DAYS.displayText;
+
+  let eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}`;
 
   const toggleTempDisplay = () => {
     tempDisplay = tempDisplay == "C" ? "F" : "C";
@@ -135,26 +138,11 @@
   {/if}
 
   {#if lastReading}
-    {#if showBanner}
-      <div class="banner" in:fade>
-        <p>
-          The Airnote is made in partnership with
-          <a href="https://safecast.org/">Safecast</a>, a volunteer-centered
-          organization devoted to open citizen science for environmental
-          monitoring.
-          <a href="https://safecast.org/donate/">Donate here</a>.
-        </p>
-        <button class="svg-button" on:click={closeBanner}>
-          <CloseIcon />
-        </button>
-      </div>
-    {/if}
-
     <div class="air-quality-wrapper" in:fade>
       <h2 class="air-quality-heading" data-cy="dashboard-title">
         <span>
           Air Quality {lastReading.location ? "in " + lastReading.location : ""}
-          {lastReading.serial_number ? "—" + lastReading.serial_number : ""}
+          {lastReading.serial_number ? "— " + lastReading.serial_number : ""}
         </span>
       </h2>
 
@@ -287,6 +275,13 @@
           </div>
         </div>
       </div>
+
+      <p class="notehub-link">
+        <a href={eventsUrl} target="_new" data-cy="notehub-link">
+          View live Airnote events on Notehub.io
+        </a>
+      </p>
+
       <div class="map">
         <MapboxMap {lastReading} />
       </div>
@@ -336,6 +331,21 @@
         <PMChart {readings} />
       </div>
     </div>
+
+    {#if showBanner}
+      <div class="banner" in:fade>
+        <p>
+          The Airnote is made in partnership with
+          <a href="https://safecast.org/">Safecast</a>, a volunteer-centered
+          organization devoted to open citizen science for environmental
+          monitoring.
+          <a href="https://safecast.org/donate/">Donate here</a>.
+        </p>
+        <button class="svg-button" on:click={closeBanner}>
+          <CloseIcon />
+        </button>
+      </div>
+    {/if}
   {/if}
 </div>
 
@@ -449,11 +459,17 @@
       "title title"
       "last-update last-update"
       "speedometer all-measurements"
+      "notehub-link notehub-link"
       "map map";
   }
 
   .current-readings-title {
     grid-area: title;
+    margin-bottom: 0;
+  }
+
+  .notehub-link {
+    grid-area: notehub-link;
     margin-bottom: 0;
   }
 

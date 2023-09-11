@@ -6,7 +6,7 @@
     "install-svelte": "npm install",
     "setup": "npm run install-node & npm run install-svelte",
     "build": "rollup -c",
-    "dev": "npx concurrently --raw \"cd server && npx nodemon server.js\" \"rollup -c -w\"",
+    "dev": "npx -y concurrently --raw \"cd server && npx -y nodemon server.js\" \"rollup -c -w\"",
     "start": "sirv public --single --port 5555",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
