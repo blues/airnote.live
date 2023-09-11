@@ -331,6 +331,21 @@
         <PMChart {readings} />
       </div>
     </div>
+
+    {#if showBanner}
+      <div class="banner" in:fade>
+        <p>
+          The Airnote is made in partnership with
+          <a href="https://safecast.org/">Safecast</a>, a volunteer-centered
+          organization devoted to open citizen science for environmental
+          monitoring.
+          <a href="https://safecast.org/donate/">Donate here</a>.
+        </p>
+        <button class="svg-button" on:click={closeBanner}>
+          <CloseIcon />
+        </button>
+      </div>
+    {/if}
   {/if}
 </div>
 
@@ -389,20 +404,6 @@
       }}
     >
       Close
-    </button>
-  </div>
-{/if}
-
-{#if showBanner}
-  <div class="banner" in:fade>
-    <p>
-      The Airnote is made in partnership with
-      <a href="https://safecast.org/">Safecast</a>, a volunteer-centered
-      organization devoted to open citizen science for environmental monitoring.
-      <a href="https://safecast.org/donate/">Donate here</a>.
-    </p>
-    <button class="svg-button" on:click={closeBanner}>
-      <CloseIcon />
     </button>
   </div>
 {/if}
