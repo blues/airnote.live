@@ -45,7 +45,7 @@
 	</div>
 
 	<div>
-		<label for="displayValue"> Airnote screen display value </label>
+		<label for="displayValue">Airnote screen display value</label>
 		<select
 			disabled={!enableFields}
 			bind:value={$displayValue}
@@ -72,7 +72,7 @@
 				name="indoorDevice"
 				id="indoorDevice"
 			/>
-			<span> Indoor device (Will not be visible on the Safecast global map) </span>
+			<span>Indoor device (Will not be visible on the Safecast global map)</span>
 		</label>
 	</div>
 

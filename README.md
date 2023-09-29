@@ -10,13 +10,13 @@ The airnote.live site runs on top of Node.js, so as such you’ll need to start 
 
 It also uses npm as its package manager, so [add npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) as well if it's not already installed locally.
 
-Next, run the site’s `npm run setup` script, which installs all of the site’s dependencies.
+Next, run command `npm install`, which installs all of the site’s dependencies.
 
-```
-npm run setup
+```sh
+npm install
 ```
 
-Finally, run `npm run dev`, which starts up a development server.
+Then, run `npm run dev`, which starts up a development server.
 
 ```sh
 npm run dev
@@ -24,17 +24,15 @@ npm run dev
 
 ## Web App
 
-You can access the airnote.live site locally at `http://localhost:5555/`. To view a specific device’s dashboard, you’ll need to use a URL of `http://localhost:5555/<device_uid>/dashboard`.
+You can access the airnote.live site locally at `http://localhost:5173/`. To view a specific device’s dashboard, you’ll need to use a URL of `http://localhost:5173/<device_uid>/dashboard`.
 
-The airnote.live site uses the [Svelte](https://svelte.dev/) web framework, and the entry-point is [./src/App.svelte](./src/App.svelte).
+The airnote.live site uses the [Svelte](https://svelte.dev/) library in conjunction with the production ready [SvelteKit](https://kit.svelte.dev/) web framework, and the entry-point is [./src/routes/+page.svelte](./src/routes/+page.svelte).
 
-## Server
+It fetches all of its data from the Notehub Airnote project via the Blues [Notehub JS library](https://www.npmjs.com/package/@blues-inc/notehub-js). The Notehub JS repo requires an authentication token to interact with the Notehub API.
 
-This repo includes a Node.js server for fetching data. The repo’s main `npm run dev` script starts the server, and automatically updates the server whenever you make changes.
+ou can set this up locally by creating a `.env` file, and pasting in the contents below.
 
-The server depends on a [Notehub API](https://dev.blues.io/reference/notehub-api/api-introduction/) authentication token, `HUB_AUTH_TOKEN`, as an environment variable. You can set this up locally by creating a `server/.env` file, and pasting in the contents below.
-
-```
+```plaintext
 HUB_AUTH_TOKEN=<your token>
 ```
 
@@ -42,10 +40,10 @@ You can refer to [the Notehub API’s authentication documentation](https://dev.
 
 ## Testing
 
-This repo has a unit testing setup based on [Jest](https://jestjs.io/) and 
+This repo has a unit testing setup based on [Vitest](https://vitest.dev/) and
 [Testing Library](https://testing-library.com/docs/svelte-testing-library/intro/). You can run the test suite with the following command.
 
-``` sh
+```sh
 npm run test
 ```
 

@@ -17,7 +17,6 @@
 		contactEmail,
 		contactAffiliation
 	} from '$lib/stores/settingsStore';
-	import { deviceDisplayOptions } from '$lib/services/device';
 	import type { AirnoteDevice } from '$lib/services/DeviceModel';
 	import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
 	import { renderErrorMessage } from '$lib/util/errors';
@@ -34,6 +33,30 @@
 	let eventsUrl = `https://notehub.io/project/${APP_UID}/events`;
 	$: if (deviceUID) {
 		eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}`;
+	}
+
+	const deviceDisplayOptions = [
+		{ value: 'tempc', text: 'Temp (°C)' },
+		{ value: 'tempf', text: 'Temp (°F)' },
+		{ value: 'humid', text: 'Humidity' },
+		{ value: 'press', text: 'Barometric Pressue' }
+	];
+
+	if (productUID === RADNOTE_PRODUCT_UID) {
+		$displayValue = 'usv';
+
+		deviceDisplayOptions.splice(0, 0, {
+			value: 'usv',
+			text: 'Microsieverts per Hour (default)'
+		});
+		deviceDisplayOptions.push({ value: 'mrem', text: 'Milirem per Hour' });
+		deviceDisplayOptions.push({ value: 'cpm', text: 'LND712 Counts Per Minute' });
+	} else {
+		$displayValue = 'pm2.5';
+
+		deviceDisplayOptions.splice(0, 0, { value: 'pm2.5', text: 'PM2.5 (default)' });
+		deviceDisplayOptions.push({ value: 'pm1.0', text: 'PM1.0' });
+		deviceDisplayOptions.push({ value: 'pm10.0', text: 'PM10.0' });
 	}
 
 	export let data;
@@ -85,23 +108,6 @@
 
 	if (data.notehubResponse) {
 		updateSettingsFromEnvVars(data.notehubResponse);
-	}
-
-	if (productUID === RADNOTE_PRODUCT_UID) {
-		$displayValue = 'usv';
-
-		deviceDisplayOptions.splice(0, 0, {
-			value: 'usv',
-			text: 'Microsieverts per Hour (default)'
-		});
-		deviceDisplayOptions.push({ value: 'mrem', text: 'Milirem per Hour' });
-		deviceDisplayOptions.push({ value: 'cpm', text: 'LND712 Counts Per Minute' });
-	} else {
-		$displayValue = 'pm2.5';
-
-		deviceDisplayOptions.splice(0, 0, { value: 'pm2.5', text: 'PM2.5 (default)' });
-		deviceDisplayOptions.push({ value: 'pm1.0', text: 'PM1.0' });
-		deviceDisplayOptions.push({ value: 'pm10.0', text: 'PM10.0' });
 	}
 
 	const handleSettingsSaved = () => {

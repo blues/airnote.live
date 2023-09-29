@@ -79,7 +79,27 @@ export const actions = {
 	}
 };
 
+function determineCurrentCheckboxState(formData: FormData) {
+	let currentCheckboxState: string;
+	// required logic because unchecked checkboxes are not included in the form data
+	// figure out if device settings form is being submitted
+	if (formData.get('deviceName')) {
+		// check if checkbox data is included in form body (it means checkbox is checked)
+		if (formData.get('indoorDevice') === 'on') {
+			currentCheckboxState = '1';
+		} else {
+			currentCheckboxState = '0';
+		}
+	} else {
+		// if device owner settings are submitted, get current checkbox state from store
+		currentCheckboxState = get(indoorDevice) ? '1' : '0';
+	}
+	return currentCheckboxState;
+}
+
 function createEnvVarBody(formData: FormData) {
+	const currentCheckboxState = determineCurrentCheckboxState(formData);
+
 	return {
 		_sn: formData.get('deviceName') ? formData.get('deviceName') : get(deviceName),
 		_air_mins: `usb:${get(sampleFrequencyUSB)};high:${
@@ -91,13 +111,7 @@ function createEnvVarBody(formData: FormData) {
 				? formData.get('sampleFrequencyFull')
 				: get(sampleFrequencyFull)
 		};low:${get(sampleFrequencyLow)};43200`,
-		_air_indoors: formData.get('indoorDevice')
-			? formData.get('indoorDevice') === 'on'
-				? '1'
-				: '0'
-			: get(indoorDevice)
-			? '1'
-			: '0',
+		_air_indoors: currentCheckboxState,
 		_air_status: formData.get('displayValue') ? formData.get('displayValue') : get(displayValue),
 		_contact_name: formData.get('contactName') ? formData.get('contactName') : get(contactName),
 		_contact_email: formData.get('contactEmail') ? formData.get('contactEmail') : get(contactEmail),

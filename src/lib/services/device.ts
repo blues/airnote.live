@@ -124,10 +124,3 @@ export function getCurrentDeviceFromUrl(location: Location) {
 
 	return currentDevice;
 }
-
-export const deviceDisplayOptions: DeviceDisplayOption[] = [
-	{ value: 'tempc', text: 'Temp (°C)' },
-	{ value: 'tempf', text: 'Temp (°F)' },
-	{ value: 'humid', text: 'Humidity' },
-	{ value: 'press', text: 'Barometric Pressue' }
-];
