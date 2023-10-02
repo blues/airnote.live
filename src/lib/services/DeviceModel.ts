@@ -1,6 +1,8 @@
+export type PotentiallyNullDeviceDetails = string | (string | null)[];
+
 export interface AirnoteDevice {
   deviceUID: string;
-  productUID: string | (string | null)[];
-  pin: string | (string | null)[];
-  internalNav?: string | (string | null)[] | null;
+  productUID: PotentiallyNullDeviceDetails;
+  pin: PotentiallyNullDeviceDetails;
+  internalNav?: PotentiallyNullDeviceDetails | null;
 }

@@ -8,10 +8,11 @@
     indoorDevice
   } from '$lib/stores/settingsStore';
   import type { DeviceDisplayOption } from '$lib/services/DeviceDisplayModel';
+  import type { PotentiallyNullDeviceDetails } from '$lib/services/DeviceModel';
 
   export let enableFields: boolean;
   export let deviceDisplayOptions: DeviceDisplayOption[] = [];
-  export let pin: string | (string | null)[] = '';
+  export let pin: PotentiallyNullDeviceDetails = '';
 
   const dispatch = createEventDispatcher();
 

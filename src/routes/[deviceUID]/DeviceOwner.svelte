@@ -6,9 +6,10 @@
     contactEmail,
     contactAffiliation
   } from '$lib/stores/settingsStore';
+  import type { PotentiallyNullDeviceDetails } from '$lib/services/DeviceModel';
 
   export let enableFields: boolean;
-  export let pin: string | (string | null)[] = '';
+  export let pin: PotentiallyNullDeviceDetails = '';
 
   const dispatch = createEventDispatcher();
 

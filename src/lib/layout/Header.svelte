@@ -4,13 +4,16 @@
   import MenuIcon from '$lib/icons/MenuIcon.svelte';
   import AirnoteLogo from '$lib/images/airnote.svg';
   import { getCurrentDeviceFromUrl } from '$lib/services/device';
-  import type { AirnoteDevice } from '$lib/services/DeviceModel';
+  import type {
+    AirnoteDevice,
+    PotentiallyNullDeviceDetails
+  } from '$lib/services/DeviceModel';
 
   let menuOpen = false;
   const toggleMenu = () => (menuOpen = !menuOpen);
 
-  let pin: string | (string | null)[] = '';
-  let productUID: string | (string | null)[] = '';
+  let pin: PotentiallyNullDeviceDetails = '';
+  let productUID: PotentiallyNullDeviceDetails = '';
   let deviceUID: string = '';
 
   onMount(() => {

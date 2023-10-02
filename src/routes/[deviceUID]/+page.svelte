@@ -17,14 +17,17 @@
     contactEmail,
     contactAffiliation
   } from '$lib/stores/settingsStore';
-  import type { AirnoteDevice } from '$lib/services/DeviceModel';
+  import type {
+    AirnoteDevice,
+    PotentiallyNullDeviceDetails
+  } from '$lib/services/DeviceModel';
   import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
   import { renderErrorMessage } from '$lib/util/errors';
 
-  export let pin: string | (string | null)[] = '';
+  export let pin: PotentiallyNullDeviceDetails = '';
   export let deviceUID: string = '';
-  export let internalNav: string | (string | null)[] = 'false';
-  export let productUID: string | (string | null)[] = '';
+  export let internalNav: PotentiallyNullDeviceDetails = 'false';
+  export let productUID: PotentiallyNullDeviceDetails = '';
 
   let enableFields = false;
   let error = false;
