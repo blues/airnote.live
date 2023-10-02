@@ -1,44 +1,44 @@
 <script lang="ts">
-	import Header from '$lib/layout/Header.svelte';
-	import Footer from '$lib/layout/Footer.svelte';
-	import '../app.css';
-	import './styles.css';
+  import Header from '$lib/layout/Header.svelte';
+  import Footer from '$lib/layout/Footer.svelte';
+  import '../app.css';
+  import './styles.css';
 
-	import { onNavigate } from '$app/navigation';
+  import { onNavigate } from '$app/navigation';
 
-	onNavigate((navigation) => {
-		if (!document.startViewTransition) return;
+  onNavigate((navigation) => {
+    if (!document.startViewTransition) return;
 
-		return new Promise((resolve) => {
-			document.startViewTransition(async () => {
-				resolve();
-				await navigation.complete;
-			});
-		});
-	});
+    return new Promise((resolve) => {
+      document.startViewTransition(async () => {
+        resolve();
+        await navigation.complete;
+      });
+    });
+  });
 </script>
 
 <div class="app">
-	<Header />
+  <Header />
 
-	<main>
-		<div class="container">
-			<slot />
-			<hr />
-		</div>
-	</main>
+  <main>
+    <div class="container">
+      <slot />
+      <hr />
+    </div>
+  </main>
 
-	<Footer />
+  <Footer />
 </div>
 
 <style>
-	main {
-		padding: 0 1rem;
-		margin: 0 auto;
-	}
+  main {
+    padding: 0 1rem;
+    margin: 0 auto;
+  }
 
-	.container {
-		max-width: 960px;
-		margin: 0 auto;
-	}
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
 </style>

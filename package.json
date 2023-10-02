@@ -1,53 +1,53 @@
 {
-	"name": "airnote.live",
-	"version": "0.1.0",
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"test": "vitest",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write .",
-		"cypress:run": "cypress install && cypress run",
-		"cypress:open": "cypress install && cypress open"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^2.0.0",
-		"@sveltejs/adapter-netlify": "^1.0.0-next.88",
-		"@sveltejs/kit": "^1.20.4",
-		"@types/mapbox-gl": "^2.7.14",
-		"@types/papaparse": "^5.3.8",
-		"@typescript-eslint/eslint-plugin": "^6.0.0",
-		"@typescript-eslint/parser": "^6.0.0",
-		"cypress": "^13.3.0",
-		"eslint": "^8.28.0",
-		"eslint-config-prettier": "^8.5.0",
-		"eslint-plugin-svelte": "^2.30.0",
-		"jsdom": "^22.1.0",
-		"prettier": "^2.8.0",
-		"prettier-plugin-svelte": "^2.10.1",
-		"svelte": "^4.0.5",
-		"svelte-check": "^3.4.3",
-		"tslib": "^2.4.1",
-		"typescript": "^5.0.0",
-		"vite": "^4.4.2",
-		"vitest": "^0.34.0"
-	},
-	"dependencies": {
-		"@beyonk/svelte-notifications": "^4.2.0",
-		"@blues-inc/notehub-js": "^1.0.17",
-		"chart.js": "^4.4.0",
-		"date-fns": "^2.30.0",
-		"mapbox-gl": "^2.15.0",
-		"papaparse": "^5.4.1",
-		"query-string": "^8.1.0",
-		"svelte-speedometer": "^1.1.0"
-	},
-	"type": "module",
-	"volta": {
-		"node": "18.13.0",
-		"npm": "8.0.0"
-	}
+  "name": "airnote.live",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "vitest",
+    "lint": "prettier --plugin-search-dir . --check . && eslint .",
+    "format": "prettier --plugin-search-dir . --write .",
+    "cypress:run": "cypress install && cypress run",
+    "cypress:open": "cypress install && cypress open"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "^2.0.0",
+    "@sveltejs/adapter-netlify": "^1.0.0-next.88",
+    "@sveltejs/kit": "^1.20.4",
+    "@types/mapbox-gl": "^2.7.14",
+    "@types/papaparse": "^5.3.8",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "cypress": "^13.3.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-svelte": "^2.30.0",
+    "jsdom": "^22.1.0",
+    "prettier": "^2.8.0",
+    "prettier-plugin-svelte": "^2.10.1",
+    "svelte": "^4.0.5",
+    "svelte-check": "^3.4.3",
+    "tslib": "^2.4.1",
+    "typescript": "^5.0.0",
+    "vite": "^4.4.2",
+    "vitest": "^0.34.0"
+  },
+  "dependencies": {
+    "@beyonk/svelte-notifications": "^4.2.0",
+    "@blues-inc/notehub-js": "^1.0.17",
+    "chart.js": "^4.4.0",
+    "date-fns": "^2.30.0",
+    "mapbox-gl": "^2.15.0",
+    "papaparse": "^5.4.1",
+    "query-string": "^8.1.0",
+    "svelte-speedometer": "^1.1.0"
+  },
+  "type": "module",
+  "volta": {
+    "node": "18.13.0",
+    "npm": "8.0.0"
+  }
 }

@@ -1,4 +1,4 @@
 export interface DeviceDisplayOption {
-	value: string;
-	text: string;
+  value: string;
+  text: string;
 }

@@ -1,166 +1,166 @@
 :root {
-	--font-body: 'Barlow', sans-serif;
-	--bannerBlue: rgb(215, 229, 241);
-	--primaryBlue: rgb(0, 185, 255);
-	--hoverBlue: rgb(0, 154, 212);
-	--inputLightBlue: rgb(206, 217, 225);
-	--lighterSteelBlue: rgb(102, 149, 180);
-	--steelBlue: rgb(70, 130, 180);
-	--notehubBlue: rgb(27, 58, 82);
-	--white: rgb(255, 255, 255);
-	--backgroundWhite: rgb(247, 249, 251);
-	--warningTextYellow: rgb(102, 85, 31);
-	--warningBackgroundYellow: rgb(255, 234, 167);
-	--warningBorderYellow: rgb(254, 226, 131);
-	--alertTextRed: rgb(140, 32, 41);
-	--alertBackgroundRed: rgb(248, 215, 218);
-	--alertBorderRed: rgb(245, 194, 196);
-	--borderGrey: rgb(166, 188, 207);
-	--lightGrey: rgb(204, 204, 204);
-	--medGrey: rgb(160, 175, 185);
-	--grey: rgb(128, 128, 128);
-	--textBlack: rgb(5, 6, 7);
-	--lightestGray: rgba(0, 0, 0, 0.1);
-	font-family: var(--font-body);
+  --font-body: 'Barlow', sans-serif;
+  --bannerBlue: rgb(215, 229, 241);
+  --primaryBlue: rgb(0, 185, 255);
+  --hoverBlue: rgb(0, 154, 212);
+  --inputLightBlue: rgb(206, 217, 225);
+  --lighterSteelBlue: rgb(102, 149, 180);
+  --steelBlue: rgb(70, 130, 180);
+  --notehubBlue: rgb(27, 58, 82);
+  --white: rgb(255, 255, 255);
+  --backgroundWhite: rgb(247, 249, 251);
+  --warningTextYellow: rgb(102, 85, 31);
+  --warningBackgroundYellow: rgb(255, 234, 167);
+  --warningBorderYellow: rgb(254, 226, 131);
+  --alertTextRed: rgb(140, 32, 41);
+  --alertBackgroundRed: rgb(248, 215, 218);
+  --alertBorderRed: rgb(245, 194, 196);
+  --borderGrey: rgb(166, 188, 207);
+  --lightGrey: rgb(204, 204, 204);
+  --medGrey: rgb(160, 175, 185);
+  --grey: rgb(128, 128, 128);
+  --textBlack: rgb(5, 6, 7);
+  --lightestGray: rgba(0, 0, 0, 0.1);
+  font-family: var(--font-body);
 }
 
 body {
-	color: var(--notehubBlue);
-	background: var(--backgroundWhite);
-	margin: 0;
-	box-sizing: border-box;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 1rem;
-	line-height: 1.5;
+  color: var(--notehubBlue);
+  background: var(--backgroundWhite);
+  margin: 0;
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 section {
-	margin: 20px auto 0 auto;
-	text-align: center;
+  margin: 20px auto 0 auto;
+  text-align: center;
 }
 
 a {
-	color: var(--primaryBlue);
-	text-decoration: none;
-	text-align: center;
+  color: var(--primaryBlue);
+  text-decoration: none;
+  text-align: center;
 }
 a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 input,
 select {
-	font: inherit;
-	padding: 0.75rem;
-	margin: 0 0 1rem 0;
-	border: 1px solid var(--lightGrey);
-	border-radius: 0.25rem;
-	width: 100%;
+  font: inherit;
+  padding: 0.75rem;
+  margin: 0 0 1rem 0;
+  border: 1px solid var(--lightGrey);
+  border-radius: 0.25rem;
+  width: 100%;
 }
 
 select {
-	height: 45px;
+  height: 45px;
 }
 
 button,
 .btn {
-	background: var(--primaryBlue);
-	color: var(--white);
-	border-radius: 0.3rem;
-	border: none;
-	padding: 0.5rem 1rem;
-	font-size: 1rem;
-	cursor: pointer;
-	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-		border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  background: var(--primaryBlue);
+  color: var(--white);
+  border-radius: 0.3rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 button:hover,
 .btn:hover {
-	text-decoration: none;
-	background: var(--hoverBlue);
+  text-decoration: none;
+  background: var(--hoverBlue);
 }
 
 .svg-button {
-	background: transparent;
-	color: inherit;
-	box-shadow: none;
-	border: none;
-	padding: 0;
-	vertical-align: middle;
-	width: 20px;
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  vertical-align: middle;
+  width: 20px;
 }
 
 .svg-button:hover {
-	background: transparent;
+  background: transparent;
 }
 
 .svg-button svg,
 .svg-link svg {
-	color: var(--notehubBlue);
+  color: var(--notehubBlue);
 }
 
 .svg-link svg {
-	color: var(--primaryBlue);
-	height: 18px;
-	width: 18px;
+  color: var(--primaryBlue);
+  height: 18px;
+  width: 18px;
 }
 
 .svg-button.info svg {
-	color: var(--steelBlue);
+  color: var(--steelBlue);
 }
 
 /* here because svg is an icon imported into header and scoped css can't reach it */
 header .svg-button svg {
-	color: var(--white);
+  color: var(--white);
 }
 
 header .svg-button,
 header .svg-button svg {
-	/* Safari requires the height on both for whatever reason */
-	height: 2rem;
-	width: 2rem;
+  /* Safari requires the height on both for whatever reason */
+  height: 2rem;
+  width: 2rem;
 }
 
 hr {
-	margin: 1.5rem 0;
-	border: 0;
-	border-top: 1px solid var(--lightestGray);
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--lightestGray);
 }
 
 .warning {
-	color: var(--warningTextYellow);
-	background: var(--warningBackgroundYellow);
-	border: 1px solid var(--warningBorderYellow);
-	padding: 1rem;
-	border-radius: 0.25rem;
-	margin-top: 1rem;
+  color: var(--warningTextYellow);
+  background: var(--warningBackgroundYellow);
+  border: 1px solid var(--warningBorderYellow);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-top: 1rem;
 }
 
 .alert {
-	color: var(--alertTextRed);
-	background: var(--alertBackgroundRed);
-	border: 1px solid var(--alertBorderRed);
-	padding: 1rem;
-	border-radius: 0.25rem;
-	margin-top: 1rem;
+  color: var(--alertTextRed);
+  background: var(--alertBackgroundRed);
+  border: 1px solid var(--alertBorderRed);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-top: 1rem;
 }
 
 .alert h4 {
-	color: var(--alertTextRed);
-	margin: 0 0 0.5rem 0;
-	text-align: left;
+  color: var(--alertTextRed);
+  margin: 0 0 0.5rem 0;
+  text-align: left;
 }
 
 .alert a {
-	color: var(--alertTextRed);
-	text-decoration: underline;
+  color: var(--alertTextRed);
+  text-decoration: underline;
 }
 
 @media (max-width: 992px) {
-	section {
-		max-width: 720px;
-		padding: 0 1rem;
-	}
+  section {
+    max-width: 720px;
+    padding: 0 1rem;
+  }
 }

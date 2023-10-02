@@ -2,9 +2,9 @@ import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
 import { APP_UID } from '$lib/constants';
 
 export function renderErrorMessage(errorType: string, deviceUID: string) {
-	switch (true) {
-		case errorType === ERROR_TYPE.NOTEHUB_ERROR:
-			return `
+  switch (true) {
+    case errorType === ERROR_TYPE.NOTEHUB_ERROR:
+      return `
         <div class="alert">
           <h4 class="alert-heading">Unable to fetch device details.</h4>
           Please make sure your Airnote is
@@ -15,8 +15,8 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
           </a>
           .
         </div>`;
-		case errorType === ERROR_TYPE.NO_DATA_ERROR:
-			return `
+    case errorType === ERROR_TYPE.NO_DATA_ERROR:
+      return `
         <div class="alert">
           <h4 class="alert-heading">No data</h4>
           <p>
@@ -32,9 +32,9 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
             need help getting your Airnote back up and running.
           </p>
         </div>`;
-		case errorType === ERROR_TYPE.MISSING_PIN:
-		case errorType === ERROR_TYPE.INVALID_PIN:
-			return `
+    case errorType === ERROR_TYPE.MISSING_PIN:
+    case errorType === ERROR_TYPE.INVALID_PIN:
+      return `
         <div class="alert">
           <h4 class="alert-heading">Unauthorized</h4>
           It appears you do not have permission to edit settings, just view. 
@@ -43,13 +43,13 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
           reviewing our documentation on how to set up your Airnote, 
           <a href="https://start.airnote.live" target="_new">here</a>.
         </div>`;
-		case errorType === ERROR_TYPE.UPDATE_ERROR:
-			return `
+    case errorType === ERROR_TYPE.UPDATE_ERROR:
+      return `
          <div class="warning">
             Unable to save new configuration settings. Please try again later.
         </div>`;
-		default:
-			return `
+    default:
+      return `
         <div class="alert">
           <h4 class="alert-heading">Unable to fetch device details.</h4>
           Please make sure your Airnote is
@@ -60,5 +60,5 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
           </a>
           .
         </div>`;
-	}
+  }
 }

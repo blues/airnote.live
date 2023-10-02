@@ -23,9 +23,9 @@ import * as setupCommands from './setup/setup_commands';
 Cypress.Commands.add('setLocalStorage', setupCommands.setLocalStorage);
 
 declare global {
-	namespace Cypress {
-		interface Chainable {
-			setLocalStorage: typeof setupCommands.setLocalStorage;
-		}
-	}
+  namespace Cypress {
+    interface Chainable {
+      setLocalStorage: typeof setupCommands.setLocalStorage;
+    }
+  }
 }
