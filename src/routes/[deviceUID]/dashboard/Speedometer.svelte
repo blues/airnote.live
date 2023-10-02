@@ -66,6 +66,7 @@
 		width: 300px;
 		margin: 0 auto;
 		top: 5px;
+		min-height: 185px;
 	}
 
 	.speedometer-value {

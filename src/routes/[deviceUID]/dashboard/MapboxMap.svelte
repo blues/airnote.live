@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
 	import { format, parseISO } from 'date-fns';
 	import { aqiColors, aqiRanges, getAQIColor } from '$lib/services/air';
 	import { DATE_TIME_KEY } from '$lib/constants';
@@ -80,7 +79,7 @@
 </script>
 
 {#if lastReading.lon && lastReading.lat}
-	<div in:fade>
+	<div>
 		<div class="map-heading">
 			<h3 style="margin-top: 1rem">Map</h3>
 		</div>

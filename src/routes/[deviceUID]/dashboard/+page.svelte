@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import { unparse } from 'papaparse';
 	import { format } from 'date-fns';
@@ -133,7 +132,7 @@
 	{/if}
 
 	{#if lastReading}
-		<div class="air-quality-wrapper" in:fade>
+		<div class="air-quality-wrapper">
 			<h2 class="air-quality-heading" data-cy="dashboard-title">
 				<span>
 					Air Quality {lastReading.location ? 'in ' + lastReading.location : ''}
@@ -154,7 +153,7 @@
 			</div>
 		</div>
 
-		<div class="all-measurements box" in:fade>
+		<div class="all-measurements box">
 			<h3 class="current-readings-title">Current Reading</h3>
 			<p class="last-update">
 				Last Update:
@@ -279,11 +278,11 @@
 			</div>
 		</div>
 
-		<div class="box" in:fade>
+		<div class="box">
 			<History data={history} />
 		</div>
 
-		<div class="box" in:fade>
+		<div class="box">
 			<h3>Health Recommendations</h3>
 			<Recommendation />
 		</div>
@@ -301,28 +300,28 @@
 		</div>
 
 		<div class="all-charts">
-			<div class="box chart1" in:fade>
+			<div class="box chart1">
 				<VoltageChart readings={displayedReadings} />
 			</div>
 
-			<div class="box chart2" in:fade>
+			<div class="box chart2">
 				<TempChart {tempDisplay} readings={displayedReadings} on:change={handleTempDisplayChange} />
 			</div>
 
-			<div class="box chart3" in:fade>
+			<div class="box chart3">
 				<AQIChart readings={displayedReadings} />
 			</div>
 
-			<div class="box chart4" in:fade>
+			<div class="box chart4">
 				<HumidityChart readings={displayedReadings} />
 			</div>
 
-			<div class="box chart5" in:fade>
+			<div class="box chart5">
 				<PMChart readings={displayedReadings} />
 			</div>
 		</div>
 		{#if showBanner}
-			<div class="banner" in:fade>
+			<div class="banner">
 				<p>
 					The Airnote is made in partnership with
 					<a href="https://safecast.org/">Safecast</a>, a volunteer-centered organization devoted to
