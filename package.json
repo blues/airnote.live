@@ -15,6 +15,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-netlify": "^1.0.0-next.88",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/mapbox-gl": "^2.7.14",
 		"@types/papaparse": "^5.3.8",
