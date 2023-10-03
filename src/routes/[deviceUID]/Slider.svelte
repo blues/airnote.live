@@ -95,7 +95,7 @@
     width: 20px;
     border-radius: 50%;
     background: var(--notehubBlue);
-    box-shadow: 0 0 4px 0 var(--lightestGray);
+    box-shadow: 0 0 4px 0 var(--lightestGrey);
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: -8px;

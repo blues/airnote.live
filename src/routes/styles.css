@@ -9,6 +9,13 @@
   --notehubBlue: rgb(27, 58, 82);
   --white: rgb(255, 255, 255);
   --backgroundWhite: rgb(247, 249, 251);
+  --aqiGreen: rgb(0, 228, 0);
+  --aqiYellow: rgb(255, 255, 0);
+  --aqiOrange: rgb(255, 126, 0);
+  --aqiRed: rgb(255, 0, 0);
+  --aqiPurple: rgb(143, 63, 151);
+  --aqiDarkRed: rgb(126, 0, 35);
+  --aqiGrey: rgb(117, 117, 117);
   --warningTextYellow: rgb(102, 85, 31);
   --warningBackgroundYellow: rgb(255, 234, 167);
   --warningBorderYellow: rgb(254, 226, 131);
@@ -20,7 +27,7 @@
   --medGrey: rgb(160, 175, 185);
   --grey: rgb(128, 128, 128);
   --textBlack: rgb(5, 6, 7);
-  --lightestGray: rgba(0, 0, 0, 0.1);
+  --lightestGrey: rgba(0, 0, 0, 0.1);
   font-family: var(--font-body);
 }
 
@@ -126,7 +133,7 @@ header .svg-button svg {
 hr {
   margin: 1.5rem 0;
   border: 0;
-  border-top: 1px solid var(--lightestGray);
+  border-top: 1px solid var(--lightestGrey);
 }
 
 .warning {

@@ -424,7 +424,7 @@
   }
 
   .box {
-    border: 1px solid var(--lightestGray);
+    border: 1px solid var(--lightestGrey);
     background: var(--white);
     border-radius: 5px;
     padding: 1.5rem;
@@ -613,7 +613,7 @@
   }
 
   .measurement-air {
-    border-top: 1px solid var(--lightestGray);
+    border-top: 1px solid var(--lightestGrey);
   }
   .measurement-pm > div,
   .measurement-air > div {
@@ -640,7 +640,7 @@
     width: 50%;
     background: var(--white);
     padding: 2rem;
-    border: 1px solid var(--lightestGray);
+    border: 1px solid var(--lightestGrey);
     border-radius: 5px;
   }
   @media (max-width: 700px) {

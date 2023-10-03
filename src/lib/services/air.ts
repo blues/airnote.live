@@ -1,27 +1,56 @@
-const GOOD = { text: 'Good', color: '#00e400', textColor: '#000' };
-const MODERATE = { text: 'Moderate', color: '#ffff00', textColor: '#000' };
+// helper function to be able to use CSS variables in JS/TS
+const getCssVar = (name: string) => {
+  return getComputedStyle(document.body).getPropertyValue(name);
+};
+
+const GOOD = {
+  text: 'Good',
+  color: getCssVar('--aqiGreen'),
+  textColor: getCssVar('--textBlack')
+};
+const MODERATE = {
+  text: 'Moderate',
+  color: getCssVar('--aqiYellow'),
+  textColor: getCssVar('--textBlack')
+};
 const UNHEALTHY_SENSITIVE = {
   text: 'Unhealthy for Sensitive Groups',
-  color: '#ff7e00',
-  textColor: '#000'
+  color: getCssVar('--aqiOrange'),
+  textColor: getCssVar('--textBlack')
 };
-const UNHEALTHY = { text: 'Unhealthy', color: '#ff0000', textColor: '#000' };
+const UNHEALTHY = {
+  text: 'Unhealthy',
+  color: getCssVar('--aqiRed'),
+  textColor: getCssVar('--textBlack')
+};
 const VERY_UNHEALTHY = {
   text: 'Very Unhealthy',
-  color: '#8f3f97',
-  textColor: '#fff'
+  color: getCssVar('--aqiPurple'),
+  textColor: getCssVar('--white')
 };
-const HAZARDOUS = { text: 'Hazardous', color: '#7e0023', textColor: '#fff' };
-const NO_DATA = { text: 'No Data', color: '#757575', textColor: '#fff' };
-const PM_DATA = { text: 'PM Level', color: '#757575', textColor: '#fff' };
+const HAZARDOUS = {
+  text: 'Hazardous',
+  color: getCssVar('--aqiDarkRed'),
+  textColor: getCssVar('--white')
+};
+const NO_DATA = {
+  text: 'No Data',
+  color: getCssVar('--aqiGrey'),
+  textColor: getCssVar('--white')
+};
+const PM_DATA = {
+  text: 'PM Level',
+  color: getCssVar('--aqiGrey'),
+  textColor: getCssVar('--white')
+};
 
 export const aqiColors = [
-  '#00e400',
-  '#ffff00',
-  '#ff7e00',
-  '#ff0000',
-  '#8f3f97',
-  '#7e0023'
+  getCssVar('--aqiGreen'),
+  getCssVar('--aqiYellow'),
+  getCssVar('--aqiOrange'),
+  getCssVar('--aqiRed'),
+  getCssVar('--aqiPurple'),
+  getCssVar('--aqiDarkRed')
 ];
 
 export const aqiRanges = [
@@ -77,21 +106,21 @@ export function getAQIDisplay(value: number) {
 export function getAQIColor(value: number) {
   switch (true) {
     case value === undefined:
-      return '#757575';
+      return getCssVar('--aqiGrey');
     case value <= 50:
-      return '#00e400';
+      return getCssVar('--aqiGreen');
     case value <= 100:
-      return '#ffff00';
+      return getCssVar('--aqiYellow');
     case value <= 150:
-      return '#ff7e00';
+      return getCssVar('--aqiOrange');
     case value <= 200:
-      return '#ff0000';
+      return getCssVar('--aqiRed');
     case value <= 300:
-      return '#8f3f97';
+      return getCssVar('--aqiPurple');
     case value <= 301:
-      return '#7e0023';
+      return getCssVar('--aqiDarkRed');
     default:
-      return '#757575';
+      return getCssVar('--aqiGrey');
   }
 }
 
