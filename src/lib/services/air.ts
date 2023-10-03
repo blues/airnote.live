@@ -1,5 +1,7 @@
 // helper function to be able to use CSS variables in JS/TS
 const getCssVar = (name: string) => {
+  // handle if window is undefined (SSR)
+  if (typeof window === 'undefined') return;
   return getComputedStyle(document.body).getPropertyValue(name);
 };
 
