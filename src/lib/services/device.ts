@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import type { AirnoteReading } from '$lib/services/AirReadingModel';
 import type { NotehubEvent } from '$lib/services/NotehubEventModel';
 import type { AirnoteDevice } from '$lib/services/DeviceModel';
-import type { DeviceDisplayOption } from '$lib/services/DeviceDisplayModel';
+import { getPathname } from '$lib/util/url';
 
 export function getHistoryReadings(readings: AirnoteReading[]) {
   // Group the readings into the calendar day they occurred on
@@ -95,7 +95,7 @@ export function getCurrentDeviceFromUrl(location: Location) {
   const query = queryString.parse(location.search);
   let pin = query['pin'] || '';
   let productUID = query['product'] || AIRNOTE_PRODUCT_UID;
-  let deviceUID = location.pathname.match(/dev:\d*/)?.[0] || '';
+  let deviceUID = getPathname().match(/dev:\d*/)?.[0] || '';
   const internalNav = query['internalNav'];
 
   // If there is no device in the query string default to the
