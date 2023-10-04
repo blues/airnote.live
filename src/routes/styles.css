@@ -28,6 +28,11 @@
   --grey: rgb(128, 128, 128);
   --textBlack: rgb(5, 6, 7);
   --lightestGrey: rgba(0, 0, 0, 0.1);
+
+  /* rebrand colors */
+  --gray1: #333;
+  --gray4: #ccc;
+
   font-family: var(--font-body);
 }
 

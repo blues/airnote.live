@@ -1,40 +1,37 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { unparse } from 'papaparse';
   import { format } from 'date-fns';
   import { NotificationDisplay } from '@beyonk/svelte-notifications';
 
-  import CloseIcon from '$lib/icons/CloseIcon.svelte';
-  import DownloadIcon from '$lib/icons/DownloadIcon.svelte';
-  import InfoIcon from '$lib/icons/InfoIcon.svelte';
-  import PrintIcon from '$lib/icons/PrintIcon.svelte';
-  import ShareIcon from '$lib/icons/ShareIcon.svelte';
-
-  import History from './History.svelte';
-  import MapboxMap from './MapboxMap.svelte';
-  import VoltageChart from '$lib/components/charts/VoltageChart.svelte';
-  import TempChart from '$lib/components/charts/TempChart.svelte';
   import AQIChart from '$lib/components/charts/AQIChart.svelte';
   import HumidityChart from '$lib/components/charts/HumidityChart.svelte';
-  import Recommendation from './Recommendation.svelte';
-  import Speedometer from './Speedometer.svelte';
-  import { APP_UID } from '$lib/constants';
+  import VoltageChart from '$lib/components/charts/VoltageChart.svelte';
+  import TempChart from '$lib/components/charts/TempChart.svelte';
+
   import PMChart from '$lib/components/charts/PMChart.svelte';
-  import TOOLTIP_STATES from '$lib/constants/TooltipStates';
+  import { APP_UID } from '$lib/constants';
   import DATE_RANGE_OPTIONS from '$lib/constants/DateRangeOptions';
-  import { shareDashboard } from '$lib/util/share';
+  import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
+  import TOOLTIP_STATES from '$lib/constants/TooltipStates';
+  import CloseIcon from '$lib/icons/CloseIcon.svelte';
+  import InfoIcon from '$lib/icons/InfoIcon.svelte';
   import { getCurrentDeviceFromUrl } from '$lib/services/device';
+  import { getHeatIndex, toCelsius, toFahrenheit } from '$lib/services/air';
+  import type { AirnoteReading } from '$lib/services/AirReadingModel';
+  import type { AirnoteHistoryReadings } from '$lib/services/AirHistoryModel';
+  import type { AirnoteDevice } from '$lib/services/DeviceModel';
   import {
     convertDateRange,
     dateRangeDisplayText,
     filterEventsByDate
   } from '$lib/util/dates';
-  import { getHeatIndex, toCelsius, toFahrenheit } from '$lib/services/air';
-  import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
-  import type { AirnoteReading } from '$lib/services/AirReadingModel';
-  import type { AirnoteHistoryReadings } from '$lib/services/AirHistoryModel';
   import { renderErrorMessage } from '$lib/util/errors';
-  import type { AirnoteDevice } from '$lib/services/DeviceModel';
+
+  import Actions from './Actions.svelte';
+  import History from './History.svelte';
+  import MapboxMap from './MapboxMap.svelte';
+  import Recommendation from './Recommendation.svelte';
+  import Speedometer from './Speedometer.svelte';
 
   export let deviceUID: string;
 
@@ -98,16 +95,6 @@
     tempDisplay = event.detail;
   }
 
-  const downloadData = () => {
-    const csv = 'data:text/csv;charset=utf-8,' + unparse(readings);
-    const encodedURI = encodeURI(csv);
-
-    var link = document.createElement('a');
-    link.setAttribute('href', encodedURI);
-    link.setAttribute('download', 'airnote.csv');
-    link.click();
-  };
-
   const closeBanner = () => {
     showBanner = false;
     localStorage.setItem('showBanner', 'false');
@@ -144,26 +131,14 @@
   {/if}
 
   {#if lastReading}
-    <div class="air-quality-wrapper">
-      <h2 class="air-quality-heading" data-cy="dashboard-title">
-        <span>
-          Air Quality {lastReading.location ? 'in ' + lastReading.location : ''}
-          {lastReading.serial_number ? '— ' + lastReading.serial_number : ''}
-        </span>
-      </h2>
+    <h2 class="air-quality-heading" data-cy="dashboard-title">
+      <span>
+        Air Quality {lastReading.location ? 'in ' + lastReading.location : ''}
+        {lastReading.serial_number ? '— ' + lastReading.serial_number : ''}
+      </span>
+    </h2>
 
-      <div class="actions">
-        <button class="svg-button" on:click={downloadData}>
-          <DownloadIcon />
-        </button>
-        <button class="svg-button" on:click={() => window.print()}>
-          <PrintIcon />
-        </button>
-        <button class="svg-button" on:click={() => shareDashboard(deviceUID)}>
-          <ShareIcon />
-        </button>
-      </div>
-    </div>
+    <Actions data={readings} {deviceUID} />
 
     <div class="all-measurements box">
       <h3 class="current-readings-title">Current Reading</h3>
@@ -451,12 +426,6 @@
     align-self: center;
   }
 
-  .air-quality-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
   .last-update {
     font-size: 0.8rem;
     margin-top: 0.25rem;
@@ -469,10 +438,6 @@
     color: var(--lighterSteelBlue);
     font-weight: normal;
     padding-left: 0.25rem;
-  }
-  .actions {
-    flex-grow: 1;
-    text-align: right;
   }
 
   .all-measurements {
@@ -651,10 +616,6 @@
     }
 
     @media (max-width: 376px) {
-      .air-quality-wrapper {
-        display: block;
-      }
-
       .box {
         padding: 1.5rem 0.5rem;
       }
