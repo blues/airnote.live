@@ -72,11 +72,3 @@ For a UI where you can interact with tests, choose which files to run, debug, et
 ```sh
 npm run cypress:open
 ```
-
-## Production Deployment
-
-Fork this repo and click the button below to deploy.
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
-
-See [render.yaml](render.yaml) for details
