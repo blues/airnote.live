@@ -2,12 +2,10 @@
   import { onMount } from 'svelte';
   import { format } from 'date-fns';
   import { NotificationDisplay } from '@beyonk/svelte-notifications';
-
   import AQIChart from '$lib/components/charts/AQIChart.svelte';
   import HumidityChart from '$lib/components/charts/HumidityChart.svelte';
   import VoltageChart from '$lib/components/charts/VoltageChart.svelte';
   import TempChart from '$lib/components/charts/TempChart.svelte';
-
   import PMChart from '$lib/components/charts/PMChart.svelte';
   import { APP_UID } from '$lib/constants';
   import DATE_RANGE_OPTIONS from '$lib/constants/DateRangeOptions';

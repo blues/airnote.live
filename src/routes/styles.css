@@ -173,3 +173,11 @@ hr {
     padding: 0 1rem;
   }
 }
+
+/* fixes a bug in the toast library that allows the toast to be wider than the screen on screens under 600px wide  */
+@media (max-width: 600px) {
+  .toasts .toast {
+    min-width: 40vw !important;
+    min-height: 36px !important;
+  }
+}
