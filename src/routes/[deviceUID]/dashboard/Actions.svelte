@@ -45,12 +45,12 @@
   }
   .actions button {
     background: transparent;
-    color: var(--gray1);
-    font-size: 0.75em;
+    color: var(--notehubBlue);
+    font-size: 0.75rem;
     padding: 0;
   }
   .actions button:hover {
-    color: var(--gray4);
+    color: var(--notehubBlueTintLighter);
   }
   .actions span {
     padding-top: 6px;

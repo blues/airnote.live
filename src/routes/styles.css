@@ -7,6 +7,7 @@
   --lighterSteelBlue: rgb(102, 149, 180);
   --steelBlue: rgb(70, 130, 180);
   --notehubBlue: rgb(27, 58, 82);
+  --notehubBlueTintLighter: #729bb5;
   --white: rgb(255, 255, 255);
   --backgroundWhite: rgb(247, 249, 251);
   --aqiGreen: rgb(0, 228, 0);
@@ -28,10 +29,6 @@
   --grey: rgb(128, 128, 128);
   --textBlack: rgb(5, 6, 7);
   --lightestGrey: rgba(0, 0, 0, 0.1);
-
-  /* rebrand colors */
-  --gray1: #333;
-  --gray4: #ccc;
 
   font-family: var(--font-body);
 }
