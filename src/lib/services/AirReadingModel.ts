@@ -1,0 +1,30 @@
+export interface AirnoteReading {
+  aqi: number;
+  aqi_algorithm: string;
+  aqi_level: string;
+  c00_30: number;
+  c00_50: number;
+  c01_00: number;
+  c02_50: number;
+  c05_00: number;
+  captured: string;
+  charging?: boolean;
+  csamples: number;
+  csecs: number;
+  device_uid: string;
+  heatIndex?: number;
+  humidity: number;
+  lat: number;
+  location: string;
+  lon: number;
+  pm01_0: number;
+  pm02_5: number;
+  pm02_5_rstd: number;
+  pm10_0: number;
+  pm10_0_rstd: number;
+  pressure: number;
+  sensor: string;
+  serial_number: string;
+  temperature: number;
+  voltage: number;
+}

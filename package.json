@@ -2,70 +2,52 @@
   "name": "airnote.live",
   "version": "0.1.0",
   "scripts": {
-    "install-node": "cd server && npm install",
-    "install-svelte": "npm install",
-    "setup": "npm run install-node & npm run install-svelte",
-    "build": "rollup -c",
-    "dev": "npx -y concurrently --raw \"cd server && npx -y nodemon server.js\" \"rollup -c -w\"",
-    "start": "sirv public --single --port 5555",
-    "test": "jest",
-    "test:watch": "npm run test -- --watch",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "vitest",
+    "lint": "prettier --plugin-search-dir . --check . && eslint .",
+    "format": "prettier --plugin-search-dir . --write .",
     "cypress:run": "cypress install && cypress run",
-    "cypress:open": "cypress install && cypress open --e2e"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect"
-    ],
-    "transform": {
-      "^.+\\.svelte$": "svelte-jester",
-      "^.+\\.js$": "babel-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(@beyonk/svelte-notifications)/)"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "svelte"
-    ],
-    "setupFiles": [
-      "./tests/setup.js"
-    ],
-    "testEnvironment": "jsDom"
+    "cypress:open": "cypress install && cypress open"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
-    "@rollup/plugin-commonjs": "^17.0.0",
-    "@rollup/plugin-node-resolve": "^11.0.0",
-    "@rollup/plugin-replace": "^3.0.0",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/svelte": "^3.0.3",
-    "babel-jest": "^28.1.2",
-    "cypress": "^10.4.0",
-    "jest": "^28.1.2",
-    "jest-environment-jsdom": "^28.1.2",
-    "rollup": "^2.76.0",
-    "rollup-plugin-css-only": "^3.1.0",
-    "rollup-plugin-livereload": "^2.0.5",
-    "rollup-plugin-svelte": "^7.1.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "svelte": "^3.49.0",
-    "svelte-jester": "^2.3.2"
+    "@sveltejs/adapter-auto": "^2.0.0",
+    "@sveltejs/adapter-netlify": "^1.0.0-next.88",
+    "@sveltejs/kit": "^1.20.4",
+    "@types/mapbox-gl": "^2.7.14",
+    "@types/papaparse": "^5.3.8",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "cypress": "^13.3.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-svelte": "^2.30.0",
+    "jsdom": "^22.1.0",
+    "prettier": "^2.8.0",
+    "prettier-plugin-svelte": "^2.10.1",
+    "svelte": "^4.0.5",
+    "svelte-check": "^3.4.3",
+    "tslib": "^2.4.1",
+    "typescript": "^5.0.0",
+    "vite": "^4.4.2",
+    "vitest": "^0.34.0"
   },
   "dependencies": {
-    "@beyonk/svelte-notifications": "^4.1.0",
-    "chart.js": "^3.8.0",
-    "date-fns": "^2.28.0",
-    "mapbox-gl": "^2.9.2",
-    "papaparse": "^5.3.1",
-    "query-string": "^7.0.0",
-    "sirv-cli": "^2.0.2",
-    "svelte-routing": "^1.6.0",
+    "@beyonk/svelte-notifications": "^4.2.0",
+    "@blues-inc/notehub-js": "^1.0.17",
+    "chart.js": "^4.4.0",
+    "date-fns": "^2.30.0",
+    "mapbox-gl": "^2.15.0",
+    "papaparse": "^5.4.1",
+    "query-string": "^8.1.0",
     "svelte-speedometer": "^1.1.0"
   },
+  "type": "module",
   "volta": {
-    "node": "16.13.0",
+    "node": "18.13.0",
     "npm": "8.0.0"
   }
 }
