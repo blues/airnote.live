@@ -23,6 +23,7 @@
   } from '$lib/services/DeviceModel';
   import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
   import { renderErrorMessage } from '$lib/util/errors';
+  import { getPathname } from '$lib/util/url';
 
   export let pin: PotentiallyNullDeviceDetails = '';
   export let deviceUID: string = '';
@@ -146,7 +147,7 @@
     settings page when first directed there from Notehub. */
     if (
       deviceUID &&
-      location.pathname === '/' + deviceUID &&
+      getPathname() === '/' + deviceUID &&
       !pin &&
       internalNav === 'false'
     ) {
