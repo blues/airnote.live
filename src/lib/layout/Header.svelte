@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { afterNavigate } from '$app/navigation';
   import CloseIcon from '$lib/icons/CloseIcon.svelte';
   import MenuIcon from '$lib/icons/MenuIcon.svelte';
   import AirnoteLogo from '$lib/images/airnote.svg';
@@ -8,6 +9,11 @@
     AirnoteDevice,
     PotentiallyNullDeviceDetails
   } from '$lib/services/DeviceModel';
+
+  afterNavigate(() => {
+    if (menuOpen === false) return;
+    return (menuOpen = false);
+  });
 
   let menuOpen = false;
   const toggleMenu = () => (menuOpen = !menuOpen);
