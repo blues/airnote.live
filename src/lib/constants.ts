@@ -7,3 +7,5 @@ export const DATE_TIME_FORMAT_KEY = 'MM-dd HH:mm';
 export const DATE_TIME_KEY = 'MMM dd yyyy HH:mm a';
 
 export const NOTEHUB_API_URL = 'https://api.notefile.net';
+
+export const GA_MEASUREMENT_ID = 'G-PJ7RGMWWBX';

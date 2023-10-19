@@ -17,6 +17,7 @@
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/adapter-netlify": "^1.0.0-next.88",
     "@sveltejs/kit": "^1.20.4",
+    "@types/gtag.js": "^0.0.17",
     "@types/mapbox-gl": "^2.7.14",
     "@types/papaparse": "^5.3.8",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
