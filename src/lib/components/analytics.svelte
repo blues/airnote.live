@@ -10,8 +10,6 @@
       page_path: $page.url.pathname
     });
   }
-
-  console.log('mode ', import.meta.env.MODE);
 </script>
 
 <svelte:head>
