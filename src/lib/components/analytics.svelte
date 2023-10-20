@@ -4,12 +4,14 @@
 
   export let id = GA_MEASUREMENT_ID;
 
-  $: if (typeof gtag !== 'undefined') {
+  $: if (typeof gtag !== 'undefined' && import.meta.env.PROD === true) {
     gtag('config', id, {
       page_title: document.title,
       page_path: $page.url.pathname
     });
   }
+
+  console.log('mode ', import.meta.env.MODE);
 </script>
 
 <svelte:head>
