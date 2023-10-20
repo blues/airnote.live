@@ -110,3 +110,26 @@ export async function getEvents(deviceUID: string) {
 
   return res.json();
 }
+
+export async function loginToNotehub(username: string, password: string) {
+  const authApiInstance = new NotehubJs.AuthorizationApi();
+  const loginRequest = { username: username, password: password };
+
+  return await authApiInstance.login(loginRequest);
+}
+
+export async function loginToOry(username: string, password: string) {
+  const res = await fetch(`https://api.notefile.net/auth/login`, {
+    method: 'POST',
+    body: JSON.stringify({ username: username, password: password })
+  });
+  return res.json();
+}
+
+export async function getProjects(auth_token: string) {
+  const projectApiInstance = new NotehubJs.ProjectApi();
+  const { api_key } = notehubJsClient.authentications;
+  api_key.apiKey = auth_token;
+
+  return await projectApiInstance.getProjects();
+}
