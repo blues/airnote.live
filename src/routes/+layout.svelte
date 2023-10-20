@@ -2,6 +2,7 @@
   import { onNavigate } from '$app/navigation';
   import Header from '$lib/layout/Header.svelte';
   import Footer from '$lib/layout/Footer.svelte';
+  import Analytics from '$lib/components/analytics.svelte';
   import '../app.css';
   import './styles.css';
 
@@ -16,6 +17,8 @@
     });
   });
 </script>
+
+<Analytics />
 
 <div class="app">
   <Header />
