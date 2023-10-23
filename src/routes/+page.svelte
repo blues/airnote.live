@@ -4,6 +4,8 @@
   export let data;
   export let form;
 
+  let selectedProject = '';
+
   let loading = false;
   let showSuccessMessage = false;
   let showErrorMessage = false;
@@ -88,13 +90,19 @@
 {#if data.notehub_projects}
   <section>
     <p>Here's a list of all your Notehub projects.</p>
-    <select>
+    <select bind:value={selectedProject}>
       {#each data.notehub_projects as project}
-        <option value={project.uid}
+        <option value={project}
           >Project Label: {project.label} - Project ID: {project.uid}</option
         >
       {/each}
     </select>
+
+    <p>
+      Currently selected Notehub project: {selectedProject
+        ? selectedProject.label
+        : 'None selected'}
+    </p>
     <p>Would you like to create a new Notehub project?</p>
     <form
       method="POST"
