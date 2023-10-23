@@ -133,3 +133,36 @@ export async function getProjects(auth_token: string) {
 
   return await projectApiInstance.getProjects();
 }
+
+async function getBillingAccounts(auth_token: string) {
+  const billingApiInstance = new NotehubJs.BillingAccountApi();
+  const { api_key } = notehubJsClient.authentications;
+  api_key.apiKey = auth_token;
+
+  return await billingApiInstance.getBillingAccounts();
+}
+
+export async function createProject(auth_token: string, project_name: string) {
+  let error;
+  const projectApiInstance = new NotehubJs.ProjectApi();
+  const { api_key } = notehubJsClient.authentications;
+  api_key.apiKey = auth_token;
+
+  // billing account UID required to create project, for now, just use the first result in the array
+  const billingAccounts = await getBillingAccounts(auth_token).catch((err) => {
+    console.error(err);
+    error = err.body;
+  });
+
+  if (error && error.status === 'Unauthorized') {
+    return error;
+  } else {
+    const billingAccountUID = billingAccounts.billing_accounts[0].uid;
+    const newProjectRequest = new NotehubJs.CreateProjectRequest(
+      project_name,
+      billingAccountUID
+    );
+
+    return await projectApiInstance.createProject(newProjectRequest);
+  }
+}

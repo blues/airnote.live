@@ -1,8 +1,20 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
+  import { applyAction, enhance } from '$app/forms';
 
   export let data;
   export let form;
+
+  let loading = false;
+  let showSuccessMessage = false;
+  let showErrorMessage = false;
+
+  $: console.log('form ', form);
+
+  $: if (form && form.uid && form.label) {
+    showSuccessMessage = true;
+  } else if (form && form.error === 'Unauthorized') {
+    showErrorMessage = true;
+  }
 </script>
 
 <svelte:head>
@@ -76,14 +88,49 @@
 {#if data.notehub_projects}
   <section>
     <p>Here's a list of all your Notehub projects.</p>
-    {#each data.notehub_projects as project}
-      <div>
-        <h3>{project.uid}</h3>
-        <p>{project.label}</p>
-        <p>{project.created}</p>
-        <p>{project.role}</p>
+    <select>
+      {#each data.notehub_projects as project}
+        <option value={project.uid}
+          >Project Label: {project.label} - Project ID: {project.uid}</option
+        >
+      {/each}
+    </select>
+    <p>Would you like to create a new Notehub project?</p>
+    <form
+      method="POST"
+      use:enhance={() => {
+        loading = true;
+        return async ({ result }) => {
+          console.log(result);
+          loading = false;
+          await applyAction(result);
+        };
+      }}
+      action="?/createNotehubProject"
+    >
+      <label for="project_name">Project Name</label>
+      <input
+        type="text"
+        name="project_name"
+        id="project_name"
+        placeholder="Your Project"
+      />
+      <div class="form-buttons">
+        <button>Create Project</button>
       </div>
-    {/each}
+    </form>
+    {#if loading}
+      <p>Creating your new Notehub project...</p>
+    {/if}
+    {#if showSuccessMessage && form}
+      <p>Congrats - your new Notehub project was created!</p>
+      <p>Project Name: {form.label}</p>
+      <p>Project UID: {form.uid}</p>
+    {/if}
+    {#if showErrorMessage && form}
+      <p>Sorry - there was an error creating your new Notehub project.</p>
+      <p>Try logging back in then create your project again.</p>
+    {/if}
   </section>
 {/if}
 
