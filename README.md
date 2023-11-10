@@ -38,6 +38,14 @@ HUB_AUTH_TOKEN=<your token>
 
 You can refer to [the Notehub API’s authentication documentation](https://dev.blues.io/reference/notehub-api/api-introduction/#authentication) for steps on how to generate your own token.
 
+It also uses a Mapbox API token to display the device's location on a map on the dashboard page. This token can also be added to the `.env` file, under the name listed below.
+
+You can create your own Mapbox API token by [signing up for a free Mapbox account](https://account.mapbox.com/auth/signin/?route-to=%22https%3A%2F%2Faccount.mapbox.com%2F%22) and following these [instructions to create an access token](https://docs.mapbox.com/help/glossary/access-token/).
+
+```plaintext
+PUBLIC_MAPBOX_TOKEN=<your mapbox token>
+```
+
 ## Testing
 
 ### Unit Testing
