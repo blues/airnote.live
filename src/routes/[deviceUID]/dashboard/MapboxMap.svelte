@@ -5,6 +5,7 @@
   import { DATE_TIME_KEY } from '$lib/constants';
   import mapboxgl from 'mapbox-gl';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
+  import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
 
   export let lastReading: AirnoteReading;
 
@@ -13,8 +14,7 @@
   let markerColor;
   let zoom = 10;
   let popup;
-  let mapboxToken =
-    'pk.eyJ1IjoicGFpZ2VuMTEiLCJhIjoiY2lyemJlZ3A0MDBqZTJ5cGs5ZHJicjI2YyJ9.2-dZqM-k2obDN47BpWq5Lw';
+  let mapboxToken = PUBLIC_MAPBOX_TOKEN;
 
   onMount(() => {
     mapboxgl.accessToken = mapboxToken;
