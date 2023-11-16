@@ -29,14 +29,18 @@
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(reading.temperature.toString()).toFixed(2)
+        y: reading.temperature
+          ? parseFloat(reading.temperature.toString()).toFixed(2)
+          : 0.0
       };
     });
     tempDataFahrenheit = readings.map((reading) => {
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(toFahrenheit(reading.temperature).toString()).toFixed(2)
+        y: reading.temperature
+          ? parseFloat(toFahrenheit(reading.temperature).toString()).toFixed(2)
+          : 0.0
       };
     });
   }

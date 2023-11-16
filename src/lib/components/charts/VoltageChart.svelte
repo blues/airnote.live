@@ -30,7 +30,9 @@
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(reading.voltage.toString()).toFixed(2)
+        y: reading.voltage
+          ? parseFloat(reading.voltage.toString()).toFixed(2)
+          : 0.0
       };
     });
     chargingData = readings

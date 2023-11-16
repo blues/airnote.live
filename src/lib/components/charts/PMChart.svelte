@@ -30,21 +30,27 @@
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(reading.pm01_0.toString()).toFixed(2)
+        y: reading.pm01_0
+          ? parseFloat(reading.pm01_0.toString()).toFixed(2)
+          : 0.0
       };
     });
     pm2_5Data = readings.map((reading) => {
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(reading.pm02_5.toString()).toFixed(2)
+        y: reading.pm02_5
+          ? parseFloat(reading.pm02_5.toString()).toFixed(2)
+          : 0.0
       };
     });
     pm10Data = readings.map((reading) => {
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(reading.pm10_0.toString()).toFixed(2)
+        y: reading.pm10_0
+          ? parseFloat(reading.pm10_0.toString()).toFixed(2)
+          : 0.0
       };
     });
   }
