@@ -51,6 +51,7 @@
   };
 
   const options: ChartOptions<'line'> = {
+    maintainAspectRatio: false,
     scales: {
       x: {
         ticks: {
@@ -78,10 +79,17 @@
   });
 </script>
 
-<canvas
-  id="humdityChart"
-  bind:this={ctx}
-  width={420}
-  height={300}
-  data-cy="humidity-chart"
-/>
+<div class="chart-container">
+  <canvas id="humdityChart" bind:this={ctx} data-cy="humidity-chart" />
+</div>
+
+<style>
+  /* chart container div with relative positioning and `maintainAspectRatio: false 
+  option required to update the canvas render and display sizes for responsiveness: 
+  https://www.chartjs.org/docs/latest/configuration/responsive.html#important-note */
+  .chart-container {
+    position: relative;
+    min-height: 300px;
+    aspect-ratio: 1.4;
+  }
+</style>

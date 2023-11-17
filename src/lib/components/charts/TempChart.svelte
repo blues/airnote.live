@@ -93,6 +93,7 @@
   };
 
   const options: ChartOptions<'line'> = {
+    maintainAspectRatio: false,
     scales: {
       x: {
         ticks: {
@@ -120,13 +121,9 @@
   });
 </script>
 
-<canvas
-  id="temperatureChart"
-  bind:this={ctx}
-  width={420}
-  height={300}
-  data-cy="temperature-chart"
-/>
+<div class="chart-container">
+  <canvas id="temperatureChart" bind:this={ctx} data-cy="temperature-chart" />
+</div>
 <div class="button-group">
   <button on:click={() => fetchTempChartDisplay(tempDisplay)}>
     Change to °{tempDisplay == 'C' ? 'F' : 'C'}
@@ -134,6 +131,15 @@
 </div>
 
 <style>
+  /* chart container div with relative positioning and `maintainAspectRatio: false 
+  option required to update the canvas render and display sizes for responsiveness: 
+  https://www.chartjs.org/docs/latest/configuration/responsive.html#important-note */
+  .chart-container {
+    position: relative;
+    min-height: 300px;
+    aspect-ratio: 1.4;
+  }
+
   .button-group {
     margin-top: 0.5rem;
   }

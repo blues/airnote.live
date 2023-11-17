@@ -6,6 +6,8 @@
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import { shareDashboard } from '$lib/util/share';
 
+  /* the data passed in here is what is initially fetched in the `getEvents` function. 
+  To adjust the amount of data fetched, adjust the 'TIMEFRAME' constant */
   export let data: AirnoteReading[];
   export let deviceUID: string;
 
