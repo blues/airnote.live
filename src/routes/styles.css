@@ -167,6 +167,15 @@ hr {
   text-decoration: underline;
 }
 
+/* chart container div with relative positioning and `maintainAspectRatio: false 
+  option required to update the canvas render and display sizes for responsiveness: 
+  https://www.chartjs.org/docs/latest/configuration/responsive.html#important-note */
+.chart-container {
+  position: relative;
+  min-height: 300px;
+  aspect-ratio: 1.4;
+}
+
 @media (max-width: 992px) {
   section {
     max-width: 720px;
@@ -179,5 +188,11 @@ hr {
   .toasts .toast {
     min-width: 40vw !important;
     min-height: 36px !important;
+  }
+
+  @media (max-width: 520px) {
+    .chart-container {
+      min-height: auto;
+    }
   }
 }

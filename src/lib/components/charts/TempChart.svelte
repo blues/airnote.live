@@ -131,15 +131,6 @@
 </div>
 
 <style>
-  /* chart container div with relative positioning and `maintainAspectRatio: false 
-  option required to update the canvas render and display sizes for responsiveness: 
-  https://www.chartjs.org/docs/latest/configuration/responsive.html#important-note */
-  .chart-container {
-    position: relative;
-    min-height: 300px;
-    aspect-ratio: 1.4;
-  }
-
   .button-group {
     margin-top: 0.5rem;
   }
