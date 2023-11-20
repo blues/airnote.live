@@ -56,6 +56,9 @@
   $: if (deviceUID) {
     eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}`;
   }
+
+  let expandCharts: boolean = false;
+
   // data fetched from Notehub API via +page.server.ts on page load
   export let data;
 
@@ -82,7 +85,16 @@
   $: if (selectedDateRange) {
     const convertedTimeframe = convertDateRange(selectedDateRange);
     displayedReadings = filterEventsByDate(readings, convertedTimeframe);
+    // if the selected date range is 30 days, expand the smaller charts to full width
+    if (selectedDateRange === DATE_RANGE_OPTIONS.THIRTY_DAYS.displayText) {
+      expandCharts = true;
+    } else {
+      expandCharts = false;
+    }
   }
+
+  $: chartLayout = expandCharts ? 'large-charts' : 'charts';
+  $: chartWidth = expandCharts ? 'maximize-chart' : '';
 
   const toggleTempDisplay = () => {
     tempDisplay = tempDisplay == 'C' ? 'F' : 'C';
@@ -289,12 +301,12 @@
       </select>
     </div>
 
-    <div class="all-charts">
-      <div class="box chart1">
+    <div class={chartLayout}>
+      <div class="box chart1 {chartWidth}">
         <VoltageChart readings={displayedReadings} />
       </div>
 
-      <div class="box chart2">
+      <div class="box chart2 {chartWidth}">
         <TempChart
           {tempDisplay}
           readings={displayedReadings}
@@ -302,11 +314,11 @@
         />
       </div>
 
-      <div class="box chart3">
+      <div class="box chart3 {chartWidth}">
         <AQIChart readings={displayedReadings} />
       </div>
 
-      <div class="box chart4">
+      <div class="box chart4 {chartWidth}">
         <HumidityChart readings={displayedReadings} />
       </div>
 
@@ -497,7 +509,7 @@
     height: inherit;
   }
 
-  .all-charts {
+  .charts {
     display: grid;
     grid-template-areas:
       'chart1 chart2'
@@ -511,6 +523,10 @@
   .chart3,
   .chart4 {
     max-width: 475px;
+  }
+
+  .maximize-chart {
+    max-width: 100%;
   }
 
   .chart1 {
@@ -534,10 +550,12 @@
   }
 
   @media (max-width: 1000px) {
-    .all-charts {
+    .charts,
+    .large-charts {
       display: block;
       max-width: 700px;
-      margin: auto;
+      margin-right: auto;
+      margin-left: auto;
     }
 
     .chart1,
@@ -553,8 +571,7 @@
     .date-selector {
       grid-template-columns: repeat(2, 1fr);
     }
-    .all-measurements,
-    .all-charts {
+    .all-measurements {
       display: block;
     }
     .speedometer-box,

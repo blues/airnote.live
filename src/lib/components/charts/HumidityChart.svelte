@@ -24,7 +24,9 @@
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(reading.humidity.toString()).toFixed(2)
+        y: reading.humidity
+          ? parseFloat(reading.humidity.toString()).toFixed(2)
+          : 0.0
       };
     });
   }
@@ -49,6 +51,7 @@
   };
 
   const options: ChartOptions<'line'> = {
+    maintainAspectRatio: false,
     scales: {
       x: {
         ticks: {
@@ -76,10 +79,6 @@
   });
 </script>
 
-<canvas
-  id="humdityChart"
-  bind:this={ctx}
-  width={420}
-  height={300}
-  data-cy="humidity-chart"
-/>
+<div class="chart-container">
+  <canvas id="humdityChart" bind:this={ctx} data-cy="humidity-chart" />
+</div>

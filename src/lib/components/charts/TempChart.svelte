@@ -29,14 +29,18 @@
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(reading.temperature.toString()).toFixed(2)
+        y: reading.temperature
+          ? parseFloat(reading.temperature.toString()).toFixed(2)
+          : 0.0
       };
     });
     tempDataFahrenheit = readings.map((reading) => {
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(toFahrenheit(reading.temperature).toString()).toFixed(2)
+        y: reading.temperature
+          ? parseFloat(toFahrenheit(reading.temperature).toString()).toFixed(2)
+          : 0.0
       };
     });
   }
@@ -89,6 +93,7 @@
   };
 
   const options: ChartOptions<'line'> = {
+    maintainAspectRatio: false,
     scales: {
       x: {
         ticks: {
@@ -116,13 +121,9 @@
   });
 </script>
 
-<canvas
-  id="temperatureChart"
-  bind:this={ctx}
-  width={420}
-  height={300}
-  data-cy="temperature-chart"
-/>
+<div class="chart-container">
+  <canvas id="temperatureChart" bind:this={ctx} data-cy="temperature-chart" />
+</div>
 <div class="button-group">
   <button on:click={() => fetchTempChartDisplay(tempDisplay)}>
     Change to °{tempDisplay == 'C' ? 'F' : 'C'}

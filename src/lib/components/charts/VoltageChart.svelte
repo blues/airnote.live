@@ -30,7 +30,9 @@
       const d = parseISO(reading.captured);
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
-        y: parseFloat(reading.voltage.toString()).toFixed(2)
+        y: reading.voltage
+          ? parseFloat(reading.voltage.toString()).toFixed(2)
+          : 0.0
       };
     });
     chargingData = readings
@@ -74,6 +76,7 @@
   };
 
   const options: ChartOptions<'line'> = {
+    maintainAspectRatio: false,
     scales: {
       x: {
         ticks: {
@@ -124,10 +127,6 @@
   });
 </script>
 
-<canvas
-  id="voltageChart"
-  bind:this={ctx}
-  width={420}
-  height={300}
-  data-cy="voltage-chart"
-/>
+<div class="chart-container">
+  <canvas id="voltageChart" bind:this={ctx} data-cy="voltage-chart" />
+</div>

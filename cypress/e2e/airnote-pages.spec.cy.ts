@@ -92,9 +92,9 @@ describe('Airnote application', () => {
     cy.get('[data-cy="history-heading"]').should('be.visible');
     // check date range dropdown is visible and defaults to "Last 7 Days"
     cy.get('[data-cy="chart-date-selector"').should('contain', 'Last 7 Days');
-    cy.get('[data-cy="chart-date-selector"').select('Last 5 Days');
-    // check date range dropdown is visible and updates to "Last 5 Days"
-    cy.get('[data-cy="chart-date-selector"').should('contain', 'Last 5 Days');
+    cy.get('[data-cy="chart-date-selector"').select('Last 30 Days');
+    // check date range dropdown is visible and updates to "Last 30 Days"
+    cy.get('[data-cy="chart-date-selector"').should('contain', 'Last 30 Days');
     // check charts
     cy.get('[data-cy="voltage-chart"]').should('be.visible');
     cy.get('[data-cy="temperature-chart"]').should('be.visible');

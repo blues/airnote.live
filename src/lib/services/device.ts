@@ -95,7 +95,12 @@ export function getCurrentDeviceFromUrl(location: Location) {
   const query = queryString.parse(location.search);
   let pin = query['pin'] || '';
   let productUID = query['product'] || AIRNOTE_PRODUCT_UID;
-  let deviceUID = getPathname().match(/dev:\d*/)?.[0] || '';
+  // check if the pathname has a % in it which means it needs to be decoded, if so, decode it
+  // if not, continue on (this is as much to fix broken unit tests as anything else)
+  const sanitizedPathname = location.pathname.includes('%')
+    ? getPathname()
+    : location.pathname;
+  let deviceUID = sanitizedPathname.match(/dev:\d*/)?.[0] || '';
   const internalNav = query['internalNav'];
 
   // If there is no device in the query string default to the

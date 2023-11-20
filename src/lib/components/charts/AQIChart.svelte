@@ -49,6 +49,7 @@
   };
 
   const options: ChartOptions<'line'> = {
+    maintainAspectRatio: false,
     scales: {
       x: {
         ticks: {
@@ -76,10 +77,6 @@
   });
 </script>
 
-<canvas
-  id="aqiChart"
-  bind:this={ctx}
-  width={420}
-  height={300}
-  data-cy="aqi-chart"
-/>
+<div class="chart-container">
+  <canvas id="aqiChart" bind:this={ctx} data-cy="aqi-chart" />
+</div>
