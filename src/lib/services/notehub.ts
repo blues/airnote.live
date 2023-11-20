@@ -83,10 +83,10 @@ export async function updateDeviceEnvironmentVariablesByPin(
 
 // get events from Airnote project in Notehub
 export async function getEvents(deviceUID: string) {
-  /* this function is fetched on mount with 90 days' worth of data to
+  /* this function is fetched on mount with 30 days' worth of data to
 		  populate the CSV download, the AQI average history AND
 		  display today's most current reading as well */
-  const TIMEFRAME = '90 days';
+  const TIMEFRAME = '30 days';
 
   const body = {
     req: 'hub.app.data.query',
