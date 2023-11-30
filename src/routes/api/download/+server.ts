@@ -1,4 +1,4 @@
-import pkg from 'papaparse';
+import { unparse } from 'papaparse';
 import {
   getEvents,
   getDeviceEnvironmentVariables
@@ -6,8 +6,6 @@ import {
 import { getCurrentReadings } from '$lib/services/device';
 import type { NotehubEvent } from '$lib/services/NotehubEventModel.js';
 import type { AirnoteReading } from '$lib/services/AirReadingModel.js';
-
-const { unparse } = pkg;
 
 export async function GET({ url }) {
   const allEvents: NotehubEvent[] = [];
