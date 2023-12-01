@@ -148,7 +148,7 @@
       </span>
     </h2>
 
-    <Actions data={readings} {deviceUID} />
+    <Actions {deviceUID} />
 
     <div class="all-measurements box">
       <h3 class="current-readings-title">Current Reading</h3>
