@@ -39,6 +39,10 @@
   {#if deviceUID}
     <ul class={menuOpen ? 'open' : ''}>
       <li>
+        <!-- todo show setup even before a user's set up their devices and has deviceUID -->
+        <a href="/setup-guide">Setup Guide</a>
+      </li>
+      <li>
         <a
           href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true"
           data-cy="settings-link"

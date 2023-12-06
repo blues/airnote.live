@@ -42,6 +42,7 @@
     "chart.js": "^4.4.0",
     "date-fns": "^2.30.0",
     "mapbox-gl": "^2.15.0",
+    "mdsvex": "^0.11.0",
     "papaparse": "^5.4.1",
     "query-string": "^8.1.0",
     "svelte-speedometer": "^1.1.0"
