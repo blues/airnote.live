@@ -1,10 +1,17 @@
 import adapter from '@sveltejs/adapter-netlify';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
+import remarkGfm from 'remark-gfm';
+import remarkUnwrapImages from 'remark-unwrap-images';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeExternalLinks from 'rehype-external-links';
 
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
-  extensions: ['.mdx']
+  extensions: ['.mdx'],
+  remarkPlugins: [remarkGfm, remarkUnwrapImages],
+  rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypeExternalLinks]
 };
 
 /** @type {import('@sveltejs/kit').Config} */

@@ -1,7 +1,11 @@
 // get all the quickstart files together
 const quickstartFiles = [
   '../../setup-files/01 Introduction.mdx',
-  '../../setup-files/02 Unboxing Your Airnote.mdx'
+  '../../setup-files/02 Unboxing Your Airnote.mdx',
+  '../../setup-files/03 Airnote Setup.mdx',
+  '../../setup-files/04 Visit Your Device Dashboard.mdx',
+  '../../setup-files/05 Understanding Air Quality.mdx',
+  '../../setup-files/06 FAQ.mdx'
 ];
 
 async function getFileData(file: string) {

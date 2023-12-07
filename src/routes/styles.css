@@ -176,6 +176,83 @@ hr {
   aspect-ratio: 1.4;
 }
 
+/* todo style this nicer  */
+:where(h2, h3, h4, h5, h6) {
+  .icon-link {
+    position: relative;
+
+    &::before {
+      content: '#';
+      position: absolute;
+      left: -1ch;
+      top: 0;
+      line-height: 1;
+      opacity: 0;
+      text-decoration: underline;
+    }
+  }
+
+  &:hover .icon-link::before {
+    opacity: 1;
+  }
+}
+
+/* todo fix table styling and add blockquote styling as well */
+table {
+  border: none;
+}
+
+thead th {
+  color: var(--white);
+  background-color: var(--notehubBlue);
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+thead {
+  border-bottom: none;
+}
+
+table tr:first-child td:first-child,
+table tr:first-child td:last-child {
+  border-top: none !important;
+}
+
+table tr:last-child td:nth-child(2),
+table tr:last-child td:nth-child(3),
+table tr:last-child td:nth-child(4),
+table tr:last-child td:nth-child(5) {
+  border-bottom: 2px solid var(--notehubBlueTint);
+}
+
+table td:nth-child(2) {
+  border-left: 2px solid var(--notehubBlueTint);
+}
+
+table td:nth-child(6) {
+  border-left: 2px solid var(--notehubBlueTint);
+}
+
+table td:nth-child(2),
+table td:nth-child(3),
+table td:nth-child(4),
+table td:nth-child(5) {
+  background-color: var(--inputLightBlue);
+  border-top-color: var(--inputLightBlue);
+}
+
+table td:nth-child(3),
+table td:nth-child(4),
+table td:nth-child(5) {
+  border-right: none;
+  border-left: none;
+}
+
+.pinout table tbody tr:hover {
+  background: none;
+}
+
 @media (max-width: 992px) {
   section {
     max-width: 720px;
