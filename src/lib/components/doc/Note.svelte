@@ -19,13 +19,9 @@
   header {
     background-color: var(--notehubBlueTintLighter);
     color: var(--white);
-    font-family: Fira Code;
     font-size: 18px;
-    font-style: normal;
     font-weight: bold;
-    line-height: 26px;
     padding: 15px 20px;
-    text-transform: capitalize;
     display: flex;
     align-items: center;
     border-top-left-radius: 4px;
@@ -37,7 +33,7 @@
     margin-top: 1.125rem;
     margin-bottom: 1.125rem;
     overflow: hidden;
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem 0;
   }
 
   header img {

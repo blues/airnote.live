@@ -176,81 +176,87 @@ hr {
   aspect-ratio: 1.4;
 }
 
-/* todo style this nicer  */
-:where(h2, h3, h4, h5, h6) {
-  .icon-link {
+/* markdown doc styling  */
+:where(h1, h2, h3, h4, h5, h6) {
+  .anchor {
     position: relative;
+    color: var(--notehubBlue);
 
     &::before {
       content: '#';
       position: absolute;
-      left: -1ch;
-      top: 0;
+      left: -1.5ch;
+      top: 3px;
       line-height: 1;
       opacity: 0;
-      text-decoration: underline;
     }
   }
 
-  &:hover .icon-link::before {
+  &:hover .anchor::before,
+  .anchor:hover {
     opacity: 1;
+    color: var(--primaryBlue);
+  }
+}
+
+:where(p:has(img)) {
+  padding: 1rem 0;
+
+  & :is(img) {
+    border-radius: 4px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
   }
 }
 
 /* todo fix table styling and add blockquote styling as well */
 table {
-  border: none;
-}
+  width: 100%;
+  border-radius: 4px;
+  border-spacing: 0;
 
-thead th {
-  color: var(--white);
-  background-color: var(--notehubBlue);
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
-}
+  & :is(thead) {
+    border-bottom: none;
+    & :is(th) {
+      color: var(--white);
+      background-color: var(--lighterSteelBlue);
+      border: 1px solid var(--medGrey);
+      padding: 0.75rem;
+      margin: 0 0 1rem;
+    }
 
-thead {
-  border-bottom: none;
-}
+    & :is(th:first-child) {
+      border-right: none;
+      border-top-left-radius: 4px;
+    }
 
-table tr:first-child td:first-child,
-table tr:first-child td:last-child {
-  border-top: none !important;
-}
+    & :is(th:last-child) {
+      border-top-right-radius: 4px;
+    }
+  }
 
-table tr:last-child td:nth-child(2),
-table tr:last-child td:nth-child(3),
-table tr:last-child td:nth-child(4),
-table tr:last-child td:nth-child(5) {
-  border-bottom: 2px solid var(--notehubBlueTint);
-}
+  & :is(tbody) {
+    & :is(tr) {
+      background: var(--white);
+      & :is(td) {
+        padding: 0.75rem;
+        margin: 0 0 1rem;
+        border-bottom: 1px solid var(--lightGrey);
+        border-right: 1px solid var(--lightGrey);
+        border-left: 1px solid var(--lightGrey);
+      }
 
-table td:nth-child(2) {
-  border-left: 2px solid var(--notehubBlueTint);
-}
+      & :is(td:first-child) {
+        border-right: none;
+      }
+    }
 
-table td:nth-child(6) {
-  border-left: 2px solid var(--notehubBlueTint);
-}
-
-table td:nth-child(2),
-table td:nth-child(3),
-table td:nth-child(4),
-table td:nth-child(5) {
-  background-color: var(--inputLightBlue);
-  border-top-color: var(--inputLightBlue);
-}
-
-table td:nth-child(3),
-table td:nth-child(4),
-table td:nth-child(5) {
-  border-right: none;
-  border-left: none;
-}
-
-.pinout table tbody tr:hover {
-  background: none;
+    & :is(tr:last-child) {
+      & :is(td) {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
+    }
+  }
 }
 
 @media (max-width: 992px) {

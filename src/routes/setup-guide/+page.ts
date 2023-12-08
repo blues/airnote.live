@@ -1,5 +1,6 @@
 // get all the quickstart files together
 const quickstartFiles = [
+  '../../setup-files/00 Main.mdx',
   '../../setup-files/01 Introduction.mdx',
   '../../setup-files/02 Unboxing Your Airnote.mdx',
   '../../setup-files/03 Airnote Setup.mdx',
