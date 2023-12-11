@@ -36,12 +36,11 @@
   <a href="/">
     <img alt="Airnote logo" src={AirnoteLogo} />
   </a>
-  {#if deviceUID}
-    <ul class={menuOpen ? 'open' : ''}>
-      <li>
-        <!-- todo show setup even before a user's set up their devices and has deviceUID -->
-        <a href="/setup-guide">Setup Guide</a>
-      </li>
+  <ul class={menuOpen ? 'open' : ''}>
+    <li>
+      <a href="/setup-guide">Setup Guide</a>
+    </li>
+    {#if deviceUID}
       <li>
         <a
           href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true"
@@ -55,12 +54,12 @@
           Dashboard
         </a>
       </li>
-    </ul>
-    <button class="svg-button" on:click={toggleMenu}>
-      {#if menuOpen}<CloseIcon />{/if}
-      {#if !menuOpen}<MenuIcon />{/if}
-    </button>
-  {/if}
+    {/if}
+  </ul>
+  <button class="svg-button" on:click={toggleMenu}>
+    {#if menuOpen}<CloseIcon />{/if}
+    {#if !menuOpen}<MenuIcon />{/if}
+  </button>
 </header>
 
 <style>

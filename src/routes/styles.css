@@ -182,21 +182,27 @@ hr {
     position: relative;
     color: var(--notehubBlue);
 
-    &::before {
+    &::after {
       content: '#';
-      position: absolute;
-      left: -1.5ch;
-      top: 3px;
-      line-height: 1;
       opacity: 0;
+      margin-left: 2px;
+    }
+
+    &:hover {
+      color: var(--notehubBlue);
+      text-decoration: none;
     }
   }
 
-  &:hover .anchor::before,
-  .anchor:hover {
+  &:hover .anchor::after {
     opacity: 1;
     color: var(--primaryBlue);
+    text-decoration: none;
   }
+}
+
+code {
+  overflow-wrap: break-word;
 }
 
 :where(p:has(img)) {
@@ -205,10 +211,31 @@ hr {
   & :is(img) {
     border-radius: 4px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+    height: auto;
+    max-width: 100%;
   }
 }
 
-/* todo fix table styling and add blockquote styling as well */
+blockquote {
+  background-color: var(--white);
+  margin: 16px 0;
+  display: flow-root;
+  padding: 0 16px 0 32px;
+  border-left: 8px solid var(--notehubBlueTintLighter);
+  border-radius: 4px;
+  position: relative;
+
+  &::before {
+    content: ' ';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    background-image: url('/src/lib/images/left-quote.svg');
+    height: 24px;
+    width: 24px;
+  }
+}
+
 table {
   width: 100%;
   border-radius: 4px;
