@@ -1,7 +1,7 @@
 import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
 import { APP_UID } from '$lib/constants';
 
-export function renderErrorMessage(errorType: string, deviceUID: string) {
+export function renderErrorMessage(errorType: string, deviceUID?: string) {
   switch (true) {
     case errorType === ERROR_TYPE.NOTEHUB_ERROR:
       return `
@@ -47,6 +47,13 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
       return `
          <div class="warning">
             Unable to save new configuration settings. Please try again later.
+        </div>`;
+    case errorType === ERROR_TYPE.DOCS_ERROR:
+      return `
+        <div class="alert">
+          <h4 class="alert-heading">Unable to load Airnote quickstart documentation.</h4>
+          Please try refreshing the page or <a href="https://discuss.blues.io">reach out on our forum</a> if you
+          need help getting your Airnote up and running.
         </div>`;
     default:
       return `

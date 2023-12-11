@@ -2,15 +2,14 @@
   import CalloutNoteImg from '$lib/images/callout-note.svg';
 </script>
 
-<!-- todo rename classes here -->
-<div class="callout">
+<div class="note">
   <header>
     <img alt="" src={CalloutNoteImg} />
     <span>Note</span>
   </header>
-  <div class="border">
-    <div class="margin">
-      <div class="details"><slot /></div>
+  <div class="note-border">
+    <div class="note-margin">
+      <slot />
     </div>
   </div>
 </div>
@@ -28,7 +27,7 @@
     border-top-right-radius: 4px;
   }
 
-  .callout {
+  .note {
     box-sizing: border-box;
     margin-top: 1.125rem;
     margin-bottom: 1.125rem;
@@ -41,7 +40,7 @@
     height: 18px;
   }
 
-  .callout .border {
+  .note .note-border {
     overflow: auto; /* so margins of children are contained. */
     border-right: 2px solid var(--notehubBlueTintLighter);
     border-left: 2px solid var(--notehubBlueTintLighter);
@@ -50,7 +49,7 @@
     border-bottom-right-radius: 4px;
   }
 
-  .margin {
+  .note-margin {
     margin: 15px;
   }
 </style>

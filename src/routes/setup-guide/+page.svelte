@@ -2,7 +2,6 @@
   export let data;
 </script>
 
-<!-- todo add description and page title from og site  -->
 <svelte:head>
   <title>Airnote Quickstart Guide</title>
 </svelte:head>
