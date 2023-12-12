@@ -180,8 +180,8 @@
   </p>
   <p>
     <i>
-      For help setting up your Airnote, visit
-      <a href="https://start.airnote.live">start.airnote.live</a>.
+      For help setting up your Airnote, visit the
+      <a href="/quickstart">Quickstart guide</a>.
     </i>
   </p>
 </section>
