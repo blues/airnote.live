@@ -13,7 +13,7 @@
   </p>
   <p>
     To get started with your Airnote, visit the
-    <a href="/quickstart" target="new">Quickstart guide</a>.
+    <a href="/quickstart">Quickstart guide</a>.
   </p>
 
   <a href="/quickstart" class="btn" data-cy="setup-airnote-btn"
