@@ -38,7 +38,7 @@
   </a>
   <ul class={menuOpen ? 'open' : ''}>
     <li>
-      <a href="/setup-guide">Setup Guide</a>
+      <a href="/quickstart">Quickstart</a>
     </li>
     {#if deviceUID}
       <li>

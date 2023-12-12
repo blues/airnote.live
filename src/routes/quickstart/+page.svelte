@@ -6,6 +6,4 @@
   <title>Airnote Quickstart Guide</title>
 </svelte:head>
 
-{#each data.docs as doc}
-  <svelte:component this={doc.content} />
-{/each}
+<svelte:component this={data.content} />
