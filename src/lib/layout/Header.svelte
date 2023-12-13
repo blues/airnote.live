@@ -38,7 +38,7 @@
   </a>
   <ul class={menuOpen ? 'open' : ''}>
     <li>
-      <a href="/quickstart">Quickstart</a>
+      <a href="/quickstart" data-cy="quickstart-link">Quickstart</a>
     </li>
     {#if deviceUID}
       <li>
