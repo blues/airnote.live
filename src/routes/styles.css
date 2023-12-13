@@ -44,6 +44,10 @@ body {
   line-height: 1.5;
 }
 
+h1 {
+  font-size: 2rem;
+}
+
 section {
   margin: 20px auto 0 auto;
   text-align: center;
@@ -155,13 +159,13 @@ hr {
   border-radius: 0.25rem;
   margin-top: 1rem;
 
-  &:is(h4) {
+  & :is(h4) {
     color: var(--alertTextRed);
     margin: 0 0 0.5rem 0;
     text-align: left;
   }
 
-  &:is(a) {
+  & :is(a) {
     color: var(--alertTextRed);
     text-decoration: underline;
   }
@@ -177,10 +181,6 @@ hr {
 }
 
 /* markdown doc styling  */
-h1 {
-  font-size: 1.5rem;
-}
-
 :where(h1, h2, h3, h4, h5, h6) {
   .anchor {
     position: relative;
