@@ -36,8 +36,11 @@
   <a href="/">
     <img alt="Airnote logo" src={AirnoteLogo} />
   </a>
-  {#if deviceUID}
-    <ul class={menuOpen ? 'open' : ''}>
+  <ul class={menuOpen ? 'open' : ''}>
+    <li>
+      <a href="/quickstart" data-cy="quickstart-link">Quickstart</a>
+    </li>
+    {#if deviceUID}
       <li>
         <a
           href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true"
@@ -51,12 +54,12 @@
           Dashboard
         </a>
       </li>
-    </ul>
-    <button class="svg-button" on:click={toggleMenu}>
-      {#if menuOpen}<CloseIcon />{/if}
-      {#if !menuOpen}<MenuIcon />{/if}
-    </button>
-  {/if}
+    {/if}
+  </ul>
+  <button class="svg-button" on:click={toggleMenu}>
+    {#if menuOpen}<CloseIcon />{/if}
+    {#if !menuOpen}<MenuIcon />{/if}
+  </button>
 </header>
 
 <style>

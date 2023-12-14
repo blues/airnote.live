@@ -1,7 +1,7 @@
 import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
 import { APP_UID } from '$lib/constants';
 
-export function renderErrorMessage(errorType: string, deviceUID: string) {
+export function renderErrorMessage(errorType: string, deviceUID?: string) {
   switch (true) {
     case errorType === ERROR_TYPE.NOTEHUB_ERROR:
       return `
@@ -9,11 +9,8 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
           <h4 class="alert-heading">Unable to fetch device details.</h4>
           Please make sure your Airnote is
           <a href="https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}" target="_new"> online and connected to Notehub.io </a>
-          before visiting this page. For help getting started, visit
-          <a href="https://start.airnote.live" target="_new">
-            start.airnote.live
-          </a>
-          .
+          before visiting this page. For help getting started, visit the
+          <a href="/quickstart">Quickstart guide</a>.
         </div>`;
     case errorType === ERROR_TYPE.NO_DATA_ERROR:
       return `
@@ -22,13 +19,13 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
           <p>
             This Airnote has not reported data in the last seven days. If this
             is a new Airnote, it may take several hours for your device to
-            report its first readings. For help setting up your Airnote, visit
-            <a href="https://start.airnote.live">start.airnote.live</a>.
+            report its first readings. For help setting up your Airnote, visit our
+            <a href="/quickstart">Quickstart guide</a>.
           </p>
 
           <p>
             If this is a device that has previously reported readings, you can 
-            <a href="https://discuss.blues.io">reach out on our forum</a> if you
+            <a href="https://discuss.blues.com">reach out on our forum</a> if you
             need help getting your Airnote back up and running.
           </p>
         </div>`;
@@ -41,12 +38,19 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
           If you believe you are receiving this message in error, please try 
           scanning your Airnote QR code on the back of the device or 
           reviewing our documentation on how to set up your Airnote, 
-          <a href="https://start.airnote.live" target="_new">here</a>.
+          <a href="/quickstart">here</a>.
         </div>`;
     case errorType === ERROR_TYPE.UPDATE_ERROR:
       return `
          <div class="warning">
             Unable to save new configuration settings. Please try again later.
+        </div>`;
+    case errorType === ERROR_TYPE.DOCS_ERROR:
+      return `
+        <div class="alert">
+          <h4 class="alert-heading">Unable to load Airnote quickstart documentation.</h4>
+          Please try refreshing the page or <a href="https://discuss.blues.com">reach out on our forum</a> if you
+          need help getting your Airnote up and running.
         </div>`;
     default:
       return `
@@ -54,11 +58,7 @@ export function renderErrorMessage(errorType: string, deviceUID: string) {
           <h4 class="alert-heading">Unable to fetch device details.</h4>
           Please make sure your Airnote is
           <a href="https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}" target="_new"> online and connected to Notehub.io </a>
-          before visiting this page. For help getting started, visit
-          <a href="https://start.airnote.live" target="_new">
-            start.airnote.live
-          </a>
-          .
+          before visiting this page. For help getting started, visit our <a href="/quickstart">Quickstart guide</a>.
         </div>`;
   }
 }

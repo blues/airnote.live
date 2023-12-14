@@ -1,0 +1,129 @@
+<script>import {Note} from '$lib/components/doc';</script>
+
+## Airnote Setup
+
+To set up your Airnote and start capturing air quality readings,
+follow the steps below.
+
+<Note>
+
+**Don't scan that QR Code yet!**
+
+Before you can configure the Airnote via the included
+QR Code, the device needs to make its first
+connection to the cloud. If you scan the code before
+your Airnote is online, you'll see an
+error message on the airnote.live configuration page for your device.
+
+![Screenshot of error on landing page](images/guides/airnote/lperror.png)
+
+</Note>
+
+### Turn It On
+
+To give the Airnote a few minutes to find a cell tower and make its
+first connection to the [Notehub.io](https://notehub.io) cloud service,
+you'll next want to turn it on. Find the black slide switch at the base of
+the device between the two screws and turn on your Airnote.
+
+![image of the power switch at the base of the Airnote](/images/guides/airnote/switch.png)
+
+Once you've flipped the switch, look at the LCD screen on the back.
+
+![image showing the location of the LCD screen](images/guides/airnote/lcd-screen.png)
+
+If you
+see anything on the screen, that means the device has started its self-test
+sequence, and you're ready for the next step.
+
+![image of the 3 dots on the LCD during initialization](images/guides/airnote/lcd-init.png)
+
+<Note>
+
+Your Airnote should have enough charge out of the box to function and fully charge its
+battery using the onboard solar panel. If, however, your Airnote needs a manual charge at
+any time, you can do so with a micro USB cable. [See manual charging instructions.](/quickstart#how-can-i-manually-charge-my-airnote)
+
+</Note>
+
+### Mount It
+
+Once the device is charged and reassembled, find
+a place to mount it. For best performance, we recommend mounting
+the Airnote on the outside of an exterior window that
+gets a lot of sunlight. Using a window allows you to see real-time air
+quality readings on the included LCD display.
+
+If you live in the Northern Hemisphere, use a south-facing window, if possible.
+If you live in the Southern Hemisphere, use a north-facing window.
+
+Separate four of the included velcro Command Strips, and join the velcro
+sides together to make two pairs of strips. Remove the backing tape off of
+one side of each pair and place one above and one below the LCD screen on
+the back of the device. This is the side that you will want to be
+visible through a window.
+
+![image of command strips on the device](/images/guides/airnote/commandstrips.png)
+
+Next, remove the backing tape from the still exposed sides of the
+Command Strips and secure it to your preferred location. We've provided eight
+strips in total just in case you ever need to reposition the device.
+
+![image of the Airnote mounted on an exterior window](images/guides/airnote/window.png)
+
+<Note>
+
+**The Airnote is not intended to be set directly on top of a solid surface!**
+
+To ensure that the Airnote has proper airflow for heat dissipation and sensor accuracy,
+the device includes a vented baseplate. This should not be obstructed and as such, we
+do not suggest placing the airnote on a table, railing or other non-porous surface.
+
+</Note>
+
+### Watch the Self-Test And See Your First Reading
+
+Once the Airnote is powered on, it begins a self-test sequence that is
+detailed in the [Airnote Datasheet](https://dev.blues.io/datasheets/airnote/airnote-datasheet/#self-testing-sequence).
+This sequence may take a few minutes depending on the strength of cellular
+service in your area. Once completed, the screen on your device displays the
+current PM2.5 reading in micrograms per cubic meter air (or µg/m3), which you
+can customize in the next step.
+
+### Scan the QR Code and Customize Your Airnote
+
+Now, you're ready to customize your device. Open a QR code reader on
+your mobile device and scan the QR code on the back of the Airnote, just
+below the LCD screen.
+
+![image of a person scanning the Airnote QR code with a phone](images/guides/airnote/scan.png)
+
+The code on each Airnote is unique to the device and directs you to
+a personalized landing page here on [airnote.live](/). From this
+site you can update device settings, set your contact information, and view
+charts and graphs for your Airnote. All of the settings and contact information on this
+site is optional.
+
+<Note>
+
+If you see the **Unable to Fetch Device Details** error message on the
+screen after you scan the QR code, that means your Airnote hasn't
+yet connected to the cloud. Give the device a few minutes to make its first
+cellular connection and refresh the page to try again.
+
+</Note>
+
+![image of the Airnote landing page](images/guides/airnote/airnotelp.png)
+
+The device settings section allows you to assign a name to the device, set how
+often the Airnote should sample readings from its onboard sensors, and which
+sensor value (like temperature, humidity, pressure, etc.) to display on the
+built-in screen.
+
+![Image of the device settings section of the Airnote landing page](images/guides/airnote/devicesettings.png)
+
+The owner settings section allows you to share your contact information
+with other members of the global Safecast network. Again, this information
+is optional.
+
+![Image of the owner settings section of the Airnote landing page](/images/guides/airnote/ownersettings.png)

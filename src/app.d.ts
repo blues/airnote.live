@@ -4,7 +4,7 @@ declare global {
   namespace App {
     interface Error {
       errorType: string;
-      deviceUID: string;
+      deviceUID?: string;
     }
     // interface Locals {}
     // interface PageData {}

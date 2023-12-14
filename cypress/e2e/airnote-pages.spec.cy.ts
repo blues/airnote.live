@@ -3,6 +3,8 @@ describe('Airnote application', () => {
     cy.visit('/');
     // check title is visible
     cy.get('[data-cy="page-title"]').should('contain', 'Welcome to Airnote!');
+    // check quickstart link is visible
+    cy.get('[data-cy="quickstart-link"]').should('contain', 'Quickstart');
     // check settings link is hidden (b/c Airnote creds not setup)
     cy.get('[data-cy="settings-link"]').should('not.exist');
     // check dashboard link is hidden (b/c Airnote creds not setup)
@@ -10,7 +12,7 @@ describe('Airnote application', () => {
     // check setup airnote button present
     cy.get('[data-cy="setup-airnote-btn"]')
       .should('have.attr', 'href')
-      .and('include', 'https://start.airnote.live');
+      .and('include', '/quickstart');
     // check buy airnote button present
     cy.get('[data-cy="buy-airnote-btn"]')
       .should('have.attr', 'href')
@@ -101,5 +103,26 @@ describe('Airnote application', () => {
     cy.get('[data-cy="aqi-chart"]').should('be.visible');
     cy.get('[data-cy="humidity-chart"]').should('be.visible');
     cy.get('[data-cy="pm-chart"]').should('be.visible');
+  });
+
+  it('should render the Airnote quickstart page with the correct data', () => {
+    cy.setLocalStorage();
+    cy.visit('/');
+    // navigate to dashboard page
+    cy.get('[data-cy="quickstart-link"]').click();
+    // check quickstart title is visible
+    cy.get('#airnote-quickstart').should('be.visible');
+    // check introduction section is visible
+    cy.get('#introduction').should('be.visible');
+    // check unboxing section is visible
+    cy.get('#unboxing-your-airnote').should('be.visible');
+    // check airnote setup section is visible
+    cy.get('#airnote-setup').should('be.visible');
+    // check device dashboard section is visible
+    cy.get('#visit-your-device-dashboard').should('be.visible');
+    // check air quality section is visible
+    cy.get('#understanding-air-quality').should('be.visible');
+    // check faq section is visible
+    cy.get('#faq').should('be.visible');
   });
 });

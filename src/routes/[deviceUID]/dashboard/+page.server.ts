@@ -7,6 +7,7 @@ import { getCurrentReadings, getHistoryReadings } from '$lib/services/device';
 import type { NotehubEvent } from '$lib/services/NotehubEventModel';
 import type { AirnoteReading } from '$lib/services/AirReadingModel';
 import type { AirnoteHistoryReadings } from '$lib/services/AirHistoryModel';
+import { ERROR_TYPE } from '$lib/constants/ErrorTypes.js';
 
 export async function load({ params }) {
   const deviceUID = params.deviceUID;
@@ -45,13 +46,13 @@ export async function load({ params }) {
       if (notehubError.status === 404) {
         throw error(404, {
           message: 'Device not found',
-          errorType: 'Notehub error',
+          errorType: ERROR_TYPE.NOTEHUB_ERROR,
           deviceUID
         });
       } else {
         throw error(500, {
           message: 'Error fetching data from Notehub',
-          errorType: 'Notehub error',
+          errorType: ERROR_TYPE.NOTEHUB_ERROR,
           deviceUID
         });
       }

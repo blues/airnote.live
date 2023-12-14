@@ -376,8 +376,7 @@
         The voltage level of the Airnote. Anything over 4 volts indicates the
         battery is full. If your Airnote is running low on battery, you may want
         to move your device to an area with more sunlight, or
-        <a
-          href="https://dev.blues.io/hardware/airnote-quickstart/#how-can-i-manually-charge-my-airnote"
+        <a href="/quickstart#how-can-i-manually-charge-my-airnote"
           >manually charge the device</a
         >.
       </p>

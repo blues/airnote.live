@@ -1,0 +1,133 @@
+## FAQ
+
+For other questions, issues deploying your device, or to share
+a photo of your Airnote in its new home,
+visit the [Blues Forum](https://discuss.blues.com/c/airnote/19).
+
+### How can I manually charge my Airnote?
+
+Your Airnote should have enough charge out of the box to function and
+fully charge the battery using the onboard solar panel. If, however, your
+Airnote needs a manual charge, you can do so with a Micro USB cable.
+
+Remove the rear bottom panel from the Airnote and plug
+a Micro USB cable into the Micro USB port as shown in the image below.
+
+![Airnote device showing the charging port](/images/guides/airnote/charging-port.jpg)
+
+If the Airnote is off when you plug it in, you won't see any visual indication
+that the device is charging, even though it is. If the device has been switched
+on, the LCD display will update to indicate that the device is charging.
+When the plus (+) sign on the display disappears, the Airnote is charged and
+ready to mount.
+
+![Image of the LCD Screen with the charging indicator](/images/guides/airnote/usb-chg.png)
+
+Once the battery has charged, place the bottom panel back
+on the Airnote and secure the panel with the two included
+Phillips screws.
+
+![Base panel with screws in place](/images/guides/airnote/base.png)
+
+### How do I know my Airnote is charging?
+
+If the Airnote is off when plugged into USB, you won't see any visual indication
+that the device is charging, even though it is. If the device is on, you
+can use the built-in LCD panel to monitor the charging process.
+
+When the Airnote is plugged-in via USB, place it on a flat surface with the
+LCD screen facing up. The display will update to read "USb" with a
+lowercase "b" and plus (+) sign. The plus sign will disappear when the
+battery is full.
+
+![Image of the LCD Screen with the charging indicator](/images/guides/airnote/usb-chg.png)
+
+### Can I check the current voltage of my Airnote?
+
+Yes. Remove the Airnote from its mounted location and place it on a flat surface
+with the solar charging panel facing down.
+
+![How to position an Airnote to display the battery level](/images/guides/airnote/tilt.jpg)
+
+When the Airnote's built-in accelerometer detects this orientation (which might take
+several seconds), the built-in display will update to indicate the current voltage of
+the device's battery. Anything over 4 volts indicates the battery is full.
+
+![Image of the LCD Screen with voltage](/images/guides/airnote/voltage.png)
+
+### Can I use the Airnote indoors?
+
+The Airnote is not rated for indoor use. We recommend mounting the
+device only in outdoor settings.
+
+### How can I mount the Airnote?
+
+Use the Command Strips included with your Airnote and affix them
+to the back using the instructions [here](/quickstart#mount-it).
+
+### The built-in screen on the Airnote is updating with a lot of information once I power it on. What does it all mean?
+
+When powered on, the Airnote performs a self-test sequence before it
+enters normal operation. This self-test sequence is detailed in the
+[Airnote Datasheet](https://dev.blues.io/datasheets/airnote/airnote-datasheet/).
+
+### Why is my Airnote showing "LOBAT"?
+
+If you see this on the LCD screen, it means the battery is low. Move the Airnote
+to a location with more sunlight, or charge the device over USB.
+
+### Why is my Airnote showing the letters "CL"?
+
+After the Airnote runs through its self-test sequence, it attempts to connect to
+a cellular tower to obtain the time. Until it obtains the time, "CL" is
+displayed to indicate that the Airnote is waiting for clock time in order to
+begin capturing air quality readings.
+
+### Why is my Airnote flashing a plus sign ("+")?
+
+The plus sign indicates that the Airnote is performing a network operation. A
+flashing plus sign indicates that cellular or GPS is on, and a fast-flash means
+that the Airnote is connected to the cloud and is syncing.
+
+### Why is my airnote displaying a colon character (":") on the screen?
+
+If you see this on the screen, it means that the Airnote couldn't find a
+cellular tower the last time it tried to sync. Move the device to another
+location and try again.
+
+### Do I need to update the Airnote firmware or activate the device?
+
+No. The Airnote is a pre-configured cellular-powered device. You don't need
+to do anything to activate it other than turning it on, and there's no need
+to update the firmware on the device in order to use it.
+
+### What air quality sensors does the Airnote use?
+
+For details about the onboard sensors, see
+the [Airnote Datasheet](https://dev.blues.io/datasheets/airnote/airnote-datasheet/).
+
+### In which countries can the Airnote operate?
+
+The Airnote's built-in cellular connection works in over 135 countries. For
+the complete list, see the [Notecard datasheet](https://dev.blues.io/datasheets/notecard-datasheet/note-nbgl-500/#cellular-service).
+
+### What does the value in the Serial Number field represent?
+
+The Airnote is populated with a unique serial number string during activation.
+The string is auto-generated using three random words, separated by hyphens.
+
+### Why does the LCD screen turn off?
+
+The Airnote's LCD screen shuts off if voltage is too low. Make sure to position
+your Airnote in a location that receives enough sunlight to charge the device,
+or [manually charge your Airnote](/quickstart#how-can-i-manually-charge-my-airnote).
+
+### Why don't I see data on the dashboard at the same rate data is collected?
+
+By default the Airnote collects data every 30 minutes, and you can [configure that
+rate on your device's dashboard](/quickstart#scan-the-qr-code-and-customize-your-airnote).
+
+The Airnote transmits collected data every 60 minutes, however the transmission
+rate can vary based on the device's battery level. If your device is not
+transmitting data, you can try [checking its current voltage](/quickstart#can-i-check-the-current-voltage-of-my-airnote),
+and [manually charging if necessary](/quickstart#how-can-i-manually-charge-my-airnote).

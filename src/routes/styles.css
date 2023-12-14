@@ -44,6 +44,10 @@ body {
   line-height: 1.5;
 }
 
+h1 {
+  font-size: 2rem;
+}
+
 section {
   margin: 20px auto 0 auto;
   text-align: center;
@@ -53,9 +57,9 @@ a {
   color: var(--primaryBlue);
   text-decoration: none;
   text-align: center;
-}
-a:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 input,
@@ -99,10 +103,14 @@ button:hover,
   padding: 0;
   vertical-align: middle;
   width: 20px;
-}
 
-.svg-button:hover {
-  background: transparent;
+  &:hover {
+    background: transparent;
+  }
+
+  &.info svg {
+    color: var(--steelBlue);
+  }
 }
 
 .svg-button svg,
@@ -114,10 +122,6 @@ button:hover,
   color: var(--primaryBlue);
   height: 18px;
   width: 18px;
-}
-
-.svg-button.info svg {
-  color: var(--steelBlue);
 }
 
 /* here because svg is an icon imported into header and scoped css can't reach it */
@@ -154,17 +158,17 @@ hr {
   padding: 1rem;
   border-radius: 0.25rem;
   margin-top: 1rem;
-}
 
-.alert h4 {
-  color: var(--alertTextRed);
-  margin: 0 0 0.5rem 0;
-  text-align: left;
-}
+  & :is(h4) {
+    color: var(--alertTextRed);
+    margin: 0 0 0.5rem 0;
+    text-align: left;
+  }
 
-.alert a {
-  color: var(--alertTextRed);
-  text-decoration: underline;
+  & :is(a) {
+    color: var(--alertTextRed);
+    text-decoration: underline;
+  }
 }
 
 /* chart container div with relative positioning and `maintainAspectRatio: false 
@@ -174,6 +178,116 @@ hr {
   position: relative;
   min-height: 300px;
   aspect-ratio: 1.4;
+}
+
+/* markdown doc styling  */
+:where(h1, h2, h3, h4, h5, h6) {
+  .anchor {
+    position: relative;
+    color: var(--notehubBlue);
+
+    &::after {
+      content: '#';
+      opacity: 0;
+      margin-left: 2px;
+    }
+
+    &:hover {
+      color: var(--notehubBlue);
+      text-decoration: none;
+    }
+  }
+
+  &:hover .anchor::after {
+    opacity: 1;
+    color: var(--primaryBlue);
+    text-decoration: none;
+  }
+}
+
+code {
+  overflow-wrap: break-word;
+}
+
+:where(p:has(img)) {
+  padding: 1rem 0;
+
+  & :is(img) {
+    border-radius: 4px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+    height: auto;
+    max-width: 100%;
+  }
+}
+
+blockquote {
+  background-color: var(--white);
+  margin: 16px 0;
+  display: flow-root;
+  padding: 0 16px 0 32px;
+  border-left: 8px solid var(--notehubBlueTintLighter);
+  border-radius: 4px;
+  position: relative;
+
+  &::before {
+    content: ' ';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    background-image: url('/src/lib/images/left-quote.svg');
+    height: 24px;
+    width: 24px;
+  }
+}
+
+table {
+  width: 100%;
+  border-radius: 4px;
+  border-spacing: 0;
+
+  & :is(thead) {
+    border-bottom: none;
+    & :is(th) {
+      color: var(--white);
+      background-color: var(--lighterSteelBlue);
+      border: 1px solid var(--medGrey);
+      padding: 0.75rem;
+      margin: 0 0 1rem;
+    }
+
+    & :is(th:first-child) {
+      border-right: none;
+      border-top-left-radius: 4px;
+    }
+
+    & :is(th:last-child) {
+      border-top-right-radius: 4px;
+    }
+  }
+
+  & :is(tbody) {
+    & :is(tr) {
+      background: var(--white);
+      & :is(td) {
+        padding: 0.75rem;
+        margin: 0 0 1rem;
+        border-bottom: 1px solid var(--lightGrey);
+        border-right: 1px solid var(--lightGrey);
+        border-left: 1px solid var(--lightGrey);
+      }
+
+      & :is(td:first-child) {
+        border-right: none;
+      }
+    }
+
+    & :is(tr:last-child) {
+      & :is(td) {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
+    }
+  }
 }
 
 @media (max-width: 992px) {
