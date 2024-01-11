@@ -44,13 +44,13 @@ export async function load({ params }) {
   if (erred) {
     if (notehubError) {
       if (notehubError.status === 404) {
-        throw error(404, {
+        error(404, {
           message: 'Device not found',
           errorType: ERROR_TYPE.NOTEHUB_ERROR,
           deviceUID
         });
       } else {
-        throw error(500, {
+        error(500, {
           message: 'Error fetching data from Notehub',
           errorType: ERROR_TYPE.NOTEHUB_ERROR,
           deviceUID
