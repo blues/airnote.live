@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import { afterNavigate } from '$app/navigation';
   import CloseIcon from '$lib/icons/CloseIcon.svelte';
@@ -22,6 +23,9 @@
   let productUID: PotentiallyNullDeviceDetails = '';
   let deviceUID: string = '';
 
+  let activePage: string | null = '';
+  $: activePage = $page.route.id;
+
   onMount(() => {
     const location = window.location;
     const currentDevice: AirnoteDevice = getCurrentDeviceFromUrl(location);
@@ -38,19 +42,28 @@
   </a>
   <ul class={menuOpen ? 'open' : ''}>
     <li>
-      <a href="/quickstart" data-cy="quickstart-link">Quickstart</a>
+      <a
+        href="/quickstart"
+        data-cy="quickstart-link"
+        class:active={activePage === '/quickstart'}>Quickstart</a
+      >
     </li>
     {#if deviceUID}
       <li>
         <a
           href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true"
           data-cy="settings-link"
+          class:active={activePage === '/[deviceUID]'}
         >
           Settings
         </a>
       </li>
       <li>
-        <a href="/{deviceUID}/dashboard" data-cy="dashboard-link">
+        <a
+          href="/{deviceUID}/dashboard"
+          data-cy="dashboard-link"
+          class:active={activePage && activePage.includes('/dashboard')}
+        >
           Dashboard
         </a>
       </li>
@@ -66,63 +79,74 @@
   header {
     background: var(--notehubBlue);
     display: flex;
-  }
-  header img {
-    height: 24px;
-    margin: 1.25rem 0.5rem 1.25rem 1rem;
-    vertical-align: middle;
-  }
-  header ul {
-    padding: 0;
-    display: flex;
-    list-style: none;
-    color: var(--white);
-    flex-grow: 1;
-    align-self: center;
-    justify-content: flex-end;
-    margin-right: 1rem;
-  }
-  header li {
-    padding-left: 1rem;
-  }
-  header ul a {
-    color: var(--white);
-  }
-  header .svg-button {
-    border: 1px solid var(--white);
-    align-self: center;
-    margin-right: 1rem;
-    justify-content: center;
-    align-items: center;
-    display: none;
-  }
 
-  @media (max-width: 600px) {
-    header {
+    /* CSS nesting @media queries inside different selectors: https://developer.chrome.com/docs/css-ui/css-nesting */
+    @media (max-width: 600px) {
       justify-content: space-between;
       position: relative;
     }
-    header ul {
-      position: absolute;
-      top: 48px;
-      left: 0;
-      z-index: 2;
-      width: 100%;
-      background: var(--notehubBlue);
-      display: none;
-      text-align: center;
+    & :is(img) {
+      height: 24px;
+      margin: 1.25rem 0.5rem 1.25rem 1rem;
+      vertical-align: middle;
     }
-    header ul.open {
-      display: block;
-    }
-    header li {
-      display: block;
-      padding: 1rem;
-      border: 1px solid var(--white);
-      border-width: 1px 0;
-    }
-    header .svg-button {
+
+    & :is(ul) {
+      padding: 0;
       display: flex;
+      list-style: none;
+      color: var(--white);
+      flex-grow: 1;
+      align-self: center;
+      justify-content: flex-end;
+      margin-right: 1rem;
+
+      @media (max-width: 600px) {
+        position: absolute;
+        top: 48px;
+        left: 0;
+        z-index: 2;
+        width: 100%;
+        background: var(--notehubBlue);
+        display: none;
+        text-align: center;
+
+        &.open {
+          display: block;
+        }
+      }
+
+      & :is(li) {
+        padding-left: 1rem;
+
+        @media (max-width: 600px) {
+          display: block;
+          padding: 1rem;
+          border: 1px solid var(--white);
+          border-width: 1px 0;
+        }
+
+        & :is(a) {
+          color: var(--white);
+        }
+
+        & :is(.active) {
+          font-weight: 600;
+        }
+      }
+    }
+
+    & .svg-button {
+      border: 1px solid var(--white);
+      align-self: center;
+      margin-right: 1rem;
+      justify-content: center;
+      align-items: center;
+      display: none;
+
+      @media (max-width: 600px) {
+        display: flex;
+      }
     }
   }
 </style>
