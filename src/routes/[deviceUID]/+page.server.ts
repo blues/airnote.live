@@ -1,4 +1,4 @@
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import {
   getDeviceEnvironmentVariables,
   getDeviceEnvironmentVariablesByPin,
@@ -22,6 +22,14 @@ import type { DeviceEnvVars } from '$lib/services/DeviceEnvVarModel.js';
 export async function load({ params, url }) {
   const deviceUID = params.deviceUID;
   const pin = url.searchParams.get('pin');
+  const internalNav = url.searchParams.get('internalNav');
+
+  /* Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
+    and we want Notehub users to view the device’s dashboard, and not the
+    settings page when first directed there from Notehub. */
+  if (deviceUID && !pin && internalNav === null) {
+    redirect(302, `/${deviceUID}/dashboard`);
+  }
 
   let notehubError: { status: number } | undefined;
   let error;

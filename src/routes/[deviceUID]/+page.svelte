@@ -141,18 +141,6 @@
       ? currentDevice.internalNav
       : 'false';
     productUID = currentDevice.productUID ? currentDevice.productUID : '';
-
-    /* Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
-    and we want Notehub users to view the device’s dashboard, and not the
-    settings page when first directed there from Notehub. */
-    if (
-      deviceUID &&
-      getPathname() === '/' + deviceUID &&
-      !pin &&
-      internalNav === 'false'
-    ) {
-      goto(`/${deviceUID}/dashboard`, { replaceState: true });
-    }
   });
 </script>
 
