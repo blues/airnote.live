@@ -332,7 +332,7 @@
         class="svg-link"
         target="_blank"
       >
-        <span>View full data at Safecast.org</span>
+        <span>View additional data at Safecast.org</span>
       </a>
     </div>
     {#if showBanner}
