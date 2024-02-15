@@ -326,6 +326,15 @@
         <PMChart readings={displayedReadings} />
       </div>
     </div>
+    <div class="safecast-link">
+      <a
+        href="http://tt.safecast.org/dashboard/note:{deviceUID}"
+        class="svg-link"
+        target="_blank"
+      >
+        <span>View full data at Safecast.org</span>
+      </a>
+    </div>
     {#if showBanner}
       <div class="banner">
         <p>
@@ -417,6 +426,10 @@
 
   .box h3 {
     margin-top: 0;
+  }
+
+  .safecast-link {
+    padding: 0.25rem 0 0 0;
   }
 
   .banner {
