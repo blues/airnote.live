@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
   import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
   import { APP_UID, RADNOTE_PRODUCT_UID } from '$lib/constants';
   import { getCurrentDeviceFromUrl } from '$lib/services/device';
@@ -23,7 +22,6 @@
   } from '$lib/services/DeviceModel';
   import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
   import { renderErrorMessage } from '$lib/util/errors';
-  import { getPathname } from '$lib/util/url';
 
   export let pin: PotentiallyNullDeviceDetails = '';
   export let deviceUID: string = '';
