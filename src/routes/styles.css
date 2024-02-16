@@ -157,7 +157,7 @@ hr {
   border: 1px solid var(--alertBorderRed);
   padding: 1rem;
   border-radius: 0.25rem;
-  margin-top: 1rem;
+  margin: 1rem 0;
 
   & :is(h4) {
     color: var(--alertTextRed);
