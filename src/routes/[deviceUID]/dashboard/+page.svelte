@@ -45,6 +45,7 @@
 
   let error = false;
   let errorType: string;
+  let safecastLinkText = 'View additional data at Safecast.org';
 
   let tempDisplay: string = 'C';
   let showBanner: boolean = true;
@@ -73,6 +74,7 @@
   if (!readings || readings.length === 0) {
     error = true;
     errorType = ERROR_TYPE.NO_DATA_ERROR;
+    safecastLinkText = 'Check for historical data at Safecast.org';
   } else {
     lastReading = readings[0];
 
@@ -326,15 +328,6 @@
         <PMChart readings={displayedReadings} />
       </div>
     </div>
-    <div class="safecast-link">
-      <a
-        href="http://tt.safecast.org/dashboard/note:{deviceUID}"
-        class="svg-link"
-        target="_blank"
-      >
-        <span>View additional data at Safecast.org</span>
-      </a>
-    </div>
     {#if showBanner}
       <div class="banner">
         <p>
@@ -349,6 +342,17 @@
         </button>
       </div>
     {/if}
+  {/if}
+  {#if deviceUID}
+    <div class="safecast-link">
+      <a
+        href="http://tt.safecast.org/dashboard/note:{deviceUID}"
+        class="svg-link"
+        target="_blank"
+      >
+        <span>{safecastLinkText}</span>
+      </a>
+    </div>
   {/if}
 </div>
 
