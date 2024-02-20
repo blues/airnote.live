@@ -45,6 +45,7 @@
 
   let error = false;
   let errorType: string;
+  let safecastLinkText = 'View additional data at Safecast.org';
 
   let tempDisplay: string = 'C';
   let showBanner: boolean = true;
@@ -73,6 +74,7 @@
   if (!readings || readings.length === 0) {
     error = true;
     errorType = ERROR_TYPE.NO_DATA_ERROR;
+    safecastLinkText = 'Check for historical data at Safecast.org';
   } else {
     lastReading = readings[0];
 
@@ -348,7 +350,7 @@
         class="svg-link"
         target="_blank"
       >
-        <span>View additional data at Safecast.org</span>
+        <span>{safecastLinkText}</span>
       </a>
     </div>
   {/if}
