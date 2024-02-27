@@ -1,3 +1,22 @@
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { get } from 'svelte/store';
+  import { identity } from '$lib/stores/identityStore';
+  import { fetchOryLoginUrl, fetchOryLogoutUrl } from '$lib/ory/kratos';
+
+  let oryLoginUrl: string = '';
+  let oryLogoutUrl: string = '';
+  let userIdentity = get(identity);
+
+  onMount(async () => {
+    if (userIdentity === null) {
+      oryLoginUrl = await fetchOryLoginUrl();
+    } else {
+      oryLogoutUrl = await fetchOryLogoutUrl();
+    }
+  });
+</script>
+
 <svelte:head>
   <title>Welcome to Airnote</title>
 </svelte:head>
@@ -35,6 +54,16 @@
     class="btn"
     data-cy="buy-airnote-btn">Buy an Airnote</a
   >
+</section>
+
+<section>
+  {#if oryLoginUrl !== '' && userIdentity === null}
+    <p>Sign in to Airnote</p>
+    <a class="btn" href={oryLoginUrl}>Sign in</a>
+  {:else if oryLogoutUrl !== '' && userIdentity !== null}
+    <p>Welcome back {userIdentity.traits.full_name}</p>
+    <a class="btn" href={oryLogoutUrl}>Sign Out</a>
+  {/if}
 </section>
 
 <style>
