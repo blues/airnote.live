@@ -4,8 +4,8 @@
   import { identity } from '$lib/stores/identityStore';
   import { fetchOryLoginUrl, fetchOryLogoutUrl } from '$lib/ory/kratos';
 
-  let oryLoginUrl: string = '';
-  let oryLogoutUrl: string = '';
+  let oryLoginUrl: any = '';
+  let oryLogoutUrl: any = '';
   let userIdentity = get(identity);
 
   onMount(async () => {
