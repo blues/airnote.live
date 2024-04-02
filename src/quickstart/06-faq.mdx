@@ -89,11 +89,29 @@ The plus sign indicates that the Airnote is performing a network operation. A
 flashing plus sign indicates that cellular or GPS is on, and a fast-flash means
 that the Airnote is connected to the cloud and is syncing.
 
-### Why is my airnote displaying a colon character (":") on the screen?
+### Why is my Airnote displaying a colon character (":") on the screen?
 
 If you see this on the screen, it means that the Airnote couldn't find a
 cellular tower the last time it tried to sync. Move the device to another
 location and try again.
+
+### My Airnote is displaying a numeric code. What does that mean?
+
+If the Airnote is experiencing an error or other issue with one of its 
+components, a status code may appear:
+
+- 1xx BME280 OK
+- 2xx BME280 temperature failure
+- 3xx BME280 humidity failure
+- 4xx BME280 pressure failure
+- 5xx BME280 general failure
+- x0x Air Particle Counter not detected
+- x1x Air Particle Counter OK
+- 999 Airnote Configuration Error
+
+In some cases, Airnotes that have been deployed outdoors for many months (and 
+display one of these codes) may need to be opened and inspected for insect 
+debris.
 
 ### Do I need to update the Airnote firmware or activate the device?
 
