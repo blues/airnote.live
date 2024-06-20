@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { get } from 'svelte/store';
   import { onMount } from 'svelte';
   import { afterNavigate } from '$app/navigation';
   import CloseIcon from '$lib/icons/CloseIcon.svelte';
@@ -10,6 +11,8 @@
     AirnoteDevice,
     PotentiallyNullDeviceDetails
   } from '$lib/services/DeviceModel';
+  import { identity } from '$lib/stores/identityStore';
+  import { fetchOryLoginUrl } from '$lib/ory/kratos';
 
   afterNavigate(() => {
     if (menuOpen === false) return;
@@ -26,13 +29,20 @@
   let activePage: string | null = '';
   $: activePage = $page.route.id;
 
-  onMount(() => {
+  let userIdentity = get(identity);
+  let oryLoginUrl = '';
+
+  onMount(async () => {
     const location = window.location;
     const currentDevice: AirnoteDevice = getCurrentDeviceFromUrl(location);
 
     pin = currentDevice.pin ? currentDevice.pin : '';
     productUID = currentDevice.productUID ? currentDevice.productUID : '';
     deviceUID = currentDevice.deviceUID ? currentDevice.deviceUID : '';
+
+    if (userIdentity === null) {
+      oryLoginUrl = await fetchOryLoginUrl();
+    }
   });
 </script>
 
@@ -67,6 +77,11 @@
           Dashboard
         </a>
       </li>
+    {/if}
+    {#if userIdentity !== null && userIdentity.traits.full_name !== ''}
+      <li>Hi, {userIdentity?.traits.full_name}</li>
+    {:else if userIdentity === null && oryLoginUrl !== ''}
+      <li><a href={oryLoginUrl}>Sign in</a></li>
     {/if}
   </ul>
   <button class="svg-button" on:click={toggleMenu}>
