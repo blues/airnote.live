@@ -77,8 +77,7 @@
         name="indoorDevice"
         id="indoorDevice"
       />
-      <span>Indoor device (Will not be visible on the Safecast global map)</span
-      >
+      <span>Indoor device (Will not be visible on the global map)</span>
     </label>
   </div>
 
