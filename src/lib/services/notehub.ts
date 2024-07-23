@@ -92,7 +92,7 @@ export async function getEvents(deviceUID: string, timeframe = '30 days') {
     query: {
       columns:
         ".body;.when;lat:(events.value->'best_lat');lon:(events.value->'best_lon');location:(events.value->'best_location')",
-      limit: 12000,
+      limit: 10000,
       order: '.modified',
       descending: true,
       where: `.file::text='_air.qo' and .device::text='${deviceUID}' and .modified >= now()-interval '${timeframe}'`
