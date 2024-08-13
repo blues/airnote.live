@@ -22,6 +22,7 @@
   } from '$lib/services/DeviceModel';
   import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
   import { renderErrorMessage } from '$lib/util/errors';
+  import { getNotehubEventsUrl } from '$lib/util/url';
 
   export let pin: PotentiallyNullDeviceDetails = '';
   export let deviceUID: string = '';
@@ -34,7 +35,7 @@
 
   let eventsUrl = `https://notehub.io/project/${APP_UID}/events`;
   $: if (deviceUID) {
-    eventsUrl = `https://notehub.io/project/${APP_UID}/events?filter_dev=${deviceUID}`;
+    eventsUrl = getNotehubEventsUrl(deviceUID);
   }
 
   const deviceDisplayOptions = [
