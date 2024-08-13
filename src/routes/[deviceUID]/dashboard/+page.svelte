@@ -30,6 +30,7 @@
   import MapboxMap from './MapboxMap.svelte';
   import Recommendation from './Recommendation.svelte';
   import Speedometer from './Speedometer.svelte';
+  import { getNotehubEventsUrl } from '$lib/util/url';
 
   export let deviceUID: string;
 
@@ -54,7 +55,7 @@
   let eventsUrl = `https://notehub.io/project/${APP_UID}/events`;
 
   $: if (deviceUID) {
-    eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}`;
+    eventsUrl = getNotehubEventsUrl(deviceUID);
   }
 
   let expandCharts: boolean = false;

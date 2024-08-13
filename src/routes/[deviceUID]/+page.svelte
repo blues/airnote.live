@@ -22,6 +22,7 @@
   } from '$lib/services/DeviceModel';
   import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
   import { renderErrorMessage } from '$lib/util/errors';
+  import { getNotehubEventsUrl } from '$lib/util/url';
 
   export let pin: PotentiallyNullDeviceDetails = '';
   export let deviceUID: string = '';
@@ -34,18 +35,18 @@
 
   let eventsUrl = `https://notehub.io/project/${APP_UID}/events`;
   $: if (deviceUID) {
-    eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}`;
+    eventsUrl = getNotehubEventsUrl(deviceUID);
   }
 
   const deviceDisplayOptions = [
     { value: 'tempc', text: 'Temp (°C)' },
     { value: 'tempf', text: 'Temp (°F)' },
     { value: 'humid', text: 'Humidity' },
-    { value: 'press', text: 'Barometric Pressue' }
+    { value: 'press', text: 'Barometric Pressure' }
   ];
 
   if (productUID === RADNOTE_PRODUCT_UID) {
-    $displayValue = 'usv';
+    displayValue.set('usv');
 
     deviceDisplayOptions.splice(0, 0, {
       value: 'usv',
@@ -57,7 +58,7 @@
       text: 'LND712 Counts Per Minute'
     });
   } else {
-    $displayValue = 'pm2.5';
+    displayValue.set('pm2.5');
 
     deviceDisplayOptions.splice(0, 0, {
       value: 'pm2.5',
@@ -87,35 +88,35 @@
   }
 
   const updateSettingsFromEnvVars = (data: { [property: string]: string }) => {
-    if (data['_sn']) $deviceName = data['_sn'];
+    if (data['_sn']) deviceName.set(data['_sn']);
     if (data['_air_mins']) {
       // Split semi-colon list into an array for parsing and reassembly
       // "usb:15;high:123;normal:123;low:720;0"
-      let airMinsVals = data['_air_mins']
+      const airMinsVals = data['_air_mins']
         .split(';')
         .map((item) => item.split(':'));
       for (let index = 0; index < airMinsVals.length; index++) {
         const element = airMinsVals[index];
         switch (element[0]) {
           case 'usb':
-            $sampleFrequencyUSB = element[1];
+            sampleFrequencyUSB.set(element[1]);
             break;
           case 'high':
-            $sampleFrequencyFull = element[1];
+            sampleFrequencyFull.set(element[1]);
             break;
           case 'low':
-            $sampleFrequencyLow = element[1];
+            sampleFrequencyLow.set(element[1]);
             break;
         }
       }
     }
     if (data['_air_indoors'])
-      $indoorDevice = data['_air_indoors'] === '0' ? false : true;
-    if (data['_air_status']) $displayValue = data['_air_status'];
-    if (data['_contact_name']) $contactName = data['_contact_name'];
-    if (data['_contact_email']) $contactEmail = data['_contact_email'];
+      indoorDevice.set(data['_air_indoors'] === '0' ? false : true);
+    if (data['_air_status']) displayValue.set(data['_air_status']);
+    if (data['_contact_name']) contactName.set(data['_contact_name']);
+    if (data['_contact_email']) contactEmail.set(data['_contact_email']);
     if (data['_contact_affiliation'])
-      $contactAffiliation = data['_contact_affiliation'];
+      contactAffiliation.set(data['_contact_affiliation']);
   };
 
   if (data.notehubResponse) {
