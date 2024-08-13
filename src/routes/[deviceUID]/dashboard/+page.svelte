@@ -54,7 +54,7 @@
   let eventsUrl = `https://notehub.io/project/${APP_UID}/events`;
 
   $: if (deviceUID) {
-    eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}`;
+    eventsUrl = `https://notehub.io/project/${APP_UID}/events?filter_dev=${deviceUID}`;
   }
 
   let expandCharts: boolean = false;

@@ -34,7 +34,7 @@
 
   let eventsUrl = `https://notehub.io/project/${APP_UID}/events`;
   $: if (deviceUID) {
-    eventsUrl = `https://notehub.io/project/${APP_UID}/events?queryDevice=${deviceUID}`;
+    eventsUrl = `https://notehub.io/project/${APP_UID}/events?filter_dev=${deviceUID}`;
   }
 
   const deviceDisplayOptions = [
@@ -45,7 +45,7 @@
   ];
 
   if (productUID === RADNOTE_PRODUCT_UID) {
-    $displayValue = 'usv';
+    displayValue.set('usv');
 
     deviceDisplayOptions.splice(0, 0, {
       value: 'usv',
@@ -57,7 +57,7 @@
       text: 'LND712 Counts Per Minute'
     });
   } else {
-    $displayValue = 'pm2.5';
+    displayValue.set('pm2.5');
 
     deviceDisplayOptions.splice(0, 0, {
       value: 'pm2.5',
@@ -91,7 +91,7 @@
     if (data['_air_mins']) {
       // Split semi-colon list into an array for parsing and reassembly
       // "usb:15;high:123;normal:123;low:720;0"
-      let airMinsVals = data['_air_mins']
+      const airMinsVals = data['_air_mins']
         .split(';')
         .map((item) => item.split(':'));
       for (let index = 0; index < airMinsVals.length; index++) {

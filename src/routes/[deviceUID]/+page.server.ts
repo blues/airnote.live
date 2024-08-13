@@ -5,18 +5,6 @@ import {
   updateDeviceEnvironmentVariablesByPin
 } from '$lib/services/notehub';
 import { ERROR_TYPE } from '$lib/constants/ErrorTypes.js';
-import {
-  deviceName,
-  displayValue,
-  indoorDevice,
-  sampleFrequencyFull,
-  sampleFrequencyLow,
-  sampleFrequencyUSB,
-  contactName,
-  contactEmail,
-  contactAffiliation
-} from '$lib/stores/settingsStore';
-import { get } from 'svelte/store';
 import type { DeviceEnvVars } from '$lib/services/DeviceEnvVarModel.js';
 
 export async function load({ params, url }) {
@@ -70,7 +58,20 @@ export const actions = {
     const deviceUID = params.deviceUID;
     const pin = url.searchParams.get('pin');
     const body = await request.formData();
-    const formattedBody: DeviceEnvVars = createEnvVarBody(body);
+
+    let currentEnvVars;
+    const envVarResponse = await getDeviceEnvironmentVariables(deviceUID).catch(
+      (err) => {
+        console.error(err);
+        notehubError = err;
+      }
+    );
+
+    if (envVarResponse) {
+      currentEnvVars = envVarResponse.environment_variables;
+    }
+
+    const formattedBody: DeviceEnvVars = createEnvVarBody(body, currentEnvVars);
     if (pin === '') {
       error = { errorType: ERROR_TYPE.MISSING_PIN };
     } else if (pin !== null) {
@@ -93,7 +94,10 @@ export const actions = {
   }
 };
 
-function determineCurrentCheckboxState(formData: FormData) {
+function determineCurrentCheckboxState(
+  formData: FormData,
+  envVars: { [x: string]: string }
+) {
   let currentCheckboxState: string;
   // required logic because unchecked checkboxes are not included in the form data
   // figure out if device settings form is being submitted
@@ -105,40 +109,51 @@ function determineCurrentCheckboxState(formData: FormData) {
       currentCheckboxState = '0';
     }
   } else {
-    // if device owner settings are submitted, get current checkbox state from store
-    currentCheckboxState = get(indoorDevice) ? '1' : '0';
+    // if device owner settings are submitted, get current checkbox state from envVars
+    currentCheckboxState = envVars['_air_indoors']
+      ? envVars['_air_indoors']
+      : '0';
   }
   return currentCheckboxState;
 }
 
-function createEnvVarBody(formData: FormData) {
-  const currentCheckboxState = determineCurrentCheckboxState(formData);
+function formatAirSamplingInterval(
+  formData: FormData,
+  envVars: { [x: string]: string }
+) {
+  if (formData.get('sampleFrequencyFull')) {
+    return `usb:15;high:${formData.get(
+      'sampleFrequencyFull'
+    )};normal:${formData.get('sampleFrequencyFull')};low:720;43200`;
+  } else {
+    return envVars['_air_mins'];
+  }
+}
+
+function createEnvVarBody(
+  formData: FormData,
+  envVars: { [x: string]: string }
+) {
+  // combine existing Airnote env vars with the new form data for accurate env var bdy request
+  const currentCheckboxState = determineCurrentCheckboxState(formData, envVars);
 
   return {
     _sn: formData.get('deviceName')
       ? formData.get('deviceName')
-      : get(deviceName),
-    _air_mins: `usb:${get(sampleFrequencyUSB)};high:${
-      formData.get('sampleFrequencyFull')
-        ? formData.get('sampleFrequencyFull')
-        : get(sampleFrequencyFull)
-    };normal:${
-      formData.get('sampleFrequencyFull')
-        ? formData.get('sampleFrequencyFull')
-        : get(sampleFrequencyFull)
-    };low:${get(sampleFrequencyLow)};43200`,
+      : envVars['_sn'],
+    _air_mins: formatAirSamplingInterval(formData, envVars),
     _air_indoors: currentCheckboxState,
     _air_status: formData.get('displayValue')
       ? formData.get('displayValue')
-      : get(displayValue),
+      : envVars['_air_status'],
     _contact_name: formData.get('contactName')
       ? formData.get('contactName')
-      : get(contactName),
+      : envVars['_contact_name'],
     _contact_email: formData.get('contactEmail')
       ? formData.get('contactEmail')
-      : get(contactEmail),
+      : envVars['_contact_email'],
     _contact_affiliation: formData.get('contactAffiliation')
       ? formData.get('contactAffiliation')
-      : get(contactAffiliation)
+      : envVars['_contact_affiliation']
   };
 }
