@@ -1,11 +1,13 @@
 import * as NotehubJs from '@blues-inc/notehub-js';
 import { HUB_AUTH_TOKEN } from '$env/static/private';
+import { convertToSeconds } from '$lib/util/dates';
 import type { DeviceEnvVars } from './DeviceEnvVarModel';
 
 const AIRNOTE_PROJECT_UID = 'app:2606f411-dea6-44a0-9743-1130f57d77d8';
 
 const notehubJsClient = NotehubJs.ApiClient.instance;
 const deviceApiInstance = new NotehubJs.DeviceApi();
+const eventApiInstance = new NotehubJs.EventApi();
 
 // read env vars only
 export async function getDeviceEnvironmentVariables(deviceUID: string) {
@@ -82,30 +84,31 @@ export async function updateDeviceEnvironmentVariablesByPin(
 }
 
 // get events from Airnote project in Notehub
-export async function getEvents(deviceUID: string, timeframe = '30 days') {
+export async function getEvents(deviceUID: string, timeframe = 30) {
   /* this function is fetched on mount with 30 days' worth of data to
 		  populate the CSV download, the AQI average history AND
 		  display today's most current reading as well */
+  const { api_key } = notehubJsClient.authentications;
+  api_key.apiKey = HUB_AUTH_TOKEN;
 
-  const body = {
-    req: 'hub.app.data.query',
-    query: {
-      columns:
-        ".body;.when;lat:(events.value->'best_lat');lon:(events.value->'best_lon');location:(events.value->'best_location')",
-      limit: 10000,
-      order: '.modified',
-      descending: true,
-      where: `.file::text='_air.qo' and .device::text='${deviceUID}' and .modified >= now()-interval '${timeframe}'`
-    }
+  // todo refactor this
+  // convert timeframe into two dates
+  const endDateMs = new Date().getTime();
+  const endDateSecs = convertToSeconds(endDateMs);
+  const startDateMs = new Date(
+    endDateMs - timeframe * 24 * 60 * 60 * 1000
+  ).getTime();
+  const startDateSecs = convertToSeconds(startDateMs);
+
+  const opts = {
+    deviceUID: [deviceUID],
+    sortBy: 'modified',
+    sortOrder: 'desc',
+    files: '_air.qo',
+    startDate: startDateSecs,
+    endDate: endDateSecs,
+    pageSize: 10000
   };
 
-  const res = await fetch(
-    `https://api.notefile.net/req?app=${AIRNOTE_PROJECT_UID}`,
-    {
-      method: 'POST',
-      body: JSON.stringify(body)
-    }
-  );
-
-  return res.json();
+  return await eventApiInstance.getProjectEvents(AIRNOTE_PROJECT_UID, opts);
 }

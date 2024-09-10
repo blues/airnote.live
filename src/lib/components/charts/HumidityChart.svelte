@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { format, parseISO } from 'date-fns';
+  import { format } from 'date-fns';
   import { DATE_TIME_FORMAT_KEY } from '$lib/constants';
   import Chart, {
     type ChartConfiguration,
@@ -21,7 +21,7 @@
 
   function getHumidityData(readings: AirnoteReading[]) {
     humidityData = readings.map((reading) => {
-      const d = parseISO(reading.captured);
+      const d = reading.captured * 1000;
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
         y: reading.humidity

@@ -7,7 +7,7 @@ export interface AirnoteReading {
   c01_00: number;
   c02_50: number;
   c05_00: number;
-  captured: string;
+  captured: number;
   charging?: boolean;
   csamples: number;
   csecs: number;

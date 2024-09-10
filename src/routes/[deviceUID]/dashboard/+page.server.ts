@@ -30,7 +30,7 @@ export async function load({ params }) {
     .then((responses) => {
       const [envVarResponse, eventsResponse] = responses;
       const serialNumber = envVarResponse.environment_variables._sn;
-      allEvents.push(...eventsResponse);
+      allEvents.push(...eventsResponse.events);
       allEvents.forEach((entry) => (entry.serial_number = serialNumber));
       readings = getCurrentReadings(allEvents, deviceUID);
       history = getHistoryReadings(readings);

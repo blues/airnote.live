@@ -11,7 +11,10 @@ export function getHistoryReadings(readings: AirnoteReading[]) {
   const groupedReadings: Record<string, AirnoteReading[]> = {};
 
   readings.forEach((reading) => {
-    const formattedDate = format(new Date(reading.captured), DATE_FORMAT_KEY);
+    const formattedDate = format(
+      new Date(reading.captured * 1000),
+      DATE_FORMAT_KEY
+    );
     if (groupedReadings[formattedDate]) {
       groupedReadings[formattedDate].push(reading);
     } else {
@@ -56,9 +59,9 @@ export function getCurrentReadings(events: NotehubEvent[], deviceUID: string) {
     const data: AirnoteReading = event.body;
     data.device_uid = deviceUID;
     data.captured = event.when;
-    data.location = event.location;
-    data.lat = event.lat;
-    data.lon = event.lon;
+    data.location = event.best_location;
+    data.lat = event.best_lat;
+    data.lon = event.best_lon;
     data.serial_number = event.serial_number;
     data.aqi = event.body.aqi ? event.body.aqi : 0;
     data.pm01_0 = event.body.pm01_0 ? event.body.pm01_0 : 0;

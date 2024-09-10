@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { format, parseISO } from 'date-fns';
+  import { format } from 'date-fns';
   import { DATE_TIME_FORMAT_KEY } from '$lib/constants';
   import Chart, {
     type ChartConfiguration,
@@ -23,11 +23,8 @@
   }
 
   function getPMData(readings: AirnoteReading[]) {
-    /* reading.captured comes in as something like 2022-08-22T06:27:38Z, 
-    then parseISO() turns it into Mon Aug 22 2022 02:27:38 GMT-0400 (Eastern Daylight Time),
-    and we take that date object and format() for the particular component (MM-dd HH:mm) */
     pm1Data = readings.map((reading) => {
-      const d = parseISO(reading.captured);
+      const d = reading.captured * 1000;
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
         y: reading.pm01_0
@@ -36,7 +33,7 @@
       };
     });
     pm2_5Data = readings.map((reading) => {
-      const d = parseISO(reading.captured);
+      const d = reading.captured * 1000;
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
         y: reading.pm02_5
@@ -45,7 +42,7 @@
       };
     });
     pm10Data = readings.map((reading) => {
-      const d = parseISO(reading.captured);
+      const d = reading.captured * 1000;
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
         y: reading.pm10_0

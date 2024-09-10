@@ -1,6 +1,6 @@
 import DATE_RANGE_OPTIONS from '$lib/constants/DateRangeOptions';
 import type { AirnoteReading } from '$lib/services/AirReadingModel';
-import { isAfter, subDays, parseISO } from 'date-fns';
+import { isAfter, subDays } from 'date-fns';
 
 interface DateRangeOption {
   [key: string]: number;
@@ -30,7 +30,9 @@ export function filterEventsByDate(
 ) {
   const startingDate = subDays(new Date(), daysPrior);
   // Filter out any events that occurred before the starting date
-  return events.filter((event) =>
-    isAfter(parseISO(event.captured), startingDate)
-  );
+  return events.filter((event) => isAfter(event.captured * 1000, startingDate));
+}
+
+export function convertToSeconds(millisecondsTimestamp: number) {
+  return Math.floor(millisecondsTimestamp / 1000);
 }

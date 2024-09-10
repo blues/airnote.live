@@ -1,15 +1,15 @@
 export interface NotehubEvent {
   body: NotehubEventBody;
   heatIndex: number;
-  lat: number;
-  location: string;
-  lon: number;
+  best_lat: number;
+  best_location: string;
+  best_lon: number;
   serial_number: string;
-  when: string;
+  when: number;
 }
 
 interface NotehubEventBody {
-  captured: string;
+  captured: number;
   location: string;
   lat: number;
   lon: number;

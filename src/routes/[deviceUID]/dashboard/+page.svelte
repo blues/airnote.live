@@ -156,7 +156,10 @@
       <p class="last-update">
         Last Update:
         <span>
-          {format(new Date(lastReading.captured), "MMMM dd yyyy 'at' h:mm aaa")}
+          {format(
+            new Date(lastReading.captured * 1000),
+            "MMMM dd yyyy 'at' h:mm aaa"
+          )}
         </span>
       </p>
       <div class="box speedometer-box">
