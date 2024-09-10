@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { format, parseISO } from 'date-fns';
+  import { format } from 'date-fns';
   import { aqiColors, aqiRanges, getAQIColor } from '$lib/services/air';
   import { DATE_TIME_KEY } from '$lib/constants';
   import mapboxgl from 'mapbox-gl';
@@ -48,7 +48,7 @@
       }
     });
 
-    const d = parseISO(lastReading.captured);
+    const d = lastReading.captured * 1000;
 
     popup = new mapboxgl.Popup().setHTML(
       `<p style="text-align: center; margin:0">${format(d, DATE_TIME_KEY)}</p>

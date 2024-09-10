@@ -17,12 +17,12 @@ export async function GET({ url }) {
 
   await Promise.all([
     getDeviceEnvironmentVariables(deviceUID),
-    getEvents(deviceUID, '90 days')
+    getEvents(deviceUID, 90)
   ])
     .then((responses) => {
       const [envVarResponse, eventsResponse] = responses;
       const serialNumber = envVarResponse.environment_variables._sn;
-      allEvents.push(...eventsResponse);
+      allEvents.push(...eventsResponse.events);
       allEvents.forEach((entry) => (entry.serial_number = serialNumber));
       readings = getCurrentReadings(allEvents, deviceUID);
     })
