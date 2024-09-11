@@ -33,6 +33,20 @@ export function filterEventsByDate(
   return events.filter((event) => isAfter(event.captured * 1000, startingDate));
 }
 
-export function convertToSeconds(millisecondsTimestamp: number) {
+function convertToSeconds(millisecondsTimestamp: number) {
   return Math.floor(millisecondsTimestamp / 1000);
+}
+
+export function convertTimeframeToSeconds(timeframe: number) {
+  const endDateMs = new Date().getTime();
+  const endDateSecs = convertToSeconds(endDateMs);
+  const startDateMs = new Date(
+    endDateMs - timeframe * 24 * 60 * 60 * 1000
+  ).getTime();
+  const startDateSecs = convertToSeconds(startDateMs);
+
+  return {
+    endDateSecs,
+    startDateSecs
+  };
 }

@@ -1,6 +1,6 @@
 import * as NotehubJs from '@blues-inc/notehub-js';
 import { HUB_AUTH_TOKEN } from '$env/static/private';
-import { convertToSeconds } from '$lib/util/dates';
+import { convertTimeframeToSeconds } from '$lib/util/dates';
 import type { DeviceEnvVars } from './DeviceEnvVarModel';
 
 const AIRNOTE_PROJECT_UID = 'app:2606f411-dea6-44a0-9743-1130f57d77d8';
@@ -91,14 +91,8 @@ export async function getEvents(deviceUID: string, timeframe = 30) {
   const { api_key } = notehubJsClient.authentications;
   api_key.apiKey = HUB_AUTH_TOKEN;
 
-  // todo refactor this
-  // convert timeframe into two dates
-  const endDateMs = new Date().getTime();
-  const endDateSecs = convertToSeconds(endDateMs);
-  const startDateMs = new Date(
-    endDateMs - timeframe * 24 * 60 * 60 * 1000
-  ).getTime();
-  const startDateSecs = convertToSeconds(startDateMs);
+  // convert timeframe into seconds for start and end date
+  const { startDateSecs, endDateSecs } = convertTimeframeToSeconds(timeframe);
 
   const opts = {
     deviceUID: [deviceUID],
