@@ -84,12 +84,14 @@ export async function updateDeviceEnvironmentVariablesByPin(
 }
 
 // get events from Airnote project in Notehub
-export async function getEvents(deviceUID: string, timeframe = 30) {
+export async function getEvents(
+  deviceUID: string,
+  timeframe = 30,
+  includeAllFields = false
+) {
   /* this function is fetched on mount with 30 days' worth of data to
 		  populate the CSV download, the AQI average history AND
 		  display today's most current reading as well */
-  const { api_key } = notehubJsClient.authentications;
-  api_key.apiKey = HUB_AUTH_TOKEN;
 
   // convert timeframe into seconds for start and end date
   const { startDateSecs, endDateSecs } = convertTimeframeToSeconds(timeframe);
@@ -101,8 +103,15 @@ export async function getEvents(deviceUID: string, timeframe = 30) {
     files: '_air.qo',
     startDate: startDateSecs,
     endDate: endDateSecs,
-    pageSize: 10000
+    pageSize: 10000,
+    selectFields: ''
   };
+
+  // todo once the bug is fixed, remove entire body from selected fields and just add needed properties
+  if (!includeAllFields) {
+    opts.selectFields =
+      'when,best_location,best_lat,best_lon,serial_number,body';
+  }
 
   return await eventApiInstance.getProjectEvents(AIRNOTE_PROJECT_UID, opts);
 }

@@ -17,7 +17,7 @@ export async function GET({ url }) {
 
   await Promise.all([
     getDeviceEnvironmentVariables(deviceUID),
-    getEvents(deviceUID, 90)
+    getEvents(deviceUID, 90, true)
   ])
     .then((responses) => {
       const [envVarResponse, eventsResponse] = responses;
