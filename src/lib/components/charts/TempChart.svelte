@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte';
-  import { format, parseISO } from 'date-fns';
+  import { format } from 'date-fns';
   import { toFahrenheit } from '../../services/air';
   import { DATE_TIME_FORMAT_KEY } from '../../constants';
   import Chart, {
@@ -26,7 +26,7 @@
 
   function getTempData(readings: AirnoteReading[]) {
     tempDataCelsius = readings.map((reading) => {
-      const d = parseISO(reading.captured);
+      const d = reading.captured * 1000;
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
         y: reading.temperature
@@ -35,7 +35,7 @@
       };
     });
     tempDataFahrenheit = readings.map((reading) => {
-      const d = parseISO(reading.captured);
+      const d = reading.captured * 1000;
       return {
         x: format(d, DATE_TIME_FORMAT_KEY),
         y: reading.temperature
