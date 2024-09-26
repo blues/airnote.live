@@ -110,7 +110,7 @@ export async function getEvents(
   // todo once the bug is fixed, remove entire body from selected fields and just add needed properties
   if (!includeAllFields) {
     opts.selectFields =
-      'when,best_location,best_lat,best_lon,serial_number,body';
+      'when,best_location,best_lat,best_lon,serial_number,body.aqi,body.humidity,body.pm01_0,body.pm02_5,body.pm10_0,body.pressure,body.temperature,body.voltage,body.charging';
   }
 
   return await eventApiInstance.getProjectEvents(AIRNOTE_PROJECT_UID, opts);
