@@ -43,17 +43,17 @@ describe('Device service', () => {
             pm10_0_rstd: 0.103515625,
             temperature: 27.141157,
             aqi_algorithm: 'cf-atm',
-            captured: '',
+            captured: 1727364384,
             location: '',
             lat: 0,
             lon: 0,
             serial_number: '',
             device_uid: ''
           },
-          when: '2021-09-20T17:32:53Z',
-          lat: 34.824667500000004,
-          lon: -85.32273828125,
-          location: 'New York',
+          when: 1727364384,
+          best_lat: 34.824667500000004,
+          best_lon: -85.32273828125,
+          best_location: 'New York',
           serial_number: 'airnote-test',
           heatIndex: 0
         }
@@ -70,7 +70,7 @@ describe('Device service', () => {
           c01_00: 120,
           c02_50: 8,
           c05_00: 1,
-          captured: '2021-09-20T17:32:53Z',
+          captured: 1727364384,
           charging: true,
           csamples: 38,
           csecs: 60,
@@ -112,7 +112,7 @@ describe('Device service', () => {
     it('should group readings by calendar day and calculate average AQI, PM01_0, PM02_5, and PM10_0 readings for each day', () => {
       const readings: AirnoteReading[] = [
         {
-          captured: '2022-01-01T00:00:00.000Z',
+          captured: 1640995200,
           aqi: 10,
           pm01_0: 1,
           pm02_5: 2,
@@ -141,7 +141,7 @@ describe('Device service', () => {
           serial_number: 'airnote-test'
         },
         {
-          captured: '2022-01-01T01:00:00.000Z',
+          captured: 1640995200,
           aqi: 20,
           pm01_0: 2,
           pm02_5: 4,
@@ -170,7 +170,7 @@ describe('Device service', () => {
           serial_number: 'airnote-test'
         },
         {
-          captured: '2022-01-02T00:00:00.000Z',
+          captured: 1641081600,
           aqi: 30,
           pm01_0: 3,
           pm02_5: 6,
