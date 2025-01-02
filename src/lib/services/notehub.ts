@@ -6,8 +6,8 @@ import type { DeviceEnvVars } from './DeviceEnvVarModel';
 const AIRNOTE_PROJECT_UID = 'app:2606f411-dea6-44a0-9743-1130f57d77d8';
 
 function isValidDeviceUID(deviceUID: string) {
-  const deviceUIDPattern = /^dev:\d{12}(\d{3})?$/; // Matches 'dev:' followed by 12 or 15 digits
-  return deviceUIDPattern.test(deviceUID);
+  const validPrefixes = ['dev:', 'imei:', 'test:', 'id:'];
+  return validPrefixes.some((prefix) => deviceUID.startsWith(prefix));
 }
 
 const notehubJsClient = NotehubJs.ApiClient.instance;
