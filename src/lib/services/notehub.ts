@@ -5,12 +5,21 @@ import type { DeviceEnvVars } from './DeviceEnvVarModel';
 
 const AIRNOTE_PROJECT_UID = 'app:2606f411-dea6-44a0-9743-1130f57d77d8';
 
+function isValidDeviceUID(deviceUID: string) {
+  const validPrefixes = ['dev:', 'imei:', 'test:', 'id:'];
+  return validPrefixes.some((prefix) => deviceUID.startsWith(prefix));
+}
+
 const notehubJsClient = NotehubJs.ApiClient.instance;
 const deviceApiInstance = new NotehubJs.DeviceApi();
 const eventApiInstance = new NotehubJs.EventApi();
 
 // read env vars only
 export async function getDeviceEnvironmentVariables(deviceUID: string) {
+  if (!isValidDeviceUID(deviceUID)) {
+    throw new Error('Invalid device UID. getDeviceEnvVar() API call aborted.');
+  }
+
   const { api_key } = notehubJsClient.authentications;
   api_key.apiKey = HUB_AUTH_TOKEN;
   return await deviceApiInstance.getDeviceEnvironmentVariables(
@@ -24,6 +33,10 @@ export async function getDeviceEnvironmentVariablesByPin(
   deviceUID: string,
   pinNumber: string
 ) {
+  if (!isValidDeviceUID(deviceUID)) {
+    throw new Error('Invalid device UID');
+  }
+
   const { pin } = notehubJsClient.authentications;
   pin.apiKey = pinNumber;
   return await deviceApiInstance.getDeviceEnvironmentVariablesByPin(
@@ -34,6 +47,12 @@ export async function getDeviceEnvironmentVariablesByPin(
 
 // delete env var by key on device
 async function deleteDeviceEnvironmentVariable(deviceUID: string, key: string) {
+  if (!isValidDeviceUID(deviceUID)) {
+    throw new Error(
+      'Invalid device UID. deleteDeviceEnvVar() API call aborted.'
+    );
+  }
+
   const { pin } = notehubJsClient.authentications;
   pin.apiKey = HUB_AUTH_TOKEN;
   return await deviceApiInstance.deleteDeviceEnvironmentVariable(
@@ -49,6 +68,10 @@ async function putDeviceEnvironmentVariablesByPin(
   pinNumber: string,
   environmentVariables: DeviceEnvVars
 ) {
+  if (!isValidDeviceUID(deviceUID)) {
+    throw new Error('Invalid device UID. putDeviceEnvVar() API call aborted.');
+  }
+
   const { pin } = notehubJsClient.authentications;
   pin.apiKey = pinNumber;
   const deviceEnvironmentVariables = new NotehubJs.EnvironmentVariables(
@@ -66,6 +89,11 @@ export async function updateDeviceEnvironmentVariablesByPin(
   pinNumber: string,
   environmentVariables: DeviceEnvVars
 ) {
+  if (!isValidDeviceUID(deviceUID)) {
+    throw new Error(
+      'Invalid device UID. updateDeviceEnvVar() API call aborted.'
+    );
+  }
   // If the _air_mins environment variable is set to the default, don't save the value so
   // the device defaults to the project-level _air_mins. Also, delete the environment variable
   // on the device in case it already exists.
@@ -89,6 +117,9 @@ export async function getEvents(
   timeframe = 30,
   includeAllFields = false
 ) {
+  if (!isValidDeviceUID(deviceUID)) {
+    throw new Error('Invalid device UID. getEvents() API call aborted.');
+  }
   /* this function is fetched on mount with 30 days' worth of data to
 		  populate the CSV download, the AQI average history AND
 		  display today's most current reading as well */
@@ -107,7 +138,6 @@ export async function getEvents(
     selectFields: ''
   };
 
-  // todo once the bug is fixed, remove entire body from selected fields and just add needed properties
   if (!includeAllFields) {
     opts.selectFields =
       'when,best_location,best_lat,best_lon,serial_number,body.aqi,body.humidity,body.pm01_0,body.pm02_5,body.pm10_0,body.pressure,body.temperature,body.voltage,body.charging';
