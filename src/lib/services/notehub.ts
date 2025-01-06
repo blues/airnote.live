@@ -5,7 +5,7 @@ import type { DeviceEnvVars } from './DeviceEnvVarModel';
 
 const AIRNOTE_PROJECT_UID = 'app:2606f411-dea6-44a0-9743-1130f57d77d8';
 
-function isValidDeviceUID(deviceUID: string) {
+export function isValidDeviceUID(deviceUID: string) {
   const validPrefixes = ['dev:', 'imei:', 'test:', 'id:'];
   return validPrefixes.some((prefix) => deviceUID.startsWith(prefix));
 }
@@ -17,7 +17,10 @@ const eventApiInstance = new NotehubJs.EventApi();
 // read env vars only
 export async function getDeviceEnvironmentVariables(deviceUID: string) {
   if (!isValidDeviceUID(deviceUID)) {
-    throw new Error('Invalid device UID. getDeviceEnvVar() API call aborted.');
+    console.warn(
+      `Invalid device UID ${deviceUID}. Skipping getDeviceEnvVar() API call.`
+    );
+    return null;
   }
 
   const { api_key } = notehubJsClient.authentications;
@@ -34,7 +37,9 @@ export async function getDeviceEnvironmentVariablesByPin(
   pinNumber: string
 ) {
   if (!isValidDeviceUID(deviceUID)) {
-    throw new Error('Invalid device UID');
+    console.warn(
+      `Invalid device UID ${deviceUID}. Skipping getDeviceEnvVar() API call.`
+    );
   }
 
   const { pin } = notehubJsClient.authentications;
@@ -48,8 +53,8 @@ export async function getDeviceEnvironmentVariablesByPin(
 // delete env var by key on device
 async function deleteDeviceEnvironmentVariable(deviceUID: string, key: string) {
   if (!isValidDeviceUID(deviceUID)) {
-    throw new Error(
-      'Invalid device UID. deleteDeviceEnvVar() API call aborted.'
+    console.warn(
+      `Invalid device UID ${deviceUID}. Skipping deleteDeviceEnvVar() API call.`
     );
   }
 
@@ -69,7 +74,9 @@ async function putDeviceEnvironmentVariablesByPin(
   environmentVariables: DeviceEnvVars
 ) {
   if (!isValidDeviceUID(deviceUID)) {
-    throw new Error('Invalid device UID. putDeviceEnvVar() API call aborted.');
+    console.warn(
+      `Invalid device UID ${deviceUID}. Skipping putDeviceEnvVar() API.`
+    );
   }
 
   const { pin } = notehubJsClient.authentications;
@@ -90,8 +97,8 @@ export async function updateDeviceEnvironmentVariablesByPin(
   environmentVariables: DeviceEnvVars
 ) {
   if (!isValidDeviceUID(deviceUID)) {
-    throw new Error(
-      'Invalid device UID. updateDeviceEnvVar() API call aborted.'
+    console.warn(
+      `Invalid device UID ${deviceUID}. Skipping updateDeviceEnvVar() API call.`
     );
   }
   // If the _air_mins environment variable is set to the default, don't save the value so
@@ -118,7 +125,9 @@ export async function getEvents(
   includeAllFields = false
 ) {
   if (!isValidDeviceUID(deviceUID)) {
-    throw new Error('Invalid device UID. getEvents() API call aborted.');
+    console.warn(
+      `Invalid device UID ${deviceUID}. Skipping getEvents() API call.`
+    );
   }
   /* this function is fetched on mount with 30 days' worth of data to
 		  populate the CSV download, the AQI average history AND

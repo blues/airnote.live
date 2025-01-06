@@ -2,7 +2,8 @@ import { fail, redirect } from '@sveltejs/kit';
 import {
   getDeviceEnvironmentVariables,
   getDeviceEnvironmentVariablesByPin,
-  updateDeviceEnvironmentVariablesByPin
+  updateDeviceEnvironmentVariablesByPin,
+  isValidDeviceUID
 } from '$lib/services/notehub';
 import { ERROR_TYPE } from '$lib/constants/ErrorTypes.js';
 import type { DeviceEnvVars } from '$lib/services/DeviceEnvVarModel.js';
@@ -11,6 +12,13 @@ export async function load({ params, url }) {
   const deviceUID = params.deviceUID;
   const pin = url.searchParams.get('pin');
   const internalNav = url.searchParams.get('internalNav');
+
+  if (!isValidDeviceUID(deviceUID)) {
+    return {
+      notehubResponse: null,
+      error: { errorType: ERROR_TYPE.NOTEHUB_ERROR }
+    };
+  }
 
   /* Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
     and we want Notehub users to view the device’s dashboard, and not the
@@ -52,37 +60,43 @@ export async function load({ params, url }) {
 
 export const actions = {
   saveSettings: async ({ params, url, request }) => {
-    let notehubError: { status: number } | undefined;
-    let error;
-
     const deviceUID = params.deviceUID;
     const pin = url.searchParams.get('pin');
     const body = await request.formData();
 
-    let currentEnvVars;
-    const envVarResponse = await getDeviceEnvironmentVariables(deviceUID).catch(
-      (err) => {
-        console.error(err);
-        notehubError = err;
-      }
-    );
+    if (!isValidDeviceUID(deviceUID)) {
+      return fail(400, { error: { errorType: ERROR_TYPE.NOTEHUB_ERROR } });
+    }
 
-    if (envVarResponse) {
-      currentEnvVars = envVarResponse.environment_variables;
+    let notehubError: { status: number } | undefined;
+    let error;
+
+    let currentEnvVars;
+    try {
+      const envVarResponse = await getDeviceEnvironmentVariables(deviceUID);
+      if (envVarResponse) {
+        currentEnvVars = envVarResponse.environment_variables;
+      }
+    } catch (err) {
+      console.error(err);
+      notehubError = err as { status: number };
     }
 
     const formattedBody: DeviceEnvVars = createEnvVarBody(body, currentEnvVars);
+
     if (pin === '') {
       error = { errorType: ERROR_TYPE.MISSING_PIN };
     } else if (pin !== null) {
-      await updateDeviceEnvironmentVariablesByPin(
-        deviceUID,
-        pin,
-        formattedBody
-      ).catch((err) => {
+      try {
+        await updateDeviceEnvironmentVariablesByPin(
+          deviceUID,
+          pin,
+          formattedBody
+        );
+      } catch (err) {
         console.error(err);
-        notehubError = err;
-      });
+        notehubError = err as { status: number };
+      }
 
       if (notehubError) {
         error = { errorType: ERROR_TYPE.UPDATE_ERROR };

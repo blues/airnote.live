@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit';
 import {
   getDeviceEnvironmentVariables,
-  getEvents
+  getEvents,
+  isValidDeviceUID
 } from '$lib/services/notehub';
 import { getCurrentReadings, getHistoryReadings } from '$lib/services/device';
 import type { NotehubEvent } from '$lib/services/NotehubEventModel';
@@ -19,6 +20,14 @@ export async function load({ params }) {
     pm2_5: {},
     pm10_0: {}
   };
+
+  if (!isValidDeviceUID(deviceUID)) {
+    error(400, {
+      message: 'Invalid device UID',
+      errorType: ERROR_TYPE.NOTEHUB_ERROR,
+      deviceUID
+    });
+  }
 
   let erred = false;
   let notehubError: { status: number } | undefined;
