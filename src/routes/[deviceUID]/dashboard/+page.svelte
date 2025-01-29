@@ -283,7 +283,19 @@
         <div class="map">
           <MapboxMap {lastReading} />
         </div>
+      {:else}
+        <div class="map-notice">
+          <p>Not seeing your device on the map? Ensure the setting is not set to Indoor on the settings page.</p>
+        </div>
       {/if}
+
+<style>
+  .map-notice {
+    text-align: center;
+    padding: 2rem;
+    color: var(--darkGrey);
+  }
+</style>
     </div>
 
     <div class="box">
