@@ -40,7 +40,7 @@ export async function load({ params }) {
     .then((responses) => {
       const [envVarResponse, eventsResponse] = responses;
       const serialNumber = envVarResponse.environment_variables._sn;
-      if (envVarResponse.environment_variables._air_indoors === 1) {
+      if (envVarResponse.environment_variables._air_indoors === '1') {
         isIndoors = true;
       }
       allEvents.push(...eventsResponse.events);

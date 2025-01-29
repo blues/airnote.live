@@ -74,7 +74,7 @@
     history = data.history;
   }
 
-  if (data && data.isIndoors !== undefined && data.isIndoors) {
+  if (data && data.isIndoors) {
     hideMap = true;
   }
 

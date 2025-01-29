@@ -77,7 +77,7 @@
         name="indoorDevice"
         id="indoorDevice"
       />
-      <span>Indoor device (Will not be visible on the global map)</span>
+      <span>Private device (Will not be visible on the global map)</span>
     </label>
   </div>
 
