@@ -72,8 +72,8 @@
     history = data.history;
   }
 
-  if (data && typeof data.airIndoors !== 'undefined') {
-    hideMap = (data.airIndoors === 1);
+  if (data && data.airIndoors !== undefined && data.airIndoors === 1) {
+    hideMap = true;
   }
 
   if (!readings || readings.length === 0) {
