@@ -297,7 +297,6 @@
           </p>
         </div>
       {/if}
-</style>
     </div>
 
     <div class="box">
