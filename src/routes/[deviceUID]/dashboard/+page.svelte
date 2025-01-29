@@ -43,6 +43,7 @@
     pm10_0: {}
   };
   let displayedReadings: AirnoteReading[];
+  let hideMap = 0;
 
   let error = false;
   let errorType: string;
@@ -69,6 +70,10 @@
 
   if (data && data.history) {
     history = data.history;
+  }
+
+  if (data && data.airIndoors !== undefined) {
+    hideMap = data.airIndoors;
   }
 
   if (!readings || readings.length === 0) {
@@ -279,22 +284,19 @@
         </a>
       </p>
 
-      {#if data.airIndoors === 0}
+      {#if hideMap === 0}
         <div class="map">
           <MapboxMap {lastReading} />
         </div>
       {:else}
-        <div class="map-notice">
-          <p>Not seeing your device on the map? Ensure the setting is not set to Indoor on the settings page.</p>
+        <div class="banner">
+          <p>
+            Not seeing your device on the map? Check the 
+            <a href="/{deviceUID}/DeviceSettings">settings page</a> 
+            to verify the device is not marked as Indoor.
+          </p>
         </div>
       {/if}
-
-<style>
-  .map-notice {
-    text-align: center;
-    padding: 2rem;
-    color: var(--darkGrey);
-  }
 </style>
     </div>
 
