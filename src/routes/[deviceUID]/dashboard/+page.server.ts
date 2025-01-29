@@ -14,7 +14,7 @@ export async function load({ params }) {
   const deviceUID = params.deviceUID;
   const allEvents: NotehubEvent[] = [];
   let readings: AirnoteReading[] = [];
-  let airIndoors = 0;
+  let isIndoors = false;
   let history: AirnoteHistoryReadings = {
     aqi: {},
     pm1_0: {},
@@ -40,7 +40,9 @@ export async function load({ params }) {
     .then((responses) => {
       const [envVarResponse, eventsResponse] = responses;
       const serialNumber = envVarResponse.environment_variables._sn;
-      airIndoors = envVarResponse.environment_variables?._air_indoors ?? 0;
+      if (envVarResponse.environment_variables._air_indoors === 1) {
+        isIndoors = true;
+      }
       allEvents.push(...eventsResponse.events);
       allEvents.forEach((entry) => (entry.serial_number = serialNumber));
       readings = getCurrentReadings(allEvents, deviceUID);
@@ -72,7 +74,7 @@ export async function load({ params }) {
     return {
       readings,
       history,
-      airIndoors
+      isIndoors
     };
   }
 }

@@ -33,6 +33,8 @@
   import { getNotehubEventsUrl } from '$lib/util/url';
 
   export let deviceUID: string;
+  let productUID: string;
+  let pin: string;
 
   let lastReading: AirnoteReading;
   let readings: AirnoteReading[] = [];
@@ -72,7 +74,7 @@
     history = data.history;
   }
 
-  if (data && data.airIndoors !== undefined && data.airIndoors === 1) {
+  if (data && data.isIndoors !== undefined && data.isIndoors) {
     hideMap = true;
   }
 
@@ -119,6 +121,8 @@
   onMount(() => {
     const currentDevice: AirnoteDevice = getCurrentDeviceFromUrl(location);
     deviceUID = currentDevice.deviceUID ? currentDevice.deviceUID : '';
+    productUID = currentDevice.productUID || '';
+    pin = currentDevice.pin || '';
     tempDisplay = localStorage.getItem('tempDisplay') || 'C';
     showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
   });
