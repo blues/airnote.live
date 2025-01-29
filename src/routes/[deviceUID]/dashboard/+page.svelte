@@ -279,9 +279,11 @@
         </a>
       </p>
 
-      <div class="map">
-        <MapboxMap {lastReading} />
-      </div>
+      {#if data.airIndoors === 0}
+        <div class="map">
+          <MapboxMap {lastReading} />
+        </div>
+      {/if}
     </div>
 
     <div class="box">
