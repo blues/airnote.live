@@ -297,7 +297,7 @@
           <p>
             Not seeing your device on the map? Check the 
             <a href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true">settings page</a> 
-            to verify the device is not marked as Indoor.
+            to verify the device is not set to Private.
           </p>
           <button class="svg-button" style="display: none;">
             <CloseIcon />
