@@ -43,7 +43,7 @@
     pm10_0: {}
   };
   let displayedReadings: AirnoteReading[];
-  let hideMap = 0;
+  let hideMap = false;
 
   let error = false;
   let errorType: string;
@@ -72,8 +72,8 @@
     history = data.history;
   }
 
-  if (data && data.airIndoors !== undefined) {
-    hideMap = data.airIndoors;
+  if (data && typeof data.airIndoors !== 'undefined') {
+    hideMap = (data.airIndoors === 1);
   }
 
   if (!readings || readings.length === 0) {
@@ -284,7 +284,7 @@
         </a>
       </p>
 
-      {#if hideMap === 0}
+      {#if !hideMap}
         <div class="map">
           <MapboxMap {lastReading} />
         </div>
@@ -292,7 +292,7 @@
         <div class="banner">
           <p>
             Not seeing your device on the map? Check the 
-            <a href="/{deviceUID}/DeviceSettings">settings page</a> 
+            <a href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true">settings page</a> 
             to verify the device is not marked as Indoor.
           </p>
         </div>
@@ -444,9 +444,14 @@
     border-radius: 0.25rem;
     display: flex;
     margin-top: 1rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    grid-area: map;
   }
   .banner p {
     margin: 0;
+    flex: 1;
   }
   .banner button {
     margin-left: 0.5rem;
