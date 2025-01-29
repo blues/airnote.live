@@ -299,6 +299,9 @@
             <a href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true">settings page</a> 
             to verify the device is not marked as Indoor.
           </p>
+          <button class="svg-button" style="display: none;">
+            <CloseIcon />
+          </button>
         </div>
       {/if}
     </div>
@@ -444,10 +447,10 @@
 
   .banner {
     background: var(--bannerBlue);
-    padding: 0.75rem 0.75rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 0.25rem;
     display: flex;
-    margin-top: 1rem;
+    margin: 1rem 0;
     width: 100%;
     justify-content: space-between;
     align-items: center;
@@ -456,6 +459,8 @@
   .banner p {
     margin: 0;
     flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
   .banner button {
     margin-left: 0.5rem;
