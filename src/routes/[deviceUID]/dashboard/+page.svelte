@@ -33,6 +33,8 @@
   import { getNotehubEventsUrl } from '$lib/util/url';
 
   export let deviceUID: string;
+  let productUID: string;
+  let pin: string;
 
   let lastReading: AirnoteReading;
   let readings: AirnoteReading[] = [];
@@ -43,6 +45,7 @@
     pm10_0: {}
   };
   let displayedReadings: AirnoteReading[];
+  let hideMap = false;
 
   let error = false;
   let errorType: string;
@@ -69,6 +72,10 @@
 
   if (data && data.history) {
     history = data.history;
+  }
+
+  if (data && data.isIndoors) {
+    hideMap = true;
   }
 
   if (!readings || readings.length === 0) {
@@ -114,6 +121,8 @@
   onMount(() => {
     const currentDevice: AirnoteDevice = getCurrentDeviceFromUrl(location);
     deviceUID = currentDevice.deviceUID ? currentDevice.deviceUID : '';
+    productUID = currentDevice.productUID || '';
+    pin = currentDevice.pin || '';
     tempDisplay = localStorage.getItem('tempDisplay') || 'C';
     showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
   });
@@ -279,9 +288,22 @@
         </a>
       </p>
 
-      <div class="map">
-        <MapboxMap {lastReading} />
-      </div>
+      {#if !hideMap}
+        <div class="map">
+          <MapboxMap {lastReading} />
+        </div>
+      {:else}
+        <div class="banner">
+          <p>
+            Not seeing your device on the map? Check the 
+            <a href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true">settings page</a> 
+            to verify the device is not set to Private.
+          </p>
+          <button class="svg-button" style="display: none;">
+            <CloseIcon />
+          </button>
+        </div>
+      {/if}
     </div>
 
     <div class="box">
@@ -425,13 +447,20 @@
 
   .banner {
     background: var(--bannerBlue);
-    padding: 0.75rem 0.75rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 0.25rem;
     display: flex;
-    margin-top: 1rem;
+    margin: 1rem 0;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    grid-area: map;
   }
   .banner p {
     margin: 0;
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.4;
   }
   .banner button {
     margin-left: 0.5rem;
