@@ -33,8 +33,6 @@
   import { getNotehubEventsUrl } from '$lib/util/url';
 
   export let deviceUID: string;
-  let productUID: string;
-  let pin: string;
 
   let lastReading: AirnoteReading;
   let readings: AirnoteReading[] = [];
@@ -45,7 +43,6 @@
     pm10_0: {}
   };
   let displayedReadings: AirnoteReading[];
-  let hideMap = false;
 
   let error = false;
   let errorType: string;
@@ -72,10 +69,6 @@
 
   if (data && data.history) {
     history = data.history;
-  }
-
-  if (data && data.isIndoors) {
-    hideMap = true;
   }
 
   if (!readings || readings.length === 0) {
@@ -121,8 +114,6 @@
   onMount(() => {
     const currentDevice: AirnoteDevice = getCurrentDeviceFromUrl(location);
     deviceUID = currentDevice.deviceUID ? currentDevice.deviceUID : '';
-    productUID = currentDevice.productUID || '';
-    pin = currentDevice.pin || '';
     tempDisplay = localStorage.getItem('tempDisplay') || 'C';
     showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
   });
@@ -288,22 +279,9 @@
         </a>
       </p>
 
-      {#if !hideMap}
-        <div class="map">
-          <MapboxMap {lastReading} />
-        </div>
-      {:else}
-        <div class="banner">
-          <p>
-            Not seeing your device on the map? Check the 
-            <a href="/{deviceUID}?product={productUID}&pin={pin}&internalNav=true">settings page</a> 
-            to verify the device is not set to Private.
-          </p>
-          <button class="svg-button" style="display: none;">
-            <CloseIcon />
-          </button>
-        </div>
-      {/if}
+      <div class="map">
+        <MapboxMap {lastReading} />
+      </div>
     </div>
 
     <div class="box">

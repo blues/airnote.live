@@ -77,7 +77,11 @@
         name="indoorDevice"
         id="indoorDevice"
       />
-      <span>Private device (Will not be visible on the global map)</span>
+      <span
+        >Indoor device (Will omit device data and location from <a
+          href="https://map.safecast.org">global Safecast map</a
+        >)</span
+      >
     </label>
   </div>
 

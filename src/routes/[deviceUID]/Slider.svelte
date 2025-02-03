@@ -63,8 +63,10 @@
   />
   <output class="frequencyPopup" />
 </div>
-<span class="min-val">15 min</span>
-<span class="max-val">1440 min</span>
+<div class="frequencySliderVals">
+  <span class="min-val">15 min</span>
+  <span class="max-val">1440 min</span>
+</div>
 
 <style>
   .frequency-wrap {
@@ -124,11 +126,14 @@
     right: 15%;
   }
 
-  .min-val,
-  .max-val {
-    color: var(--medGrey);
-  }
-  .max-val {
-    float: right;
+  .frequencySliderVals {
+    display: flex;
+    justify-content: space-between;
+
+    & .min-val,
+    .max-val {
+      color: var(--medGrey);
+      margin-bottom: 16px;
+    }
   }
 </style>
