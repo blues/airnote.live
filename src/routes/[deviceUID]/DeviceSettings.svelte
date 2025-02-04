@@ -77,7 +77,12 @@
         name="indoorDevice"
         id="indoorDevice"
       />
-      <span>Private device (Will not be visible on the global map)</span>
+      <span
+        >Indoor device (Omits device air quality readings and location from
+        external providers, such as <a href="https://map.safecast.org"
+          >Safecast</a
+        >)</span
+      >
     </label>
   </div>
 
