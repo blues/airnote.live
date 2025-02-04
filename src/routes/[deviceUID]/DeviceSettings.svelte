@@ -78,8 +78,9 @@
         id="indoorDevice"
       />
       <span
-        >Indoor device (Will omit device data and location from <a
-          href="https://map.safecast.org">global Safecast map</a
+        >Indoor device (Omits device air quality readings and location from
+        external providers, such as <a href="https://map.safecast.org"
+          >Safecast</a
         >)</span
       >
     </label>
