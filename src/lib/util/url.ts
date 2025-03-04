@@ -6,6 +6,12 @@ export function getPathname() {
   return decodeURIComponent(location.pathname);
 }
 
+// remove the "dev:" prefix from the DeviceUID.
+export function getDeviceUID(deviceUID: string) {
+  return deviceUID.replace('dev:', '');
+}
+
 export function getNotehubEventsUrl(deviceUID: string) {
-  return `https://notehub.io/project/${APP_UID}/events?filter_dev=${deviceUID}`;
+  const deviceNumber = getDeviceUID(deviceUID);
+  return `https://notehub.io/project/${APP_UID}/events?filter_dev=${deviceNumber}`;
 }
