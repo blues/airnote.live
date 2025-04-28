@@ -7,9 +7,11 @@ import {
 } from '$lib/services/notehub';
 import { ERROR_TYPE } from '$lib/constants/ErrorTypes.js';
 import type { DeviceEnvVars } from '$lib/services/DeviceEnvVarModel.js';
+import { AIRNOTE_PRODUCT_UID } from '$lib/constants.js';
 
 export async function load({ params, url }) {
   const deviceUID = params.deviceUID;
+  const productUID = url.searchParams.get('product') || AIRNOTE_PRODUCT_UID;
   const pin = url.searchParams.get('pin');
   const internalNav = url.searchParams.get('internalNav');
 
@@ -42,13 +44,15 @@ export async function load({ params, url }) {
     notehubResponse = envVarResponse.environment_variables;
   }
 
-  if (pin === '') {
+  if (pin === '' || pin === null) {
     error = { errorType: ERROR_TYPE.MISSING_PIN };
   } else if (pin !== null) {
-    await getDeviceEnvironmentVariablesByPin(deviceUID, pin).catch((err) => {
-      console.error(err);
-      error = { errorType: ERROR_TYPE.INVALID_PIN };
-    });
+    await getDeviceEnvironmentVariablesByPin(productUID, deviceUID, pin).catch(
+      (err) => {
+        console.error(err);
+        error = { errorType: ERROR_TYPE.INVALID_PIN };
+      }
+    );
   }
 
   if (notehubError) {
@@ -61,6 +65,7 @@ export async function load({ params, url }) {
 export const actions = {
   saveSettings: async ({ params, url, request }) => {
     const deviceUID = params.deviceUID;
+    const productUID = url.searchParams.get('product') || AIRNOTE_PRODUCT_UID;
     const pin = url.searchParams.get('pin');
     const body = await request.formData();
 
@@ -89,6 +94,7 @@ export const actions = {
     } else if (pin !== null) {
       try {
         await updateDeviceEnvironmentVariablesByPin(
+          productUID,
           deviceUID,
           pin,
           formattedBody

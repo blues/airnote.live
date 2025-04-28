@@ -10,6 +10,17 @@ export function isValidDeviceUID(deviceUID: string) {
   return validPrefixes.some((prefix) => deviceUID.startsWith(prefix));
 }
 
+export function isValidProductUID(productUID: string) {
+  const validProductUIDPrefixes = [
+    'com.blues.airnote',
+    'org.airnote.solar.v1',
+    'product:org.airnote.solar.air.v1'
+  ];
+  return validProductUIDPrefixes.some((prefix) =>
+    productUID.startsWith(prefix)
+  );
+}
+
 const notehubJsClient = NotehubJs.ApiClient.instance;
 const deviceApiInstance = new NotehubJs.DeviceApi();
 const eventApiInstance = new NotehubJs.EventApi();
@@ -33,6 +44,7 @@ export async function getDeviceEnvironmentVariables(deviceUID: string) {
 
 // read env vars by pin
 export async function getDeviceEnvironmentVariablesByPin(
+  productUID: string,
   deviceUID: string,
   pinNumber: string
 ) {
@@ -42,10 +54,16 @@ export async function getDeviceEnvironmentVariablesByPin(
     );
   }
 
+  if (!isValidProductUID(productUID)) {
+    console.warn(
+      `Invalid product UID ${productUID}. Skipping getDeviceEnvVar() API call.`
+    );
+  }
+
   const { pin } = notehubJsClient.authentications;
   pin.apiKey = pinNumber;
   return await deviceApiInstance.getDeviceEnvironmentVariablesByPin(
-    AIRNOTE_PROJECT_UID,
+    productUID,
     deviceUID
   );
 }
@@ -69,6 +87,7 @@ async function deleteDeviceEnvironmentVariable(deviceUID: string, key: string) {
 
 // update env vars on device by pin
 async function putDeviceEnvironmentVariablesByPin(
+  productUID: string,
   deviceUID: string,
   pinNumber: string,
   environmentVariables: DeviceEnvVars
@@ -79,19 +98,26 @@ async function putDeviceEnvironmentVariablesByPin(
     );
   }
 
+  if (!isValidProductUID(productUID)) {
+    console.warn(
+      `Invalid product UID ${productUID}. Skipping getDeviceEnvVar() API call.`
+    );
+  }
+
   const { pin } = notehubJsClient.authentications;
   pin.apiKey = pinNumber;
   const deviceEnvironmentVariables = new NotehubJs.EnvironmentVariables(
     environmentVariables
   );
   return await deviceApiInstance.putDeviceEnvironmentVariablesByPin(
-    AIRNOTE_PROJECT_UID,
+    productUID,
     deviceUID,
     deviceEnvironmentVariables
   );
 }
 
 export async function updateDeviceEnvironmentVariablesByPin(
+  productUID: string,
   deviceUID: string,
   pinNumber: string,
   environmentVariables: DeviceEnvVars
@@ -101,6 +127,13 @@ export async function updateDeviceEnvironmentVariablesByPin(
       `Invalid device UID ${deviceUID}. Skipping updateDeviceEnvVar() API call.`
     );
   }
+
+  if (!isValidProductUID(productUID)) {
+    console.warn(
+      `Invalid product UID ${productUID}. Skipping getDeviceEnvVar() API call.`
+    );
+  }
+
   // If the _air_mins environment variable is set to the default, don't save the value so
   // the device defaults to the project-level _air_mins. Also, delete the environment variable
   // on the device in case it already exists.
@@ -112,6 +145,7 @@ export async function updateDeviceEnvironmentVariablesByPin(
     await deleteDeviceEnvironmentVariable(deviceUID, '_air_mins');
   }
   return await putDeviceEnvironmentVariablesByPin(
+    productUID,
     deviceUID,
     pinNumber,
     environmentVariables
