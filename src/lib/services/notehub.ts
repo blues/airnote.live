@@ -11,13 +11,10 @@ export function isValidDeviceUID(deviceUID: string) {
 }
 
 export function isValidProductUID(productUID: string) {
-  const validProductUIDs = [
-    'com.blues.airnote',
-    'org.airnote.solar.v1',
-    'org.airnote.solar.rad.v1',
-    'org.airnote.solar.air.v1'
-  ];
-  return validProductUIDs.includes(productUID);
+  const validProductUIDPrefixes = ['com.blues.airnote', 'org.airnote.solar.v1'];
+  return validProductUIDPrefixes.some((prefix) =>
+    productUID.startsWith(prefix)
+  );
 }
 
 const notehubJsClient = NotehubJs.ApiClient.instance;
