@@ -5,6 +5,7 @@
   import { getCurrentDeviceFromUrl } from '$lib/services/device';
   import DeviceSettings from './DeviceSettings.svelte';
   import DeviceOwner from './DeviceOwner.svelte';
+  import DeviceAdvanced from './DeviceAdvanced.svelte';
   import {
     deviceName,
     displayValue,
@@ -14,7 +15,8 @@
     sampleFrequencyLow,
     contactName,
     contactEmail,
-    contactAffiliation
+    contactAffiliation,
+    routingUrl
   } from '$lib/stores/settingsStore';
   import type {
     AirnoteDevice,
@@ -117,6 +119,7 @@
     if (data['_contact_email']) contactEmail.set(data['_contact_email']);
     if (data['_contact_affiliation'])
       contactAffiliation.set(data['_contact_affiliation']);
+    if (data['_route']) routingUrl.set(data['_route']);
   };
 
   if (data.notehubResponse) {
@@ -191,6 +194,17 @@
 
 <section>
   <DeviceOwner
+    {enableFields}
+    on:settingsSaved={() => handleSettingsSaved()}
+    on:settingsError={() => handleSettingsError()}
+    {pin}
+  />
+</section>
+
+<hr />
+
+<section>
+  <DeviceAdvanced
     {enableFields}
     on:settingsSaved={() => handleSettingsSaved()}
     on:settingsError={() => handleSettingsError()}
