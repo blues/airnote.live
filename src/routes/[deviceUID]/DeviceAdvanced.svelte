@@ -63,7 +63,7 @@
   }
   .help-text {
     font-size: 0.9em;
-    color: #666;
+    color: var(--grey);
     margin-top: 0;
     margin-bottom: 1rem;
   }
