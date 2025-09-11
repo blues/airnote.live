@@ -9,3 +9,4 @@ export const sampleFrequencyLow = writable('720');
 export const contactName = writable('');
 export const contactEmail = writable('');
 export const contactAffiliation = writable('');
+export const routingUrl = writable('');

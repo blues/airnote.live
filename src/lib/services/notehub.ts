@@ -13,7 +13,7 @@ export function isValidDeviceUID(deviceUID: string) {
 export function isValidProductUID(productUID: string) {
   const validProductUIDPrefixes = [
     'com.blues.airnote',
-    'org.airnote.solar.v1',
+    'product:org.airnote.solar.v1',
     'product:org.airnote.solar.air.v1'
   ];
   return validProductUIDPrefixes.some((prefix) =>

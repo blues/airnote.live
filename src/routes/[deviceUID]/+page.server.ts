@@ -158,7 +158,7 @@ function createEnvVarBody(
   const currentCheckboxState = determineCurrentCheckboxState(formData, envVars);
 
   return {
-    _sn: formData.get('deviceName')
+    _sn: formData.has('deviceName')
       ? formData.get('deviceName')
       : envVars['_sn'],
     _air_mins: formatAirSamplingInterval(formData, envVars),
@@ -166,14 +166,17 @@ function createEnvVarBody(
     _air_status: formData.get('displayValue')
       ? formData.get('displayValue')
       : envVars['_air_status'],
-    _contact_name: formData.get('contactName')
+    _contact_name: formData.has('contactName')
       ? formData.get('contactName')
       : envVars['_contact_name'],
-    _contact_email: formData.get('contactEmail')
+    _contact_email: formData.has('contactEmail')
       ? formData.get('contactEmail')
       : envVars['_contact_email'],
-    _contact_affiliation: formData.get('contactAffiliation')
+    _contact_affiliation: formData.has('contactAffiliation')
       ? formData.get('contactAffiliation')
-      : envVars['_contact_affiliation']
+      : envVars['_contact_affiliation'],
+    _route: formData.has('routingUrl')
+      ? formData.get('routingUrl')
+      : envVars['_route']
   };
 }
