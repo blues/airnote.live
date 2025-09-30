@@ -597,17 +597,24 @@
   }
   .measurement-pm,
   .measurement-air {
-    display: flex;
     text-align: center;
-    padding: 3rem 0;
+    padding: 2rem 1rem;
   }
-
+  .measurement-pm {
+    display: flex;
+  }
+  .measurement-air {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+  }
   .measurement-air {
     border-top: 1px solid var(--lightestGrey);
   }
   .measurement-pm > div,
   .measurement-air > div {
     flex-grow: 1;
+    margin: 0.5rem;
   }
   .measurement-air strong,
   .measurement-pm strong {
@@ -639,11 +646,11 @@
       left: 15%;
       width: 70%;
     }
+  }
 
-    @media (max-width: 376px) {
-      .box {
-        padding: 1.5rem 0.5rem;
-      }
+  @media (max-width: 376px) {
+    .box {
+      padding: 1.5rem 0.5rem;
     }
   }
 </style>
