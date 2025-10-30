@@ -1,12 +1,12 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte';
-  import { format } from 'date-fns';
   import { toFahrenheit } from '../../services/air';
   import { DATE_TIME_FORMAT_KEY } from '../../constants';
   import Chart, {
     type ChartConfiguration,
     type ChartOptions
   } from 'chart.js/auto';
+  import 'chartjs-adapter-date-fns';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import type { ChartDataPointType } from '$lib/services/ChartModel';
 
@@ -28,7 +28,7 @@
     tempDataCelsius = readings.map((reading) => {
       const d = reading.captured * 1000;
       return {
-        x: format(d, DATE_TIME_FORMAT_KEY),
+        x: d,
         y: reading.temperature
           ? parseFloat(reading.temperature.toString()).toFixed(2)
           : 0.0
@@ -37,7 +37,7 @@
     tempDataFahrenheit = readings.map((reading) => {
       const d = reading.captured * 1000;
       return {
-        x: format(d, DATE_TIME_FORMAT_KEY),
+        x: d,
         y: reading.temperature
           ? parseFloat(toFahrenheit(reading.temperature).toString()).toFixed(2)
           : 0.0
@@ -96,6 +96,13 @@
     maintainAspectRatio: false,
     scales: {
       x: {
+        type: 'time',
+        time: {
+          unit: 'minute',
+          displayFormats: {
+            minute: DATE_TIME_FORMAT_KEY
+          }
+        },
         ticks: {
           maxTicksLimit: 10
         }

@@ -1,5 +1,5 @@
 export interface ChartDataPointType {
-  x: string;
+  x: string | number;
   y: number | string;
   voltage?: string;
 }
