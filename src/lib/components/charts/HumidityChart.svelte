@@ -36,10 +36,6 @@
 
   $: if (humdityChart) {
     humdityChart.data.datasets[0].data = humidityData;
-    humdityChart.update();
-  }
-
-  $: if (humdityChart && (min !== undefined || max !== undefined)) {
     humdityChart.options = options as any;
     humdityChart.update();
   }

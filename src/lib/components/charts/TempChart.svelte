@@ -69,10 +69,6 @@
       temperatureChart.data.datasets[0].data = [];
       temperatureChart.data.datasets[1].data = tempDataFahrenheit;
     }
-    temperatureChart.update();
-  }
-
-  $: if (temperatureChart && (min !== undefined || max !== undefined)) {
     temperatureChart.options = options as any;
     temperatureChart.update();
   }

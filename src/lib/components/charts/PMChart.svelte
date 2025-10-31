@@ -59,10 +59,6 @@
     pmChart.data.datasets[0].data = pm1Data;
     pmChart.data.datasets[1].data = pm2_5Data;
     pmChart.data.datasets[2].data = pm10Data;
-    pmChart.update();
-  }
-
-  $: if (pmChart && (min !== undefined || max !== undefined)) {
     pmChart.options = options as any;
     pmChart.update();
   }

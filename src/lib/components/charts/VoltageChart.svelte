@@ -53,10 +53,6 @@
   $: if (voltageChart) {
     voltageChart.data.datasets[0].data = voltageData;
     voltageChart.data.datasets[1].data = chargingData;
-    voltageChart.update();
-  }
-
-  $: if (voltageChart && (min !== undefined || max !== undefined)) {
     voltageChart.options = options as any;
     voltageChart.update();
   }

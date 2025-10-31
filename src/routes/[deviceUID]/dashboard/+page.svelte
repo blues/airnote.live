@@ -21,9 +21,9 @@
   import {
     convertDateRange,
     dateRangeDisplayText,
-    filterEventsByDate
+    filterEventsByDate,
+    getChartTimeRange
   } from '$lib/util/dates';
-  import { subDays } from 'date-fns/subDays';
   import { renderErrorMessage } from '$lib/util/errors';
 
   import Actions from './Actions.svelte';
@@ -91,10 +91,9 @@
     displayedReadings = filterEventsByDate(readings, convertedTimeframe);
 
     // Calculate time range for chart x-axis
-    const now = new Date();
-    const startDate = subDays(now, convertedTimeframe);
-    timeRangeMin = startDate.getTime();
-    timeRangeMax = now.getTime();
+    const timeRange = getChartTimeRange(convertedTimeframe);
+    timeRangeMin = timeRange.min;
+    timeRangeMax = timeRange.max;
 
     // if the selected date range is 30 days, expand the smaller charts to full width
     if (selectedDateRange === DATE_RANGE_OPTIONS.THIRTY_DAYS.displayText) {

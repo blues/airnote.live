@@ -34,10 +34,6 @@
 
   $: if (aqiChart) {
     aqiChart.data.datasets[0].data = aqiData;
-    aqiChart.update();
-  }
-
-  $: if (aqiChart && (min !== undefined || max !== undefined)) {
     aqiChart.options = options as any;
     aqiChart.update();
   }
