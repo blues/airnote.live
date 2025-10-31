@@ -12,6 +12,8 @@
   import type { ChartDataPointType } from '$lib/services/ChartModel';
 
   export let readings: AirnoteReading[] = [];
+  export let min: number | undefined = undefined;
+  export let max: number | undefined = undefined;
 
   let pmChart: Chart<'line', ChartDataPointType[], unknown>;
   let ctx: HTMLCanvasElement;
@@ -60,6 +62,11 @@
     pmChart.update();
   }
 
+  $: if (pmChart && (min !== undefined || max !== undefined)) {
+    pmChart.options = options as any;
+    pmChart.update();
+  }
+
   const data: ChartData<'line', ChartDataPointType[], unknown> = {
     datasets: [
       {
@@ -89,7 +96,7 @@
     ]
   };
 
-  const options: ChartOptions<'line'> = {
+  $: options = ({
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -102,7 +109,9 @@
         },
         ticks: {
           maxTicksLimit: 10
-        }
+        },
+        ...(min !== undefined && { min }),
+        ...(max !== undefined && { max })
       }
     },
     responsive: true,
@@ -119,7 +128,7 @@
         }
       }
     }
-  };
+  }) as ChartOptions<'line'>;
 
   const config: ChartConfiguration<'line', ChartDataPointType[], unknown> = {
     type: 'line',

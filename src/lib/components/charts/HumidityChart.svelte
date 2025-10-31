@@ -11,6 +11,8 @@
   import type { ChartDataPointType } from '$lib/services/ChartModel';
 
   export let readings: AirnoteReading[] = [];
+  export let min: number | undefined = undefined;
+  export let max: number | undefined = undefined;
 
   let humdityChart: Chart<'line', ChartDataPointType[], unknown>;
   let ctx: HTMLCanvasElement;
@@ -37,6 +39,11 @@
     humdityChart.update();
   }
 
+  $: if (humdityChart && (min !== undefined || max !== undefined)) {
+    humdityChart.options = options as any;
+    humdityChart.update();
+  }
+
   const data = {
     datasets: [
       {
@@ -51,7 +58,7 @@
     ]
   };
 
-  const options: ChartOptions<'line'> = {
+  $: options = ({
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -64,7 +71,9 @@
         },
         ticks: {
           maxTicksLimit: 10
-        }
+        },
+        ...(min !== undefined && { min }),
+        ...(max !== undefined && { max })
       }
     },
     responsive: true,
@@ -81,7 +90,7 @@
         }
       }
     }
-  };
+  }) as ChartOptions<'line'>;
 
   const config: ChartConfiguration<'line', ChartDataPointType[], unknown> = {
     type: 'line',
