@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { format } from 'date-fns/format';
   import { DATE_TIME_FORMAT_KEY } from '$lib/constants';
   import Chart, {
     type ChartConfiguration,
@@ -103,6 +104,9 @@
       },
       tooltip: {
         callbacks: {
+          title: function (context: any) {
+            return format(context[0].parsed.x, DATE_TIME_FORMAT_KEY);
+          },
           // too much of a pain to make tooltips and labels TS compatible
           label: function (context: any) {
             let label = context.dataset.label || '';

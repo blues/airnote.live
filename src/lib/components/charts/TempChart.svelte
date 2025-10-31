@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte';
+  import { format } from 'date-fns/format';
   import { toFahrenheit } from '../../services/air';
   import { DATE_TIME_FORMAT_KEY } from '../../constants';
   import Chart, {
@@ -113,6 +114,13 @@
       title: {
         display: true,
         text: 'Temperature'
+      },
+      tooltip: {
+        callbacks: {
+          title: function (context: any) {
+            return format(context[0].parsed.x, DATE_TIME_FORMAT_KEY);
+          }
+        }
       }
     }
   };

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { format } from 'date-fns/format';
   import { DATE_TIME_FORMAT_KEY } from '$lib/constants';
   import Chart, {
     type ChartConfiguration,
@@ -69,6 +70,13 @@
       title: {
         display: true,
         text: 'Air Quality Index'
+      },
+      tooltip: {
+        callbacks: {
+          title: function (context: any) {
+            return format(context[0].parsed.x, DATE_TIME_FORMAT_KEY);
+          }
+        }
       }
     }
   };
