@@ -1,6 +1,7 @@
 import DATE_RANGE_OPTIONS from '$lib/constants/DateRangeOptions';
 import type { AirnoteReading } from '$lib/services/AirReadingModel';
-import { isAfter, subDays } from 'date-fns';
+import { isAfter } from 'date-fns/isAfter';
+import { subDays } from 'date-fns/subDays';
 
 interface DateRangeOption {
   [key: string]: number;

@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { format } from 'date-fns';
+  import { format } from 'date-fns/format';
   import { DATE_TIME_FORMAT_KEY } from '$lib/constants';
   import Chart, {
     type ChartConfiguration,
     type ChartOptions,
     type ChartData
   } from 'chart.js/auto';
+  import 'chartjs-adapter-date-fns';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import type { ChartDataPointType } from '$lib/services/ChartModel';
 
@@ -29,7 +30,7 @@
     voltageData = readings.reverse().map((reading) => {
       const d = reading.captured * 1000;
       return {
-        x: format(d, DATE_TIME_FORMAT_KEY),
+        x: d,
         y: reading.voltage
           ? parseFloat(reading.voltage.toString()).toFixed(2)
           : 0.0
@@ -40,7 +41,7 @@
       .map((reading) => {
         const d = reading.captured * 1000;
         return {
-          x: format(d, DATE_TIME_FORMAT_KEY),
+          x: d,
           y: MAX_VOLTAGE,
           voltage: parseFloat(reading.voltage.toString()).toFixed(2)
         };
@@ -79,6 +80,13 @@
     maintainAspectRatio: false,
     scales: {
       x: {
+        type: 'time',
+        time: {
+          unit: 'minute',
+          displayFormats: {
+            minute: DATE_TIME_FORMAT_KEY
+          }
+        },
         ticks: {
           maxTicksLimit: 10
         }
@@ -96,6 +104,9 @@
       },
       tooltip: {
         callbacks: {
+          title: function (context: any) {
+            return format(context[0].parsed.x, DATE_TIME_FORMAT_KEY);
+          },
           // too much of a pain to make tooltips and labels TS compatible
           label: function (context: any) {
             let label = context.dataset.label || '';

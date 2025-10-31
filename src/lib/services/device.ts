@@ -1,5 +1,5 @@
 import { DATE_FORMAT_KEY, AIRNOTE_PRODUCT_UID } from '$lib/constants';
-import { format } from 'date-fns';
+import { format } from 'date-fns/format';
 import queryString from 'query-string';
 import type { AirnoteReading } from '$lib/services/AirReadingModel';
 import type { NotehubEvent } from '$lib/services/NotehubEventModel';

@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { format } from 'date-fns';
+  import { format } from 'date-fns/format';
   import { DATE_TIME_FORMAT_KEY } from '$lib/constants';
   import Chart, {
     type ChartConfiguration,
     type ChartData,
     type ChartOptions
   } from 'chart.js/auto';
+  import 'chartjs-adapter-date-fns';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import type { ChartDataPointType } from '$lib/services/ChartModel';
 
@@ -26,7 +27,7 @@
     pm1Data = readings.map((reading) => {
       const d = reading.captured * 1000;
       return {
-        x: format(d, DATE_TIME_FORMAT_KEY),
+        x: d,
         y: reading.pm01_0
           ? parseFloat(reading.pm01_0.toString()).toFixed(2)
           : 0.0
@@ -35,7 +36,7 @@
     pm2_5Data = readings.map((reading) => {
       const d = reading.captured * 1000;
       return {
-        x: format(d, DATE_TIME_FORMAT_KEY),
+        x: d,
         y: reading.pm02_5
           ? parseFloat(reading.pm02_5.toString()).toFixed(2)
           : 0.0
@@ -44,7 +45,7 @@
     pm10Data = readings.map((reading) => {
       const d = reading.captured * 1000;
       return {
-        x: format(d, DATE_TIME_FORMAT_KEY),
+        x: d,
         y: reading.pm10_0
           ? parseFloat(reading.pm10_0.toString()).toFixed(2)
           : 0.0
@@ -92,6 +93,13 @@
     maintainAspectRatio: false,
     scales: {
       x: {
+        type: 'time',
+        time: {
+          unit: 'minute',
+          displayFormats: {
+            minute: DATE_TIME_FORMAT_KEY
+          }
+        },
         ticks: {
           maxTicksLimit: 10
         }
@@ -102,6 +110,13 @@
       title: {
         display: true,
         text: 'Air Quality PM (μg/m³)'
+      },
+      tooltip: {
+        callbacks: {
+          title: function (context: any) {
+            return format(context[0].parsed.x, DATE_TIME_FORMAT_KEY);
+          }
+        }
       }
     }
   };

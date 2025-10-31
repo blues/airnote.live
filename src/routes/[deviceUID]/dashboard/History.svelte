@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { format, parse } from 'date-fns';
+  import { format } from 'date-fns/format';
+  import { parse } from 'date-fns/parse';
   import { DATE_FORMAT_KEY } from '$lib/constants';
   import { getDisplay } from '$lib/services/air';
   import type { AirnoteHistoryReadings } from '$lib/services/AirHistoryModel';

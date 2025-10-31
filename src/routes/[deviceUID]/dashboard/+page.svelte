@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { format } from 'date-fns';
+  import { format } from 'date-fns/format';
   import { NotificationDisplay } from '@beyonk/svelte-notifications';
   import AQIChart from '$lib/components/charts/AQIChart.svelte';
   import HumidityChart from '$lib/components/charts/HumidityChart.svelte';
