@@ -21,7 +21,8 @@
   import {
     convertDateRange,
     dateRangeDisplayText,
-    filterEventsByDate
+    filterEventsByDate,
+    getChartTimeRange
   } from '$lib/util/dates';
   import { renderErrorMessage } from '$lib/util/errors';
 
@@ -43,6 +44,8 @@
     pm10_0: {}
   };
   let displayedReadings: AirnoteReading[];
+  let timeRangeMin: number;
+  let timeRangeMax: number;
 
   let error = false;
   let errorType: string;
@@ -86,6 +89,12 @@
   $: if (selectedDateRange) {
     const convertedTimeframe = convertDateRange(selectedDateRange);
     displayedReadings = filterEventsByDate(readings, convertedTimeframe);
+
+    // Calculate time range for chart x-axis
+    const timeRange = getChartTimeRange(convertedTimeframe);
+    timeRangeMin = timeRange.min;
+    timeRangeMax = timeRange.max;
+
     // if the selected date range is 30 days, expand the smaller charts to full width
     if (selectedDateRange === DATE_RANGE_OPTIONS.THIRTY_DAYS.displayText) {
       expandCharts = true;
@@ -307,27 +316,29 @@
 
     <div class={chartLayout}>
       <div class="box chart1 {chartWidth}">
-        <VoltageChart readings={displayedReadings} />
+        <VoltageChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
       </div>
 
       <div class="box chart2 {chartWidth}">
         <TempChart
           {tempDisplay}
           readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
           on:change={handleTempDisplayChange}
         />
       </div>
 
       <div class="box chart3 {chartWidth}">
-        <AQIChart readings={displayedReadings} />
+        <AQIChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
       </div>
 
       <div class="box chart4 {chartWidth}">
-        <HumidityChart readings={displayedReadings} />
+        <HumidityChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
       </div>
 
       <div class="box chart5">
-        <PMChart readings={displayedReadings} />
+        <PMChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
       </div>
     </div>
     {#if showBanner}

@@ -34,6 +34,15 @@ export function filterEventsByDate(
   return events.filter((event) => isAfter(event.captured * 1000, startingDate));
 }
 
+export function getChartTimeRange(daysPrior: number) {
+  const now = new Date();
+  const startDate = subDays(now, daysPrior);
+  return {
+    min: startDate.getTime(),
+    max: now.getTime()
+  };
+}
+
 function convertToSeconds(millisecondsTimestamp: number) {
   return Math.floor(millisecondsTimestamp / 1000);
 }

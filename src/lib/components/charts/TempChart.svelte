@@ -13,6 +13,8 @@
 
   export let readings: AirnoteReading[] = [];
   export let tempDisplay: string = 'C';
+  export let min: number | undefined = undefined;
+  export let max: number | undefined = undefined;
 
   let temperatureChart: Chart<'line' | 'bar', ChartDataPointType[], unknown>;
   let ctx: HTMLCanvasElement;
@@ -67,6 +69,7 @@
       temperatureChart.data.datasets[0].data = [];
       temperatureChart.data.datasets[1].data = tempDataFahrenheit;
     }
+    temperatureChart.options = options as any;
     temperatureChart.update();
   }
 
@@ -93,7 +96,7 @@
     ]
   };
 
-  const options: ChartOptions<'line'> = {
+  $: options = ({
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -106,7 +109,9 @@
         },
         ticks: {
           maxTicksLimit: 10
-        }
+        },
+        ...(min !== undefined && { min }),
+        ...(max !== undefined && { max })
       }
     },
     responsive: true,
@@ -123,7 +128,7 @@
         }
       }
     }
-  };
+  }) as ChartOptions<'line'>;
 
   const config: ChartConfiguration<'line', ChartDataPointType[], unknown> = {
     type: 'line',
