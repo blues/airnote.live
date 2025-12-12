@@ -28,22 +28,21 @@
   }
 
   function getTempData(readings: AirnoteReading[]) {
-    tempDataCelsius = readings.map((reading) => {
+    const validReadings = readings.filter((reading) => reading.temperature !== undefined);
+
+    tempDataCelsius = validReadings.map((reading) => {
       const d = reading.captured * 1000;
       return {
         x: d,
-        y: reading.temperature
-          ? parseFloat(reading.temperature.toString()).toFixed(2)
-          : 0.0
+        y: parseFloat(reading.temperature.toString()).toFixed(2)
       };
     });
-    tempDataFahrenheit = readings.map((reading) => {
+
+    tempDataFahrenheit = validReadings.map((reading) => {
       const d = reading.captured * 1000;
       return {
         x: d,
-        y: reading.temperature
-          ? parseFloat(toFahrenheit(reading.temperature).toString()).toFixed(2)
-          : 0.0
+        y: parseFloat(toFahrenheit(reading.temperature).toString()).toFixed(2)
       };
     });
   }

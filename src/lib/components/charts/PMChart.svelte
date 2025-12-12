@@ -26,33 +26,35 @@
   }
 
   function getPMData(readings: AirnoteReading[]) {
-    pm1Data = readings.map((reading) => {
-      const d = reading.captured * 1000;
-      return {
-        x: d,
-        y: reading.pm01_0
-          ? parseFloat(reading.pm01_0.toString()).toFixed(2)
-          : 0.0
-      };
-    });
-    pm2_5Data = readings.map((reading) => {
-      const d = reading.captured * 1000;
-      return {
-        x: d,
-        y: reading.pm02_5
-          ? parseFloat(reading.pm02_5.toString()).toFixed(2)
-          : 0.0
-      };
-    });
-    pm10Data = readings.map((reading) => {
-      const d = reading.captured * 1000;
-      return {
-        x: d,
-        y: reading.pm10_0
-          ? parseFloat(reading.pm10_0.toString()).toFixed(2)
-          : 0.0
-      };
-    });
+    pm1Data = readings
+      .filter((reading) => reading.pm01_0 !== undefined)
+      .map((reading) => {
+        const d = reading.captured * 1000;
+        return {
+          x: d,
+          y: parseFloat(reading.pm01_0.toString()).toFixed(2)
+        };
+      });
+
+    pm2_5Data = readings
+      .filter((reading) => reading.pm02_5 !== undefined)
+      .map((reading) => {
+        const d = reading.captured * 1000;
+        return {
+          x: d,
+          y: parseFloat(reading.pm02_5.toString()).toFixed(2)
+        };
+      });
+
+    pm10Data = readings
+      .filter((reading) => reading.pm10_0 !== undefined)
+      .map((reading) => {
+        const d = reading.captured * 1000;
+        return {
+          x: d,
+          y: parseFloat(reading.pm10_0.toString()).toFixed(2)
+        };
+      });
   }
 
   $: if (pmChart) {
