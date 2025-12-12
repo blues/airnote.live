@@ -23,15 +23,15 @@
   }
 
   function getHumidityData(readings: AirnoteReading[]) {
-    humidityData = readings.map((reading) => {
-      const d = reading.captured * 1000;
-      return {
-        x: d,
-        y: reading.humidity
-          ? parseFloat(reading.humidity.toString()).toFixed(2)
-          : 0.0
-      };
-    });
+    humidityData = readings
+      .filter((reading) => reading.humidity !== undefined)
+      .map((reading) => {
+        const d = reading.captured * 1000;
+        return {
+          x: d,
+          y: parseFloat(reading.humidity.toString()).toFixed(2)
+        };
+      });
   }
 
   $: if (humdityChart) {

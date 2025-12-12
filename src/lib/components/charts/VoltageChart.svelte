@@ -29,17 +29,18 @@
   }
 
   function getVoltageData(readings: AirnoteReading[]) {
-    voltageData = readings.reverse().map((reading) => {
-      const d = reading.captured * 1000;
-      return {
-        x: d,
-        y: reading.voltage
-          ? parseFloat(reading.voltage.toString()).toFixed(2)
-          : 0.0
-      };
-    });
+    voltageData = readings
+      .reverse()
+      .filter((reading) => reading.voltage !== undefined)
+      .map((reading) => {
+        const d = reading.captured * 1000;
+        return {
+          x: d,
+          y: parseFloat(reading.voltage.toString()).toFixed(2)
+        };
+      });
     chargingData = readings
-      .filter((reading) => reading.charging)
+      .filter((reading) => reading.charging && reading.voltage)
       .map((reading) => {
         const d = reading.captured * 1000;
         return {
@@ -79,7 +80,7 @@
     ]
   };
 
-  $: options = ({
+  $: options = {
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -125,7 +126,7 @@
         }
       }
     }
-  }) as ChartOptions<'line'>;
+  } as ChartOptions<'line'>;
 
   const config: ChartConfiguration<
     'line' | 'bar',

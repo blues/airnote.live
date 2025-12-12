@@ -23,13 +23,15 @@
   }
 
   function getAQIData(readings: AirnoteReading[]) {
-    aqiData = readings.map((reading) => {
-      const d = reading.captured * 1000;
-      return {
-        x: d,
-        y: reading.aqi
-      };
-    });
+    aqiData = readings
+      .filter((reading) => reading.aqi !== undefined)
+      .map((reading) => {
+        const d = reading.captured * 1000;
+        return {
+          x: d,
+          y: reading.aqi
+        };
+      });
   }
 
   $: if (aqiChart) {
