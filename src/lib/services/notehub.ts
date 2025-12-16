@@ -2,6 +2,7 @@ import * as NotehubJs from '@blues-inc/notehub-js';
 import { HUB_AUTH_TOKEN } from '$env/static/private';
 import { convertTimeframeToSeconds } from '$lib/util/dates';
 import type { DeviceEnvVars } from './DeviceEnvVarModel';
+import { AIRNOTE_V3_PRODUCT_UID } from '$lib/constants';
 
 const AIRNOTE_PROJECT_UID = 'app:2606f411-dea6-44a0-9743-1130f57d77d8';
 
@@ -14,7 +15,8 @@ export function isValidProductUID(productUID: string) {
   const validProductUIDPrefixes = [
     'com.blues.airnote',
     'product:org.airnote.solar.v1',
-    'product:org.airnote.solar.air.v1'
+    'product:org.airnote.solar.air.v1',
+    'product:com.blues.airnote.v3'
   ];
   return validProductUIDPrefixes.some((prefix) =>
     productUID.startsWith(prefix)
@@ -24,6 +26,20 @@ export function isValidProductUID(productUID: string) {
 const notehubJsClient = NotehubJs.ApiClient.instance;
 const deviceApiInstance = new NotehubJs.DeviceApi();
 const eventApiInstance = new NotehubJs.EventApi();
+
+// get device info including productUID
+export async function getDeviceInfo(deviceUID: string) {
+  if (!isValidDeviceUID(deviceUID)) {
+    console.warn(
+      `Invalid device UID ${deviceUID}. Skipping getDevice() API call.`
+    );
+    return null;
+  }
+
+  const { api_key } = notehubJsClient.authentications;
+  api_key.apiKey = HUB_AUTH_TOKEN;
+  return await deviceApiInstance.getDevice(AIRNOTE_PROJECT_UID, deviceUID);
+}
 
 // read env vars only
 export async function getDeviceEnvironmentVariables(deviceUID: string) {
@@ -76,8 +92,8 @@ async function deleteDeviceEnvironmentVariable(deviceUID: string, key: string) {
     );
   }
 
-  const { pin } = notehubJsClient.authentications;
-  pin.apiKey = HUB_AUTH_TOKEN;
+  const { api_key } = notehubJsClient.authentications;
+  api_key.apiKey = HUB_AUTH_TOKEN;
   return await deviceApiInstance.deleteDeviceEnvironmentVariable(
     AIRNOTE_PROJECT_UID,
     deviceUID,
@@ -122,6 +138,16 @@ export async function updateDeviceEnvironmentVariablesByPin(
   pinNumber: string,
   environmentVariables: DeviceEnvVars
 ) {
+  console.log(
+    'updateDeviceEnvironmentVariablesByPin - productUID:',
+    productUID
+  );
+  console.log('updateDeviceEnvironmentVariablesByPin - deviceUID:', deviceUID);
+  console.log(
+    'updateDeviceEnvironmentVariablesByPin - environmentVariables:',
+    JSON.stringify(environmentVariables, null, 2)
+  );
+
   if (!isValidDeviceUID(deviceUID)) {
     console.warn(
       `Invalid device UID ${deviceUID}. Skipping updateDeviceEnvVar() API call.`
@@ -134,16 +160,36 @@ export async function updateDeviceEnvironmentVariablesByPin(
     );
   }
 
-  // If the _air_mins environment variable is set to the default, don't save the value so
-  // the device defaults to the project-level _air_mins. Also, delete the environment variable
+  // If the air_mins environment variable is set to the default, don't save the value so
+  // the device defaults to the project-level air_mins. Also, delete the environment variable
   // on the device in case it already exists.
+  const isV3 = productUID === AIRNOTE_V3_PRODUCT_UID;
+  const airMinsKey = isV3 ? 'air_mins' : '_air_mins';
+
+  console.log(
+    'updateDeviceEnvironmentVariablesByPin - isV3:',
+    isV3,
+    'airMinsKey:',
+    airMinsKey
+  );
+
+  // todo fix linting error and possibly refactor
   if (
-    environmentVariables._air_mins &&
-    environmentVariables._air_mins.toString().includes('high:30')
+    environmentVariables[airMinsKey] &&
+    environmentVariables[airMinsKey].toString().includes('high:30')
   ) {
-    delete environmentVariables._air_mins;
-    await deleteDeviceEnvironmentVariable(deviceUID, '_air_mins');
+    console.log(
+      'updateDeviceEnvironmentVariablesByPin - Deleting default air_mins'
+    );
+    delete environmentVariables[airMinsKey];
+    await deleteDeviceEnvironmentVariable(deviceUID, airMinsKey);
   }
+
+  console.log(
+    'updateDeviceEnvironmentVariablesByPin - Final payload:',
+    JSON.stringify(environmentVariables, null, 2)
+  );
+
   return await putDeviceEnvironmentVariablesByPin(
     productUID,
     deviceUID,

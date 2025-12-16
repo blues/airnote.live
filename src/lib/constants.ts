@@ -1,4 +1,5 @@
 export const AIRNOTE_PRODUCT_UID = 'product:org.airnote.solar.v1';
+export const AIRNOTE_V3_PRODUCT_UID = 'product:com.blues.airnote.v3';
 export const RADNOTE_PRODUCT_UID = 'product:org.airnote.solar.rad.v1';
 export const APP_UID = 'app:2606f411-dea6-44a0-9743-1130f57d77d8';
 
