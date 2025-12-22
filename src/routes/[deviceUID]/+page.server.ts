@@ -12,14 +12,13 @@ import { AIRNOTE_PRODUCT_UID, AIRNOTE_V3_PRODUCT_UID } from '$lib/constants.js';
 
 export async function load({ params, url }) {
   const deviceUID = params.deviceUID;
-  let productUID = url.searchParams.get('product') || AIRNOTE_PRODUCT_UID;
   const pin = url.searchParams.get('pin');
   const internalNav = url.searchParams.get('internalNav');
 
   if (!isValidDeviceUID(deviceUID)) {
     return {
       notehubResponse: null,
-      productUID,
+      productUID: url.searchParams.get('product') || AIRNOTE_PRODUCT_UID,
       error: { errorType: ERROR_TYPE.NOTEHUB_ERROR }
     };
   }
@@ -35,14 +34,22 @@ export async function load({ params, url }) {
   let error;
   let notehubResponse;
 
-  // Fetch device info to get the real productUID
+  // Fetch device info to get the real productUID - this is critical
   const deviceInfo = await getDeviceInfo(deviceUID).catch((err) => {
     console.error('Error fetching device info:', err);
+    notehubError = err;
   });
 
-  if (deviceInfo && deviceInfo.product_uid) {
-    productUID = deviceInfo.product_uid;
+  if (!deviceInfo || !deviceInfo.product_uid) {
+    // Can't proceed without knowing the correct productUID (v3 vs legacy affects env var format)
+    return {
+      notehubResponse: null,
+      productUID: url.searchParams.get('product') || AIRNOTE_PRODUCT_UID,
+      error: { errorType: ERROR_TYPE.NOTEHUB_ERROR }
+    };
   }
+
+  const productUID = deviceInfo.product_uid;
 
   const envVarResponse = await getDeviceEnvironmentVariables(deviceUID).catch(
     (err) => {
@@ -66,7 +73,7 @@ export async function load({ params, url }) {
     );
   }
 
-  if (notehubError) {
+  if (notehubError && !error) {
     error = { errorType: ERROR_TYPE.NOTEHUB_ERROR };
   }
 
@@ -76,7 +83,6 @@ export async function load({ params, url }) {
 export const actions = {
   saveSettings: async ({ params, url, request }) => {
     const deviceUID = params.deviceUID;
-    let productUID = url.searchParams.get('product') || AIRNOTE_PRODUCT_UID;
     const pin = url.searchParams.get('pin');
     const body = await request.formData();
 
@@ -87,14 +93,19 @@ export const actions = {
     let notehubError: { status: number } | undefined;
     let error;
 
-    // Fetch device info to get the real productUID
+    // Fetch device info to get the real productUID - critical for env var format
     const deviceInfo = await getDeviceInfo(deviceUID).catch((err) => {
       console.error('Error fetching device info:', err);
+      notehubError = err;
     });
 
-    if (deviceInfo && deviceInfo.product_uid) {
-      productUID = deviceInfo.product_uid;
+    if (!deviceInfo || !deviceInfo.product_uid) {
+      return fail(500, {
+        error: { errorType: ERROR_TYPE.NOTEHUB_ERROR }
+      });
     }
+
+    const productUID = deviceInfo.product_uid;
 
     let currentEnvVars;
     try {
@@ -107,16 +118,11 @@ export const actions = {
       notehubError = err as { status: number };
     }
 
-    // todo fix linting error
+    const isV3 = productUID === AIRNOTE_V3_PRODUCT_UID;
     const formattedBody: DeviceEnvVars = createEnvVarBody(
       body,
       currentEnvVars,
-      productUID
-    );
-
-    console.log(
-      'saveSettings - formattedBody to be sent:',
-      JSON.stringify(formattedBody, null, 2)
+      isV3
     );
 
     if (pin === '') {
@@ -151,10 +157,9 @@ export const actions = {
 function determineCurrentCheckboxState(
   formData: FormData,
   envVars: { [x: string]: string },
-  productUID: string
+  isV3: boolean
 ) {
   let currentCheckboxState: string;
-  const isV3 = productUID === AIRNOTE_V3_PRODUCT_UID;
 
   // required logic because unchecked checkboxes are not included in the form data
   // figure out if device settings form is being submitted
@@ -178,82 +183,55 @@ function determineCurrentCheckboxState(
 function formatAirSamplingInterval(
   formData: FormData,
   envVars: { [x: string]: string },
-  productUID: string
+  isV3: boolean
 ) {
-  const isV3 = productUID === AIRNOTE_V3_PRODUCT_UID;
-  const airMinsKey = isV3 ? 'air_mins' : '_air_mins';
+  const sampleFrequency = formData.get('sampleFrequencyFull');
 
-  if (formData.get('sampleFrequencyFull')) {
-    return `usb:15;high:${formData.get(
-      'sampleFrequencyFull'
-    )};normal:${formData.get('sampleFrequencyFull')};low:720;43200`;
-  } else {
-    return envVars[airMinsKey];
+  if (sampleFrequency) {
+    return `usb:15;high:${sampleFrequency};normal:${sampleFrequency};low:720;43200`;
   }
+
+  const airMinsKey = isV3 ? 'air_mins' : '_air_mins';
+  return envVars[airMinsKey];
 }
 
 function createEnvVarBody(
   formData: FormData,
   envVars: { [x: string]: string },
-  productUID: string
+  isV3: boolean
 ) {
   // combine existing Airnote env vars with the new form data for accurate env var bdy request
-  const isV3 = productUID === AIRNOTE_V3_PRODUCT_UID;
   const currentCheckboxState = determineCurrentCheckboxState(
     formData,
     envVars,
-    productUID
+    isV3
   );
 
-  console.log('createEnvVarBody - Is v3:', isV3, 'productUID:', productUID);
-
   // For v3 devices, use env vars without underscores. For legacy devices, use with underscores.
-  // todo refactor to reduce redundancy
-  if (isV3) {
-    return {
-      _sn: formData.has('deviceName')
-        ? formData.get('deviceName')
-        : envVars['_sn'],
-      air_mins: formatAirSamplingInterval(formData, envVars, productUID),
-      air_indoors: currentCheckboxState,
-      air_status: formData.get('displayValue')
-        ? formData.get('displayValue')
-        : envVars['air_status'],
-      _contact_name: formData.has('contactName')
-        ? formData.get('contactName')
-        : envVars['_contact_name'],
-      _contact_email: formData.has('contactEmail')
-        ? formData.get('contactEmail')
-        : envVars['_contact_email'],
-      _contact_affiliation: formData.has('contactAffiliation')
-        ? formData.get('contactAffiliation')
-        : envVars['_contact_affiliation'],
-      _route: formData.has('routingUrl')
-        ? formData.get('routingUrl')
-        : envVars['_route']
-    };
-  } else {
-    return {
-      _sn: formData.has('deviceName')
-        ? formData.get('deviceName')
-        : envVars['_sn'],
-      _air_mins: formatAirSamplingInterval(formData, envVars, productUID),
-      _air_indoors: currentCheckboxState,
-      _air_status: formData.get('displayValue')
-        ? formData.get('displayValue')
-        : envVars['_air_status'],
-      _contact_name: formData.has('contactName')
-        ? formData.get('contactName')
-        : envVars['_contact_name'],
-      _contact_email: formData.has('contactEmail')
-        ? formData.get('contactEmail')
-        : envVars['_contact_email'],
-      _contact_affiliation: formData.has('contactAffiliation')
-        ? formData.get('contactAffiliation')
-        : envVars['_contact_affiliation'],
-      _route: formData.has('routingUrl')
-        ? formData.get('routingUrl')
-        : envVars['_route']
-    };
-  }
+  const airMinsKey = isV3 ? 'air_mins' : '_air_mins';
+  const airIndoorsKey = isV3 ? 'air_indoors' : '_air_indoors';
+  const airStatusKey = isV3 ? 'air_status' : '_air_status';
+
+  return {
+    _sn: formData.has('deviceName')
+      ? formData.get('deviceName')
+      : envVars['_sn'],
+    [airMinsKey]: formatAirSamplingInterval(formData, envVars, isV3),
+    [airIndoorsKey]: currentCheckboxState,
+    [airStatusKey]: formData.get('displayValue')
+      ? formData.get('displayValue')
+      : envVars[airStatusKey],
+    _contact_name: formData.has('contactName')
+      ? formData.get('contactName')
+      : envVars['_contact_name'],
+    _contact_email: formData.has('contactEmail')
+      ? formData.get('contactEmail')
+      : envVars['_contact_email'],
+    _contact_affiliation: formData.has('contactAffiliation')
+      ? formData.get('contactAffiliation')
+      : envVars['_contact_affiliation'],
+    _route: formData.has('routingUrl')
+      ? formData.get('routingUrl')
+      : envVars['_route']
+  };
 }

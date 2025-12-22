@@ -55,7 +55,7 @@
 
     // Update the URL to reflect the correct productUID while preserving other params
     const currentProductInUrl = $page.url.searchParams.get('product');
-    if (currentProductInUrl !== productUID) {
+    if (typeof productUID === 'string' && currentProductInUrl !== productUID) {
       const newUrl = new URL($page.url);
       // This preserves all existing query params (pin, internalNav, etc.) and only updates product
       newUrl.searchParams.set('product', productUID);
@@ -82,45 +82,51 @@
 
     // Set default display value and add product-specific options
     // Only set default if we haven't already set it (to avoid overriding saved settings)
-    if (productUID === RADNOTE_PRODUCT_UID) {
-      if (!hasSetDefaultDisplayValue) {
-        displayValue.set('usv');
-        hasSetDefaultDisplayValue = true;
+    const productConfig: Record<string, {
+      defaultValue: string;
+      defaultOption: { value: string; text: string };
+      additionalOptions: { value: string; text: string }[];
+    }> = {
+      [RADNOTE_PRODUCT_UID]: {
+        defaultValue: 'usv',
+        defaultOption: { value: 'usv', text: 'Microsieverts per Hour (default)' },
+        additionalOptions: [
+          { value: 'mrem', text: 'Milirem per Hour' },
+          { value: 'cpm', text: 'LND712 Counts Per Minute' }
+        ]
+      },
+      [AIRNOTE_V3_PRODUCT_UID]: {
+        defaultValue: 'aqi',
+        defaultOption: { value: 'aqi', text: 'AQI (default)' },
+        additionalOptions: [
+          { value: 'pm2.5', text: 'PM2.5' },
+          { value: 'pm1.0', text: 'PM1.0' },
+          { value: 'pm10.0', text: 'PM10.0' }
+        ]
       }
-      deviceDisplayOptions.splice(0, 0, {
-        value: 'usv',
-        text: 'Microsieverts per Hour (default)'
-      });
-      deviceDisplayOptions.push({ value: 'mrem', text: 'Milirem per Hour' });
-      deviceDisplayOptions.push({
-        value: 'cpm',
-        text: 'LND712 Counts Per Minute'
-      });
-    } else if (productUID === AIRNOTE_V3_PRODUCT_UID) {
-      if (!hasSetDefaultDisplayValue) {
-        displayValue.set('aqi');
-        hasSetDefaultDisplayValue = true;
-      }
-      deviceDisplayOptions.splice(0, 0, {
-        value: 'aqi',
-        text: 'AQI (default)'
-      });
-      deviceDisplayOptions.push({ value: 'pm2.5', text: 'PM2.5' });
-      deviceDisplayOptions.push({ value: 'pm1.0', text: 'PM1.0' });
-      deviceDisplayOptions.push({ value: 'pm10.0', text: 'PM10.0' });
-    } else if (productUID) {
-      // Default airnote
-      if (!hasSetDefaultDisplayValue) {
-        displayValue.set('pm2.5');
-        hasSetDefaultDisplayValue = true;
-      }
-      deviceDisplayOptions.splice(0, 0, {
-        value: 'pm2.5',
-        text: 'PM2.5 (default)'
-      });
-      deviceDisplayOptions.push({ value: 'pm1.0', text: 'PM1.0' });
-      deviceDisplayOptions.push({ value: 'pm10.0', text: 'PM10.0' });
+    };
+
+    // Default config for legacy Airnote
+    const defaultConfig = {
+      defaultValue: 'pm2.5',
+      defaultOption: { value: 'pm2.5', text: 'PM2.5 (default)' },
+      additionalOptions: [
+        { value: 'pm1.0', text: 'PM1.0' },
+        { value: 'pm10.0', text: 'PM10.0' }
+      ]
+    };
+
+    const config = typeof productUID === 'string' && productConfig[productUID]
+      ? productConfig[productUID]
+      : defaultConfig;
+
+    if (!hasSetDefaultDisplayValue) {
+      displayValue.set(config.defaultValue);
+      hasSetDefaultDisplayValue = true;
     }
+
+    deviceDisplayOptions.splice(0, 0, config.defaultOption);
+    deviceDisplayOptions.push(...config.additionalOptions);
   }
 
   if (data.error !== undefined) {
@@ -189,7 +195,7 @@
   };
 
   // Reactively update settings when both notehubResponse and productUID are available
-  $: if (data.notehubResponse && productUID) {
+  $: if (data.notehubResponse && typeof productUID === 'string') {
     updateSettingsFromEnvVars(data.notehubResponse, productUID);
   }
 

@@ -138,16 +138,6 @@ export async function updateDeviceEnvironmentVariablesByPin(
   pinNumber: string,
   environmentVariables: DeviceEnvVars
 ) {
-  console.log(
-    'updateDeviceEnvironmentVariablesByPin - productUID:',
-    productUID
-  );
-  console.log('updateDeviceEnvironmentVariablesByPin - deviceUID:', deviceUID);
-  console.log(
-    'updateDeviceEnvironmentVariablesByPin - environmentVariables:',
-    JSON.stringify(environmentVariables, null, 2)
-  );
-
   if (!isValidDeviceUID(deviceUID)) {
     console.warn(
       `Invalid device UID ${deviceUID}. Skipping updateDeviceEnvVar() API call.`
@@ -166,29 +156,13 @@ export async function updateDeviceEnvironmentVariablesByPin(
   const isV3 = productUID === AIRNOTE_V3_PRODUCT_UID;
   const airMinsKey = isV3 ? 'air_mins' : '_air_mins';
 
-  console.log(
-    'updateDeviceEnvironmentVariablesByPin - isV3:',
-    isV3,
-    'airMinsKey:',
-    airMinsKey
-  );
-
-  // todo fix linting error and possibly refactor
   if (
     environmentVariables[airMinsKey] &&
     environmentVariables[airMinsKey].toString().includes('high:30')
   ) {
-    console.log(
-      'updateDeviceEnvironmentVariablesByPin - Deleting default air_mins'
-    );
     delete environmentVariables[airMinsKey];
     await deleteDeviceEnvironmentVariable(deviceUID, airMinsKey);
   }
-
-  console.log(
-    'updateDeviceEnvironmentVariablesByPin - Final payload:',
-    JSON.stringify(environmentVariables, null, 2)
-  );
 
   return await putDeviceEnvironmentVariablesByPin(
     productUID,
