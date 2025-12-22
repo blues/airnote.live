@@ -1,7 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
-  import { APP_UID, RADNOTE_PRODUCT_UID } from '$lib/constants';
+  import {
+    APP_UID,
+    AIRNOTE_V3_PRODUCT_UID,
+    RADNOTE_PRODUCT_UID
+  } from '$lib/constants';
   import { getCurrentDeviceFromUrl } from '$lib/services/device';
   import DeviceSettings from './DeviceSettings.svelte';
   import DeviceOwner from './DeviceOwner.svelte';
@@ -22,6 +28,7 @@
     AirnoteDevice,
     PotentiallyNullDeviceDetails
   } from '$lib/services/DeviceModel';
+  import type { DeviceDisplayOption } from '$lib/services/DeviceDisplayModel';
   import { ERROR_TYPE } from '$lib/constants/ErrorTypes';
   import { renderErrorMessage } from '$lib/util/errors';
   import { getNotehubEventsUrl } from '$lib/util/url';
@@ -40,37 +47,87 @@
     eventsUrl = getNotehubEventsUrl(deviceUID);
   }
 
-  const deviceDisplayOptions = [
-    { value: 'tempc', text: 'Temp (°C)' },
-    { value: 'tempf', text: 'Temp (°F)' },
-    { value: 'humid', text: 'Humidity' },
-    { value: 'press', text: 'Barometric Pressure' }
-  ];
+  export let data;
 
-  if (productUID === RADNOTE_PRODUCT_UID) {
-    displayValue.set('usv');
+  // Use productUID from server data if available
+  $: if (data.productUID) {
+    productUID = data.productUID;
 
-    deviceDisplayOptions.splice(0, 0, {
-      value: 'usv',
-      text: 'Microsieverts per Hour (default)'
-    });
-    deviceDisplayOptions.push({ value: 'mrem', text: 'Milirem per Hour' });
-    deviceDisplayOptions.push({
-      value: 'cpm',
-      text: 'LND712 Counts Per Minute'
-    });
-  } else {
-    displayValue.set('pm2.5');
-
-    deviceDisplayOptions.splice(0, 0, {
-      value: 'pm2.5',
-      text: 'PM2.5 (default)'
-    });
-    deviceDisplayOptions.push({ value: 'pm1.0', text: 'PM1.0' });
-    deviceDisplayOptions.push({ value: 'pm10.0', text: 'PM10.0' });
+    // Update the URL to reflect the correct productUID while preserving other params
+    const currentProductInUrl = $page.url.searchParams.get('product');
+    if (typeof productUID === 'string' && currentProductInUrl !== productUID) {
+      const newUrl = new URL($page.url);
+      // This preserves all existing query params (pin, internalNav, etc.) and only updates product
+      newUrl.searchParams.set('product', productUID);
+      goto(newUrl.toString(), {
+        replaceState: true,
+        noScroll: true,
+        keepFocus: true
+      });
+    }
   }
 
-  export let data;
+  // Make deviceDisplayOptions reactive to productUID changes
+  let deviceDisplayOptions: DeviceDisplayOption[] = [];
+  let hasSetDefaultDisplayValue = false;
+
+  $: {
+    // Reset the options array
+    deviceDisplayOptions = [
+      { value: 'tempc', text: 'Temp (°C)' },
+      { value: 'tempf', text: 'Temp (°F)' },
+      { value: 'humid', text: 'Humidity' },
+      { value: 'press', text: 'Barometric Pressure' }
+    ];
+
+    // Set default display value and add product-specific options
+    // Only set default if we haven't already set it (to avoid overriding saved settings)
+    const productConfig: Record<string, {
+      defaultValue: string;
+      defaultOption: { value: string; text: string };
+      additionalOptions: { value: string; text: string }[];
+    }> = {
+      [RADNOTE_PRODUCT_UID]: {
+        defaultValue: 'usv',
+        defaultOption: { value: 'usv', text: 'Microsieverts per Hour (default)' },
+        additionalOptions: [
+          { value: 'mrem', text: 'Milirem per Hour' },
+          { value: 'cpm', text: 'LND712 Counts Per Minute' }
+        ]
+      },
+      [AIRNOTE_V3_PRODUCT_UID]: {
+        defaultValue: 'aqi',
+        defaultOption: { value: 'aqi', text: 'AQI (default)' },
+        additionalOptions: [
+          { value: 'pm2.5', text: 'PM2.5' },
+          { value: 'pm1.0', text: 'PM1.0' },
+          { value: 'pm10.0', text: 'PM10.0' }
+        ]
+      }
+    };
+
+    // Default config for legacy Airnote
+    const defaultConfig = {
+      defaultValue: 'pm2.5',
+      defaultOption: { value: 'pm2.5', text: 'PM2.5 (default)' },
+      additionalOptions: [
+        { value: 'pm1.0', text: 'PM1.0' },
+        { value: 'pm10.0', text: 'PM10.0' }
+      ]
+    };
+
+    const config = typeof productUID === 'string' && productConfig[productUID]
+      ? productConfig[productUID]
+      : defaultConfig;
+
+    if (!hasSetDefaultDisplayValue) {
+      displayValue.set(config.defaultValue);
+      hasSetDefaultDisplayValue = true;
+    }
+
+    deviceDisplayOptions.splice(0, 0, config.defaultOption);
+    deviceDisplayOptions.push(...config.additionalOptions);
+  }
 
   if (data.error !== undefined) {
     if (data.error.errorType === ERROR_TYPE.MISSING_PIN) {
@@ -89,14 +146,27 @@
     enableFields = true;
   }
 
-  const updateSettingsFromEnvVars = (data: { [property: string]: string }) => {
+  const updateSettingsFromEnvVars = (
+    data: { [property: string]: string },
+    currentProductUID: string
+  ) => {
     if (data['_sn']) deviceName.set(data['_sn']);
-    if (data['_air_mins']) {
+
+    // For v3 devices, only use non-underscore vars. For legacy devices, use underscore vars.
+    const isV3 = currentProductUID === AIRNOTE_V3_PRODUCT_UID;
+
+    const airMinsVar = isV3
+      ? data['air_mins']
+      : data['_air_mins'] || data['air_mins'];
+    const airIndoorsVar = isV3
+      ? data['air_indoors']
+      : data['_air_indoors'] || data['air_indoors'];
+    const airStatusVar = isV3 ? data['air_status'] : data['_air_status'];
+
+    if (airMinsVar) {
       // Split semi-colon list into an array for parsing and reassembly
       // "usb:15;high:123;normal:123;low:720;0"
-      const airMinsVals = data['_air_mins']
-        .split(';')
-        .map((item) => item.split(':'));
+      const airMinsVals = airMinsVar.split(';').map((item) => item.split(':'));
       for (let index = 0; index < airMinsVals.length; index++) {
         const element = airMinsVals[index];
         switch (element[0]) {
@@ -112,9 +182,11 @@
         }
       }
     }
-    if (data['_air_indoors'])
-      indoorDevice.set(data['_air_indoors'] === '0' ? false : true);
-    if (data['_air_status']) displayValue.set(data['_air_status']);
+    if (airIndoorsVar) indoorDevice.set(airIndoorsVar === '0' ? false : true);
+    if (airStatusVar) {
+      displayValue.set(airStatusVar);
+      hasSetDefaultDisplayValue = true; // Mark that we've loaded a saved value
+    }
     if (data['_contact_name']) contactName.set(data['_contact_name']);
     if (data['_contact_email']) contactEmail.set(data['_contact_email']);
     if (data['_contact_affiliation'])
@@ -122,8 +194,9 @@
     if (data['_route']) routingUrl.set(data['_route']);
   };
 
-  if (data.notehubResponse) {
-    updateSettingsFromEnvVars(data.notehubResponse);
+  // Reactively update settings when both notehubResponse and productUID are available
+  $: if (data.notehubResponse && typeof productUID === 'string') {
+    updateSettingsFromEnvVars(data.notehubResponse, productUID);
   }
 
   const handleSettingsSaved = () => {
@@ -142,7 +215,7 @@
     internalNav = currentDevice.internalNav
       ? currentDevice.internalNav
       : 'false';
-    productUID = currentDevice.productUID ? currentDevice.productUID : '';
+    // productUID now comes from server data, don't override it from URL
   });
 </script>
 

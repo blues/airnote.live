@@ -1,5 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import {
+  getDeviceInfo,
   getDeviceEnvironmentVariables,
   getDeviceEnvironmentVariablesByPin,
   updateDeviceEnvironmentVariablesByPin,
@@ -7,23 +8,23 @@ import {
 } from '$lib/services/notehub';
 import { ERROR_TYPE } from '$lib/constants/ErrorTypes.js';
 import type { DeviceEnvVars } from '$lib/services/DeviceEnvVarModel.js';
-import { AIRNOTE_PRODUCT_UID } from '$lib/constants.js';
+import { AIRNOTE_PRODUCT_UID, AIRNOTE_V3_PRODUCT_UID } from '$lib/constants.js';
 
 export async function load({ params, url }) {
   const deviceUID = params.deviceUID;
-  const productUID = url.searchParams.get('product') || AIRNOTE_PRODUCT_UID;
   const pin = url.searchParams.get('pin');
   const internalNav = url.searchParams.get('internalNav');
 
   if (!isValidDeviceUID(deviceUID)) {
     return {
       notehubResponse: null,
+      productUID: url.searchParams.get('product') || AIRNOTE_PRODUCT_UID,
       error: { errorType: ERROR_TYPE.NOTEHUB_ERROR }
     };
   }
 
-  /* Notehub links to a device’s dashboard using `/${deviceUID}` with no pin,
-    and we want Notehub users to view the device’s dashboard, and not the
+  /* Notehub links to a device's dashboard using `/${deviceUID}` with no pin,
+    and we want Notehub users to view the device's dashboard, and not the
     settings page when first directed there from Notehub. */
   if (deviceUID && !pin && internalNav === null) {
     redirect(302, `/${deviceUID}/dashboard`);
@@ -32,6 +33,23 @@ export async function load({ params, url }) {
   let notehubError: { status: number } | undefined;
   let error;
   let notehubResponse;
+
+  // Fetch device info to get the real productUID - this is critical
+  const deviceInfo = await getDeviceInfo(deviceUID).catch((err) => {
+    console.error('Error fetching device info:', err);
+    notehubError = err;
+  });
+
+  if (!deviceInfo || !deviceInfo.product_uid) {
+    // Can't proceed without knowing the correct productUID (v3 vs legacy affects env var format)
+    return {
+      notehubResponse: null,
+      productUID: url.searchParams.get('product') || AIRNOTE_PRODUCT_UID,
+      error: { errorType: ERROR_TYPE.NOTEHUB_ERROR }
+    };
+  }
+
+  const productUID = deviceInfo.product_uid;
 
   const envVarResponse = await getDeviceEnvironmentVariables(deviceUID).catch(
     (err) => {
@@ -55,17 +73,16 @@ export async function load({ params, url }) {
     );
   }
 
-  if (notehubError) {
+  if (notehubError && !error) {
     error = { errorType: ERROR_TYPE.NOTEHUB_ERROR };
   }
 
-  return { notehubResponse, error };
+  return { notehubResponse, productUID, error };
 }
 
 export const actions = {
   saveSettings: async ({ params, url, request }) => {
     const deviceUID = params.deviceUID;
-    const productUID = url.searchParams.get('product') || AIRNOTE_PRODUCT_UID;
     const pin = url.searchParams.get('pin');
     const body = await request.formData();
 
@@ -75,6 +92,20 @@ export const actions = {
 
     let notehubError: { status: number } | undefined;
     let error;
+
+    // Fetch device info to get the real productUID - critical for env var format
+    const deviceInfo = await getDeviceInfo(deviceUID).catch((err) => {
+      console.error('Error fetching device info:', err);
+      notehubError = err;
+    });
+
+    if (!deviceInfo || !deviceInfo.product_uid) {
+      return fail(500, {
+        error: { errorType: ERROR_TYPE.NOTEHUB_ERROR }
+      });
+    }
+
+    const productUID = deviceInfo.product_uid;
 
     let currentEnvVars;
     try {
@@ -87,7 +118,12 @@ export const actions = {
       notehubError = err as { status: number };
     }
 
-    const formattedBody: DeviceEnvVars = createEnvVarBody(body, currentEnvVars);
+    const isV3 = productUID === AIRNOTE_V3_PRODUCT_UID;
+    const formattedBody: DeviceEnvVars = createEnvVarBody(
+      body,
+      currentEnvVars,
+      isV3
+    );
 
     if (pin === '') {
       error = { errorType: ERROR_TYPE.MISSING_PIN };
@@ -100,7 +136,11 @@ export const actions = {
           formattedBody
         );
       } catch (err) {
-        console.error(err);
+        console.error('saveSettings - Error updating device env vars:', err);
+        console.error(
+          'saveSettings - Error details:',
+          JSON.stringify(err, null, 2)
+        );
         notehubError = err as { status: number };
       }
 
@@ -116,9 +156,11 @@ export const actions = {
 
 function determineCurrentCheckboxState(
   formData: FormData,
-  envVars: { [x: string]: string }
+  envVars: { [x: string]: string },
+  isV3: boolean
 ) {
   let currentCheckboxState: string;
+
   // required logic because unchecked checkboxes are not included in the form data
   // figure out if device settings form is being submitted
   if (formData.get('deviceName')) {
@@ -130,8 +172,9 @@ function determineCurrentCheckboxState(
     }
   } else {
     // if device owner settings are submitted, get current checkbox state from envVars
-    currentCheckboxState = envVars['_air_indoors']
-      ? envVars['_air_indoors']
+    const airIndoorsKey = isV3 ? 'air_indoors' : '_air_indoors';
+    currentCheckboxState = envVars[airIndoorsKey]
+      ? envVars[airIndoorsKey]
       : '0';
   }
   return currentCheckboxState;
@@ -139,33 +182,45 @@ function determineCurrentCheckboxState(
 
 function formatAirSamplingInterval(
   formData: FormData,
-  envVars: { [x: string]: string }
+  envVars: { [x: string]: string },
+  isV3: boolean
 ) {
-  if (formData.get('sampleFrequencyFull')) {
-    return `usb:15;high:${formData.get(
-      'sampleFrequencyFull'
-    )};normal:${formData.get('sampleFrequencyFull')};low:720;43200`;
-  } else {
-    return envVars['_air_mins'];
+  const sampleFrequency = formData.get('sampleFrequencyFull');
+
+  if (sampleFrequency) {
+    return `usb:15;high:${sampleFrequency};normal:${sampleFrequency};low:720;43200`;
   }
+
+  const airMinsKey = isV3 ? 'air_mins' : '_air_mins';
+  return envVars[airMinsKey];
 }
 
 function createEnvVarBody(
   formData: FormData,
-  envVars: { [x: string]: string }
+  envVars: { [x: string]: string },
+  isV3: boolean
 ) {
   // combine existing Airnote env vars with the new form data for accurate env var bdy request
-  const currentCheckboxState = determineCurrentCheckboxState(formData, envVars);
+  const currentCheckboxState = determineCurrentCheckboxState(
+    formData,
+    envVars,
+    isV3
+  );
+
+  // For v3 devices, use env vars without underscores. For legacy devices, use with underscores.
+  const airMinsKey = isV3 ? 'air_mins' : '_air_mins';
+  const airIndoorsKey = isV3 ? 'air_indoors' : '_air_indoors';
+  const airStatusKey = isV3 ? 'air_status' : '_air_status';
 
   return {
     _sn: formData.has('deviceName')
       ? formData.get('deviceName')
       : envVars['_sn'],
-    _air_mins: formatAirSamplingInterval(formData, envVars),
-    _air_indoors: currentCheckboxState,
-    _air_status: formData.get('displayValue')
+    [airMinsKey]: formatAirSamplingInterval(formData, envVars, isV3),
+    [airIndoorsKey]: currentCheckboxState,
+    [airStatusKey]: formData.get('displayValue')
       ? formData.get('displayValue')
-      : envVars['_air_status'],
+      : envVars[airStatusKey],
     _contact_name: formData.has('contactName')
       ? formData.get('contactName')
       : envVars['_contact_name'],
