@@ -66,12 +66,18 @@
   // data fetched from Notehub API via +page.server.ts on page load
   export let data;
 
+  let isIndoor = false;
+
   if (data && data.readings) {
     readings = data.readings;
   }
 
   if (data && data.history) {
     history = data.history;
+  }
+
+  if (data && data.isIndoor) {
+    isIndoor = data.isIndoor;
   }
 
   if (!readings || readings.length === 0) {
@@ -158,7 +164,7 @@
       </span>
     </h2>
 
-    <Actions {deviceUID} />
+    <Actions {deviceUID} {isIndoor} />
 
     <div class="all-measurements box">
       <h3 class="current-readings-title">Current Reading</h3>
