@@ -163,7 +163,7 @@ function determineCurrentCheckboxState(
 
   // required logic because unchecked checkboxes are not included in the form data
   // figure out if device settings form is being submitted
-  if (formData.get('deviceName')) {
+  if (formData.has('deviceName')) {
     // check if checkbox data is included in form body (it means checkbox is checked)
     if (formData.get('indoorDevice') === 'on') {
       currentCheckboxState = '1';
