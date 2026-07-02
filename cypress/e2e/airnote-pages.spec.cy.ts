@@ -16,15 +16,15 @@ describe('Airnote application', () => {
     // check buy airnote button present
     cy.get('[data-cy="buy-airnote-btn"]')
       .should('have.attr', 'href')
-      .and('include', 'https://shop.blues.io/products/airnote');
+      .and('include', 'https://shop.blues.com/products/airnote');
     // check footer notecard link visible
     cy.get('[data-cy="notecard-link"]')
       .should('have.attr', 'href')
-      .and('include', 'https://blues.io/products');
+      .and('include', 'https://blues.com/products');
     // check footer blues wireless link visible
     cy.get('[data-cy="blues-link"]')
       .should('have.attr', 'href')
-      .and('include', 'https://blues.io');
+      .and('include', 'https://blues.com');
     // check footer safecast link visible
     cy.get('[data-cy="safecast-link"]')
       .should('have.attr', 'href')

@@ -2,7 +2,7 @@
 
 This repo contains the source for [airnote.live](https://airnote.live), an
 open-source reference implementation of a web-based
-[Notecard](https://blues.io/) configuration site.
+[Notecard](https://blues.com/) configuration site.
 
 ## Local Development
 
@@ -36,7 +36,7 @@ You can set this up locally by creating a `.env` file, and pasting in the conten
 HUB_AUTH_TOKEN=<your token>
 ```
 
-You can refer to [the Notehub API’s authentication documentation](https://dev.blues.io/reference/notehub-api/api-introduction/#authentication) for steps on how to generate your own token.
+You can refer to [the Notehub API’s authentication documentation](https://dev.blues.com/reference/notehub-api/api-introduction/#authentication) for steps on how to generate your own token.
 
 It also uses a Mapbox API token to display the device's location on a map on the dashboard page. This token can also be added to the `.env` file, under the name listed below.
 

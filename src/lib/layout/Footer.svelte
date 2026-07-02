@@ -1,13 +1,13 @@
 <footer>
   <div>
     Cloud-connected by <br />
-    <a target="_blank" href="https://blues.io/products" data-cy="notecard-link"
+    <a target="_blank" href="https://blues.com/products" data-cy="notecard-link"
       >Notecard</a
     >
   </div>
   <div>
     Developed by <br />
-    <a target="_blank" href="https://blues.io" data-cy="blues-link"
+    <a target="_blank" href="https://blues.com" data-cy="blues-link"
       >Blues Inc.</a
     >
   </div>
