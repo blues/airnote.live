@@ -13,6 +13,7 @@ Live at https://airnote.live
 - **Build:** Vite 8
 - **Deployment:** Netlify (adapter-netlify)
 - **Node:** 24.18.0 (Volta + `.nvmrc`; Netlify reads `.nvmrc`, not the Volta key)
+- **Package manager:** pnpm (pinned via the `packageManager` field)
 - **Charts:** Chart.js 4 (modular registration in `lib/components/charts/chartSetup.ts`) with date-fns adapter
 - **Maps:** Mapbox GL
 - **API Client:** @blues-inc/notehub-js
@@ -21,15 +22,15 @@ Live at https://airnote.live
 ## Commands
 
 ```bash
-npm run dev          # Dev server (localhost:5173)
-npm run build        # Production build
-npm run preview      # Preview production build
-npm run check        # Type check (svelte-check)
-npm run test         # Unit tests (Vitest)
-npm run lint         # Prettier + ESLint check
-npm run format       # Auto-format with Prettier
-npm run cypress:open # E2E tests (interactive)
-npm run cypress:run  # E2E tests (headless)
+pnpm dev           # Dev server (localhost:5173)
+pnpm build         # Production build
+pnpm preview       # Preview production build
+pnpm check         # Type check (svelte-check)
+pnpm test          # Unit tests (Vitest)
+pnpm lint          # Prettier + ESLint check
+pnpm format        # Auto-format with Prettier
+pnpm cypress:open  # E2E tests (interactive)
+pnpm cypress:run   # E2E tests (headless)
 ```
 
 ## Project Structure
@@ -95,7 +96,7 @@ Required in `.env`:
 
 Netlify auto-deploys from git. Config in `netlify.toml`:
 
-- Build: `npm run build`
+- Build: `pnpm build`
 - Publish: `build/`
 - `_redirects` lives in the project root (required by adapter-netlify v6+, not `static/`)
 - Node version for builds comes from `.nvmrc` (Netlify ignores the `volta` key)
