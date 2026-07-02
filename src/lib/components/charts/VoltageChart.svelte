@@ -145,5 +145,5 @@
 </script>
 
 <div class="chart-container">
-  <canvas id="voltageChart" bind:this={ctx} data-cy="voltage-chart" />
+  <canvas id="voltageChart" bind:this={ctx} data-cy="voltage-chart"></canvas>
 </div>

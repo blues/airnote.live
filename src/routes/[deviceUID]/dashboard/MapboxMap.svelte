@@ -4,6 +4,7 @@
   import { aqiColors, aqiRanges, getAQIColor } from '$lib/services/air';
   import { DATE_TIME_KEY } from '$lib/constants';
   import mapboxgl from 'mapbox-gl';
+  import 'mapbox-gl/dist/mapbox-gl.css';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
 
@@ -26,7 +27,7 @@
     });
 
     aqiRanges.forEach((layer, i: number) => {
-      const color = aqiColors[i];
+      const color = aqiColors[i] ?? '';
       const item = document.createElement('div');
       const key = document.createElement('span');
       const legend: HTMLElement | null = document.getElementById('legend');
@@ -84,7 +85,7 @@
       <h3 style="margin-top: 1rem">Map</h3>
     </div>
     <div class="map-wrapper">
-      <div id="map" data-cy="map" style="height:320px;max-width:960px" />
+      <div id="map" data-cy="map" style="height:320px;max-width:960px"></div>
       <div id="legend" class="map-overlay">AQI Levels</div>
     </div>
   </div>

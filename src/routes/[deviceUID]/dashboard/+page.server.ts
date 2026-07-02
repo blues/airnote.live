@@ -41,8 +41,7 @@ export async function load({ params }) {
       const [envVarResponse, eventsResponse] = responses;
       const envVars = envVarResponse.environment_variables;
       const serialNumber = envVars._sn;
-      isIndoor =
-        envVars._air_indoors === '1' || envVars.air_indoors === '1';
+      isIndoor = envVars._air_indoors === '1' || envVars.air_indoors === '1';
       allEvents.push(...eventsResponse.events);
       allEvents.forEach((entry) => (entry.serial_number = serialNumber));
       readings = getCurrentReadings(allEvents, deviceUID);

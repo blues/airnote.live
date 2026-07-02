@@ -68,6 +68,7 @@ src/
 ## Environment Variables
 
 Required in `.env`:
+
 - `HUB_AUTH_TOKEN` — Notehub API token (server-side)
 - `PUBLIC_MAPBOX_TOKEN` — Mapbox access token (client-side, must be `PUBLIC_` prefixed)
 
@@ -92,5 +93,6 @@ Required in `.env`:
 ## Deployment
 
 Netlify auto-deploys from git. Config in `netlify.toml`:
+
 - Build: `npm run build`
 - Publish: `build/`

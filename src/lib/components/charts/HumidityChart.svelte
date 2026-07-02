@@ -54,7 +54,7 @@
     ]
   };
 
-  $: options = ({
+  $: options = {
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -86,7 +86,7 @@
         }
       }
     }
-  }) as ChartOptions<'line'>;
+  } as ChartOptions<'line'>;
 
   const config: ChartConfiguration<'line', ChartDataPointType[], unknown> = {
     type: 'line',
@@ -100,5 +100,5 @@
 </script>
 
 <div class="chart-container">
-  <canvas id="humdityChart" bind:this={ctx} data-cy="humidity-chart" />
+  <canvas id="humdityChart" bind:this={ctx} data-cy="humidity-chart"></canvas>
 </div>

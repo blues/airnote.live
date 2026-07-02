@@ -18,22 +18,22 @@
     </div>
   {/if}
   <div class="action-buttons">
-  <a rel="external" href={`/api/download?deviceUID=${deviceUID}`}>
-    <button>
-      <DownloadIcon />
-      <span>Download</span>
+    <a rel="external" href={`/api/download?deviceUID=${deviceUID}`}>
+      <button>
+        <DownloadIcon />
+        <span>Download</span>
+      </button>
+    </a>
+
+    <button on:click={() => window.print()}>
+      <PrintIcon />
+      <span>Print</span>
     </button>
-  </a>
 
-  <button on:click={() => window.print()}>
-    <PrintIcon />
-    <span>Print</span>
-  </button>
-
-  <button on:click={() => shareDashboard(deviceUID)}>
-    <ShareIcon />
-    <span>Share</span>
-  </button>
+    <button on:click={() => shareDashboard(deviceUID)}>
+      <ShareIcon />
+      <span>Share</span>
+    </button>
   </div>
 </div>
 

@@ -54,7 +54,7 @@
     ]
   };
 
-  $: options = ({
+  $: options = {
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -86,7 +86,7 @@
         }
       }
     }
-  }) as ChartOptions<'line'>;
+  } as ChartOptions<'line'>;
 
   const config: ChartConfiguration<'line', ChartDataPointType[], unknown> = {
     type: 'line',
@@ -100,5 +100,5 @@
 </script>
 
 <div class="chart-container">
-  <canvas id="aqiChart" bind:this={ctx} data-cy="aqi-chart" />
+  <canvas id="aqiChart" bind:this={ctx} data-cy="aqi-chart"></canvas>
 </div>

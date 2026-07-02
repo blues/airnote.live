@@ -94,7 +94,7 @@
     ]
   };
 
-  $: options = ({
+  $: options = {
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -126,7 +126,7 @@
         }
       }
     }
-  }) as ChartOptions<'line'>;
+  } as ChartOptions<'line'>;
 
   const config: ChartConfiguration<'line', ChartDataPointType[], unknown> = {
     type: 'line',
@@ -140,5 +140,5 @@
 </script>
 
 <div class="chart-container">
-  <canvas id="pmChart" bind:this={ctx} data-cy="pm-chart" />
+  <canvas id="pmChart" bind:this={ctx} data-cy="pm-chart"></canvas>
 </div>

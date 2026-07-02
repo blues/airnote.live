@@ -1,7 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { format } from 'date-fns/format';
-  import { NotificationDisplay } from '@beyonk/svelte-notifications';
+  import { NotificationDisplay as NotificationDisplayComponent } from '@beyonk/svelte-notifications';
+  import type { Component } from 'svelte';
+  // @beyonk/svelte-notifications@4.3.0 (latest) ships Svelte 4 component types
+  // (SvelteComponentTyped) that don't satisfy Svelte 5's component position.
+  // Runtime is unaffected; cast to the Svelte 5 Component type for the template.
+  const NotificationDisplay =
+    NotificationDisplayComponent as unknown as Component;
   import AQIChart from '$lib/components/charts/AQIChart.svelte';
   import HumidityChart from '$lib/components/charts/HumidityChart.svelte';
   import VoltageChart from '$lib/components/charts/VoltageChart.svelte';
@@ -140,10 +146,6 @@
       ? '— ' + lastReading.serial_number
       : ''}</title
   >
-  <link
-    href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css"
-    rel="stylesheet"
-  />
 </svelte:head>
 
 <NotificationDisplay />
@@ -322,7 +324,11 @@
 
     <div class={chartLayout}>
       <div class="box chart1 {chartWidth}">
-        <VoltageChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
+        <VoltageChart
+          readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
+        />
       </div>
 
       <div class="box chart2 {chartWidth}">
@@ -336,15 +342,27 @@
       </div>
 
       <div class="box chart3 {chartWidth}">
-        <AQIChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
+        <AQIChart
+          readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
+        />
       </div>
 
       <div class="box chart4 {chartWidth}">
-        <HumidityChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
+        <HumidityChart
+          readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
+        />
       </div>
 
       <div class="box chart5">
-        <PMChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
+        <PMChart
+          readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
+        />
       </div>
     </div>
     {#if showBanner}

@@ -39,7 +39,7 @@
 <div class="speedometer-legend">
   {#each aqiLegend as item}
     <div class="legend-item">
-      <span class="circle" style="background-color: {item.color}" />
+      <span class="circle" style="background-color: {item.color}"></span>
       <span style="text-align: center">{item.text}</span>
     </div>
   {/each}
