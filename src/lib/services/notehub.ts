@@ -36,8 +36,8 @@ export async function getDeviceInfo(deviceUID: string) {
     return null;
   }
 
-  const { api_key } = notehubJsClient.authentications;
-  api_key.apiKey = HUB_AUTH_TOKEN;
+  notehubJsClient.authentications.personalAccessToken.accessToken =
+    HUB_AUTH_TOKEN;
   return await deviceApiInstance.getDevice(AIRNOTE_PROJECT_UID, deviceUID);
 }
 
@@ -50,8 +50,8 @@ export async function getDeviceEnvironmentVariables(deviceUID: string) {
     return null;
   }
 
-  const { api_key } = notehubJsClient.authentications;
-  api_key.apiKey = HUB_AUTH_TOKEN;
+  notehubJsClient.authentications.personalAccessToken.accessToken =
+    HUB_AUTH_TOKEN;
   return await deviceApiInstance.getDeviceEnvironmentVariables(
     AIRNOTE_PROJECT_UID,
     deviceUID
@@ -76,11 +76,10 @@ export async function getDeviceEnvironmentVariablesByPin(
     );
   }
 
-  const { pin } = notehubJsClient.authentications;
-  pin.apiKey = pinNumber;
   return await deviceApiInstance.getDeviceEnvironmentVariablesByPin(
     productUID,
-    deviceUID
+    deviceUID,
+    pinNumber
   );
 }
 
@@ -92,8 +91,8 @@ async function deleteDeviceEnvironmentVariable(deviceUID: string, key: string) {
     );
   }
 
-  const { api_key } = notehubJsClient.authentications;
-  api_key.apiKey = HUB_AUTH_TOKEN;
+  notehubJsClient.authentications.personalAccessToken.accessToken =
+    HUB_AUTH_TOKEN;
   return await deviceApiInstance.deleteDeviceEnvironmentVariable(
     AIRNOTE_PROJECT_UID,
     deviceUID,
@@ -120,14 +119,13 @@ async function putDeviceEnvironmentVariablesByPin(
     );
   }
 
-  const { pin } = notehubJsClient.authentications;
-  pin.apiKey = pinNumber;
   const deviceEnvironmentVariables = new NotehubJs.EnvironmentVariables(
     environmentVariables
   );
-  return await deviceApiInstance.putDeviceEnvironmentVariablesByPin(
+  return await deviceApiInstance.setDeviceEnvironmentVariablesByPin(
     productUID,
     deviceUID,
+    pinNumber,
     deviceEnvironmentVariables
   );
 }
@@ -206,5 +204,7 @@ export async function getEvents(
       'when,best_location,best_lat,best_lon,serial_number,body.aqi,body.humidity,body.pm01_0,body.pm02_5,body.pm10_0,body.pressure,body.temperature,body.voltage,body.charging';
   }
 
-  return await eventApiInstance.getProjectEvents(AIRNOTE_PROJECT_UID, opts);
+  notehubJsClient.authentications.personalAccessToken.accessToken =
+    HUB_AUTH_TOKEN;
+  return await eventApiInstance.getEvents(AIRNOTE_PROJECT_UID, opts);
 }
