@@ -139,7 +139,10 @@
     deviceUID = currentDevice.deviceUID ? currentDevice.deviceUID : '';
     tempDisplay = localStorage.getItem('tempDisplay') || 'C';
     showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
-    MapboxMap = (await import('./MapboxMap.svelte')).default;
+    // Only fetch mapbox-gl (~1.5MB) when the reading actually has coordinates.
+    if (lastReading?.lon && lastReading?.lat) {
+      MapboxMap = (await import('./MapboxMap.svelte')).default;
+    }
   });
 </script>
 
@@ -319,7 +322,7 @@
 
     <div class="date-selector">
       <select bind:value={selectedDateRange} data-cy="chart-date-selector">
-        {#each dateRangeDisplayText as dateRange}
+        {#each dateRangeDisplayText as dateRange (dateRange)}
           <option value={dateRange}>
             {dateRange}
           </option>

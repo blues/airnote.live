@@ -11,13 +11,15 @@
   export let lastReading: AirnoteReading;
 
   let map;
-  let airnoteMarker;
   let markerColor;
   let zoom = 10;
   let popup;
   let mapboxToken = PUBLIC_MAPBOX_TOKEN;
 
   onMount(() => {
+    // The #map container only renders when coords exist (see markup guard below),
+    // so don't initialize the map without them.
+    if (!lastReading?.lon || !lastReading?.lat) return;
     mapboxgl.accessToken = mapboxToken;
     map = new mapboxgl.Map({
       container: 'map',
@@ -70,7 +72,7 @@
 
     markerColor = getAQIColor(lastReading.aqi);
 
-    airnoteMarker = new mapboxgl.Marker({ color: markerColor })
+    new mapboxgl.Marker({ color: markerColor })
       .setLngLat([lastReading.lon, lastReading.lat])
       .setPopup(popup)
       .addTo(map);
