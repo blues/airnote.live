@@ -6,6 +6,22 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
 
+// Add native lazy-loading + async decoding to all markdown images (the quickstart
+// guide) so off-screen images don't block initial render.
+function rehypeLazyImages() {
+  const visit = (node) => {
+    if (node.tagName === 'img') {
+      node.properties = node.properties || {};
+      node.properties.loading = 'lazy';
+      node.properties.decoding = 'async';
+    }
+    (node.children || []).forEach(visit);
+  };
+  return (tree) => {
+    visit(tree);
+  };
+}
+
 /** @type {import('mdsvex').MdsvexOptions} */
 const mdsvexOptions = {
   extensions: ['.mdx'],
@@ -15,7 +31,8 @@ const mdsvexOptions = {
       rehypeAutolinkHeadings,
       { behavior: 'wrap', properties: { class: 'anchor' } }
     ],
-    rehypeExternalLinks
+    rehypeExternalLinks,
+    rehypeLazyImages
   ],
   remarkPlugins: [remarkGfm]
 };

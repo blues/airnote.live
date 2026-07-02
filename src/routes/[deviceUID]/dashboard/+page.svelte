@@ -34,7 +34,9 @@
 
   import Actions from './Actions.svelte';
   import History from './History.svelte';
-  import MapboxMap from './MapboxMap.svelte';
+  // MapboxMap is dynamically imported in onMount so mapbox-gl (~1.5MB) is
+  // code-split out of the initial dashboard bundle and loaded after first paint.
+  let MapboxMap: typeof import('./MapboxMap.svelte').default | null = null;
   import Recommendation from './Recommendation.svelte';
   import Speedometer from './Speedometer.svelte';
   import { getNotehubEventsUrl } from '$lib/util/url';
@@ -132,11 +134,12 @@
     localStorage.setItem('showBanner', 'false');
   };
 
-  onMount(() => {
+  onMount(async () => {
     const currentDevice: AirnoteDevice = getCurrentDeviceFromUrl(location);
     deviceUID = currentDevice.deviceUID ? currentDevice.deviceUID : '';
     tempDisplay = localStorage.getItem('tempDisplay') || 'C';
     showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
+    MapboxMap = (await import('./MapboxMap.svelte')).default;
   });
 </script>
 
@@ -297,7 +300,9 @@
       </p>
 
       <div class="map">
-        <MapboxMap {lastReading} />
+        {#if MapboxMap}
+          <MapboxMap {lastReading} />
+        {/if}
       </div>
     </div>
 

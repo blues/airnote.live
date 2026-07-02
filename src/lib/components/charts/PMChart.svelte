@@ -6,8 +6,7 @@
     type ChartConfiguration,
     type ChartData,
     type ChartOptions
-  } from 'chart.js/auto';
-  import 'chartjs-adapter-date-fns';
+  } from './chartSetup';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import type { ChartDataPointType } from '$lib/services/ChartModel';
 
