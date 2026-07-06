@@ -33,7 +33,7 @@ It fetches all of its data from the Notehub Airnote project via the Blues [Noteh
 You can set this up locally by creating a `.env` file, and pasting in the contents below.
 
 ```plaintext
-HUB_AUTH_TOKEN=<your token>
+NOTEHUB_PAT=<your token>
 ```
 
 You can refer to [the Notehub API’s authentication documentation](https://dev.blues.com/reference/notehub-api/api-introduction/#authentication) for steps on how to generate your own token.

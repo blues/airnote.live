@@ -70,7 +70,7 @@ src/
 
 Required in `.env`:
 
-- `HUB_AUTH_TOKEN` — Notehub API token (server-side)
+- `NOTEHUB_PAT` — Notehub API token (server-side)
 - `PUBLIC_MAPBOX_TOKEN` — Mapbox access token (client-side, must be `PUBLIC_` prefixed)
 
 ## Code Conventions
