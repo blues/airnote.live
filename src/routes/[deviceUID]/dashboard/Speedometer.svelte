@@ -14,7 +14,7 @@
   <Speedometer
     width={300}
     height={180}
-    currentValueText=""
+    currentValueText=" "
     needleHeightRatio={0.8}
     ringWidth={30}
     customSegmentStops={aqiTicks}

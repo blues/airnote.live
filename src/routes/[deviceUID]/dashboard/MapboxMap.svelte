@@ -4,6 +4,7 @@
   import { aqiColors, aqiRanges, getAQIColor } from '$lib/services/air';
   import { DATE_TIME_KEY } from '$lib/constants';
   import mapboxgl from 'mapbox-gl';
+  import MapboxWorker from 'mapbox-gl/dist/mapbox-gl-csp-worker?worker';
   import 'mapbox-gl/dist/mapbox-gl.css';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import { PUBLIC_MAPBOX_TOKEN } from '$env/static/public';
@@ -20,6 +21,11 @@
     // The #map container only renders when coords exist (see markup guard below),
     // so don't initialize the map without them.
     if (!lastReading?.lon || !lastReading?.lat) return;
+    // mapbox-gl v3 otherwise blob-loads its worker with Vite-injected import.meta,
+    // which is illegal in a classic worker. Use Vite's bundled CSP worker instead.
+    // (Vite's ?worker constructor is runtime-compatible with mapbox's Class<Worker>.)
+    mapboxgl.workerClass =
+      MapboxWorker as unknown as typeof mapboxgl.workerClass;
     mapboxgl.accessToken = mapboxToken;
     map = new mapboxgl.Map({
       container: 'map',
