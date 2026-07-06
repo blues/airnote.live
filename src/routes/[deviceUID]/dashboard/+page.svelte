@@ -1,7 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { format } from 'date-fns/format';
-  import { NotificationDisplay } from '@beyonk/svelte-notifications';
+  import { NotificationDisplay as NotificationDisplayComponent } from '@beyonk/svelte-notifications';
+  import type { Component } from 'svelte';
+  // @beyonk/svelte-notifications@4.3.0 (latest) ships Svelte 4 component types
+  // (SvelteComponentTyped) that don't satisfy Svelte 5's component position.
+  // Runtime is unaffected; cast to the Svelte 5 Component type for the template.
+  const NotificationDisplay =
+    NotificationDisplayComponent as unknown as Component;
   import AQIChart from '$lib/components/charts/AQIChart.svelte';
   import HumidityChart from '$lib/components/charts/HumidityChart.svelte';
   import VoltageChart from '$lib/components/charts/VoltageChart.svelte';
@@ -28,7 +34,9 @@
 
   import Actions from './Actions.svelte';
   import History from './History.svelte';
-  import MapboxMap from './MapboxMap.svelte';
+  // MapboxMap is dynamically imported in onMount so mapbox-gl (~1.5MB) is
+  // code-split out of the initial dashboard bundle and loaded after first paint.
+  let MapboxMap: typeof import('./MapboxMap.svelte').default | null = null;
   import Recommendation from './Recommendation.svelte';
   import Speedometer from './Speedometer.svelte';
   import { getNotehubEventsUrl } from '$lib/util/url';
@@ -126,11 +134,15 @@
     localStorage.setItem('showBanner', 'false');
   };
 
-  onMount(() => {
+  onMount(async () => {
     const currentDevice: AirnoteDevice = getCurrentDeviceFromUrl(location);
     deviceUID = currentDevice.deviceUID ? currentDevice.deviceUID : '';
     tempDisplay = localStorage.getItem('tempDisplay') || 'C';
     showBanner = localStorage.getItem('showBanner') === 'false' ? false : true;
+    // Only fetch mapbox-gl (~1.5MB) when the reading actually has coordinates.
+    if (lastReading?.lon && lastReading?.lat) {
+      MapboxMap = (await import('./MapboxMap.svelte')).default;
+    }
   });
 </script>
 
@@ -140,10 +152,6 @@
       ? '— ' + lastReading.serial_number
       : ''}</title
   >
-  <link
-    href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css"
-    rel="stylesheet"
-  />
 </svelte:head>
 
 <NotificationDisplay />
@@ -295,7 +303,9 @@
       </p>
 
       <div class="map">
-        <MapboxMap {lastReading} />
+        {#if MapboxMap}
+          <MapboxMap {lastReading} />
+        {/if}
       </div>
     </div>
 
@@ -312,7 +322,7 @@
 
     <div class="date-selector">
       <select bind:value={selectedDateRange} data-cy="chart-date-selector">
-        {#each dateRangeDisplayText as dateRange}
+        {#each dateRangeDisplayText as dateRange (dateRange)}
           <option value={dateRange}>
             {dateRange}
           </option>
@@ -322,7 +332,11 @@
 
     <div class={chartLayout}>
       <div class="box chart1 {chartWidth}">
-        <VoltageChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
+        <VoltageChart
+          readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
+        />
       </div>
 
       <div class="box chart2 {chartWidth}">
@@ -336,15 +350,27 @@
       </div>
 
       <div class="box chart3 {chartWidth}">
-        <AQIChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
+        <AQIChart
+          readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
+        />
       </div>
 
       <div class="box chart4 {chartWidth}">
-        <HumidityChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
+        <HumidityChart
+          readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
+        />
       </div>
 
       <div class="box chart5">
-        <PMChart readings={displayedReadings} min={timeRangeMin} max={timeRangeMax} />
+        <PMChart
+          readings={displayedReadings}
+          min={timeRangeMin}
+          max={timeRangeMax}
+        />
       </div>
     </div>
     {#if showBanner}

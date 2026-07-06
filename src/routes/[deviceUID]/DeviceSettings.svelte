@@ -57,7 +57,7 @@
       name="displayValue"
       id="displayValue"
     >
-      {#each deviceDisplayOptions as option}
+      {#each deviceDisplayOptions as option (option['value'])}
         <option value={option['value']}>{option['text']}</option>
       {/each}
     </select>

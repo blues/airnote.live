@@ -2,7 +2,16 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
-  import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications';
+  import {
+    NotificationDisplay as NotificationDisplayComponent,
+    notifier
+  } from '@beyonk/svelte-notifications';
+  import type { Component } from 'svelte';
+  // @beyonk/svelte-notifications@4.3.0 (latest) ships Svelte 4 component types
+  // (SvelteComponentTyped) that don't satisfy Svelte 5's component position.
+  // Runtime is unaffected; cast to the Svelte 5 Component type for the template.
+  const NotificationDisplay =
+    NotificationDisplayComponent as unknown as Component;
   import {
     APP_UID,
     AIRNOTE_V3_PRODUCT_UID,
@@ -82,14 +91,20 @@
 
     // Set default display value and add product-specific options
     // Only set default if we haven't already set it (to avoid overriding saved settings)
-    const productConfig: Record<string, {
-      defaultValue: string;
-      defaultOption: { value: string; text: string };
-      additionalOptions: { value: string; text: string }[];
-    }> = {
+    const productConfig: Record<
+      string,
+      {
+        defaultValue: string;
+        defaultOption: { value: string; text: string };
+        additionalOptions: { value: string; text: string }[];
+      }
+    > = {
       [RADNOTE_PRODUCT_UID]: {
         defaultValue: 'usv',
-        defaultOption: { value: 'usv', text: 'Microsieverts per Hour (default)' },
+        defaultOption: {
+          value: 'usv',
+          text: 'Microsieverts per Hour (default)'
+        },
         additionalOptions: [
           { value: 'mrem', text: 'Milirem per Hour' },
           { value: 'cpm', text: 'LND712 Counts Per Minute' }
@@ -116,9 +131,10 @@
       ]
     };
 
-    const config = typeof productUID === 'string' && productConfig[productUID]
-      ? productConfig[productUID]
-      : defaultConfig;
+    const config =
+      typeof productUID === 'string' && productConfig[productUID]
+        ? productConfig[productUID]
+        : defaultConfig;
 
     if (!hasSetDefaultDisplayValue) {
       displayValue.set(config.defaultValue);

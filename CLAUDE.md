@@ -8,12 +8,13 @@ Live at https://airnote.live
 
 ## Tech Stack
 
-- **Framework:** SvelteKit 2 with Svelte 4
+- **Framework:** SvelteKit 2 with Svelte 5
 - **Language:** TypeScript (strict mode)
-- **Build:** Vite 5
+- **Build:** Vite 8
 - **Deployment:** Netlify (adapter-netlify)
-- **Node:** 20.17.0 (Volta)
-- **Charts:** Chart.js 4 with date-fns adapter
+- **Node:** 24.18.0 (Volta + `.nvmrc`; Netlify reads `.nvmrc`, not the Volta key)
+- **Package manager:** pnpm (pinned via the `packageManager` field)
+- **Charts:** Chart.js 4 (modular registration in `lib/components/charts/chartSetup.ts`) with date-fns adapter
 - **Maps:** Mapbox GL
 - **API Client:** @blues-inc/notehub-js
 - **Markdown:** MDSvex with remark/rehype plugins
@@ -21,15 +22,15 @@ Live at https://airnote.live
 ## Commands
 
 ```bash
-npm run dev          # Dev server (localhost:5173)
-npm run build        # Production build
-npm run preview      # Preview production build
-npm run check        # Type check (svelte-check)
-npm run test         # Unit tests (Vitest)
-npm run lint         # Prettier + ESLint check
-npm run format       # Auto-format with Prettier
-npm run cypress:open # E2E tests (interactive)
-npm run cypress:run  # E2E tests (headless)
+pnpm dev           # Dev server (localhost:5173)
+pnpm build         # Production build
+pnpm preview       # Preview production build
+pnpm check         # Type check (svelte-check)
+pnpm test          # Unit tests (Vitest)
+pnpm lint          # Prettier + ESLint check
+pnpm format        # Auto-format with Prettier
+pnpm cypress:open  # E2E tests (interactive)
+pnpm cypress:run   # E2E tests (headless)
 ```
 
 ## Project Structure
@@ -68,7 +69,8 @@ src/
 ## Environment Variables
 
 Required in `.env`:
-- `HUB_AUTH_TOKEN` — Notehub API token (server-side)
+
+- `NOTEHUB_PAT` — Notehub API token (server-side)
 - `PUBLIC_MAPBOX_TOKEN` — Mapbox access token (client-side, must be `PUBLIC_` prefixed)
 
 ## Code Conventions
@@ -86,11 +88,15 @@ Required in `.env`:
 
 - Device data flows: Notehub API → `notehub.ts` → `device.ts` (processing) → `+page.server.ts` (load) → components
 - PIN-based authentication for device settings changes
-- Charts are reactive Svelte components wrapping Chart.js canvases
+- Charts are reactive Svelte components wrapping Chart.js canvases; Chart.js pieces are registered once in `charts/chartSetup.ts` (not `chart.js/auto`)
+- The dashboard map (`mapbox-gl`) is dynamically imported in `onMount` to keep it out of the initial bundle
 - CSV export via `/api/download` server endpoint using PapaParse
 
 ## Deployment
 
 Netlify auto-deploys from git. Config in `netlify.toml`:
-- Build: `npm run build`
+
+- Build: `pnpm build`
 - Publish: `build/`
+- `_redirects` lives in the project root (required by adapter-netlify v6+, not `static/`)
+- Node version for builds comes from `.nvmrc` (Netlify ignores the `volta` key)

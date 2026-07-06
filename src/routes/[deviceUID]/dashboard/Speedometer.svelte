@@ -14,7 +14,7 @@
   <Speedometer
     width={300}
     height={180}
-    currentValueText=""
+    currentValueText=" "
     needleHeightRatio={0.8}
     ringWidth={30}
     customSegmentStops={aqiTicks}
@@ -37,9 +37,9 @@
   </div>
 </div>
 <div class="speedometer-legend">
-  {#each aqiLegend as item}
+  {#each aqiLegend as item (item.text)}
     <div class="legend-item">
-      <span class="circle" style="background-color: {item.color}" />
+      <span class="circle" style="background-color: {item.color}"></span>
       <span style="text-align: center">{item.text}</span>
     </div>
   {/each}

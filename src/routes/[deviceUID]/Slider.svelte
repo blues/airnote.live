@@ -61,7 +61,7 @@
     bind:value={$sampleFrequencyFull}
     step="5"
   />
-  <output class="frequencyPopup" />
+  <output class="frequencyPopup"></output>
 </div>
 <div class="frequencySliderVals">
   <span class="min-val">15 min</span>
@@ -77,6 +77,7 @@
     height: 1px;
     outline: none;
     -webkit-appearance: none;
+    appearance: none;
     margin-top: 2rem;
     background: var(--backgroundWhite);
   }

@@ -51,7 +51,7 @@
   Average (Last 7 Days)
 </h3>
 <div class="history">
-  {#each getLastSevenDays() as day}
+  {#each getLastSevenDays() as day (day)}
     <div>
       {@html getDayDisplay(day)}
       <div

@@ -6,8 +6,7 @@
     type ChartConfiguration,
     type ChartData,
     type ChartOptions
-  } from 'chart.js/auto';
-  import 'chartjs-adapter-date-fns';
+  } from './chartSetup';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import type { ChartDataPointType } from '$lib/services/ChartModel';
 
@@ -94,7 +93,7 @@
     ]
   };
 
-  $: options = ({
+  $: options = {
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -126,7 +125,7 @@
         }
       }
     }
-  }) as ChartOptions<'line'>;
+  } as ChartOptions<'line'>;
 
   const config: ChartConfiguration<'line', ChartDataPointType[], unknown> = {
     type: 'line',
@@ -140,5 +139,5 @@
 </script>
 
 <div class="chart-container">
-  <canvas id="pmChart" bind:this={ctx} data-cy="pm-chart" />
+  <canvas id="pmChart" bind:this={ctx} data-cy="pm-chart"></canvas>
 </div>

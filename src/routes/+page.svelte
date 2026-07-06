@@ -8,7 +8,7 @@
   <p>
     A global partnership between
     <a href="https://safecast.org" target="_new">Safecast</a> &amp;
-    <a href="https://blues.io" target="_net">Blues</a>. Powered by a community
+    <a href="https://blues.com" target="_net">Blues</a>. Powered by a community
     of citizens monitoring the air we breathe.
   </p>
   <p>
@@ -26,12 +26,13 @@
 <section>
   <p>
     To join the network, visit the
-    <a href="https://shop.blues.io/products/airnote" target="new">Blues shop</a>
+    <a href="https://shop.blues.com/products/airnote" target="new">Blues shop</a
+    >
     to purchase your own cellular-powered air quality monitoring device.
   </p>
 
   <a
-    href="https://shop.blues.io/products/airnote"
+    href="https://shop.blues.com/products/airnote"
     class="btn"
     data-cy="buy-airnote-btn">Buy an Airnote</a
   >

@@ -48,9 +48,12 @@ describe('Airnote Product Version Configurations', () => {
 
       // Check URL contains correct legacy product UID (either v1 variant)
       cy.url().should('satisfy', (url: string) => {
+        // cy.url() may return the colon encoded (%3A) or decoded (:) depending on
+        // the browser; normalize before checking.
+        const decoded = decodeURIComponent(url);
         return (
-          url.includes('product%3Aorg.airnote.solar.v1') ||
-          url.includes('product%3Aorg.airnote.solar.air.v1')
+          decoded.includes('product:org.airnote.solar.v1') ||
+          decoded.includes('product:org.airnote.solar.air.v1')
         );
       });
     });
@@ -107,8 +110,13 @@ describe('Airnote Product Version Configurations', () => {
       cy.visit('/');
       cy.get('[data-cy="settings-link"]').click();
 
-      // Check URL contains correct v3 product UID (URL-encoded)
-      cy.url().should('include', 'product%3Acom.blues.airnote.v3');
+      // cy.url() may return the colon encoded (%3A) or decoded (:) depending on
+      // the browser; normalize before checking.
+      cy.url().should((url: string) => {
+        expect(decodeURIComponent(url)).to.include(
+          'product:com.blues.airnote.v3'
+        );
+      });
     });
   });
 });

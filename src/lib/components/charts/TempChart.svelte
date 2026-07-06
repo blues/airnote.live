@@ -6,8 +6,7 @@
   import Chart, {
     type ChartConfiguration,
     type ChartOptions
-  } from 'chart.js/auto';
-  import 'chartjs-adapter-date-fns';
+  } from './chartSetup';
   import type { AirnoteReading } from '$lib/services/AirReadingModel';
   import type { ChartDataPointType } from '$lib/services/ChartModel';
 
@@ -28,7 +27,9 @@
   }
 
   function getTempData(readings: AirnoteReading[]) {
-    const validReadings = readings.filter((reading) => reading.temperature !== undefined);
+    const validReadings = readings.filter(
+      (reading) => reading.temperature !== undefined
+    );
 
     tempDataCelsius = validReadings.map((reading) => {
       const d = reading.captured * 1000;
@@ -95,7 +96,7 @@
     ]
   };
 
-  $: options = ({
+  $: options = {
     maintainAspectRatio: false,
     scales: {
       x: {
@@ -127,7 +128,7 @@
         }
       }
     }
-  }) as ChartOptions<'line'>;
+  } as ChartOptions<'line'>;
 
   const config: ChartConfiguration<'line', ChartDataPointType[], unknown> = {
     type: 'line',
@@ -141,7 +142,8 @@
 </script>
 
 <div class="chart-container">
-  <canvas id="temperatureChart" bind:this={ctx} data-cy="temperature-chart" />
+  <canvas id="temperatureChart" bind:this={ctx} data-cy="temperature-chart"
+  ></canvas>
 </div>
 <div class="button-group">
   <button on:click={() => fetchTempChartDisplay(tempDisplay)}>
