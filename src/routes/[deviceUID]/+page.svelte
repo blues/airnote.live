@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import {
@@ -61,10 +62,13 @@
   // Use productUID from server data if available
   $: if (data.productUID) {
     productUID = data.productUID;
+  }
 
-    // Update the URL to reflect the correct productUID while preserving other params
+  // Update the URL to reflect the correct productUID while preserving other
+  // params. Guarded to the browser because goto() cannot run during SSR.
+  $: if (browser && typeof productUID === 'string') {
     const currentProductInUrl = $page.url.searchParams.get('product');
-    if (typeof productUID === 'string' && currentProductInUrl !== productUID) {
+    if (currentProductInUrl !== productUID) {
       const newUrl = new URL($page.url);
       // This preserves all existing query params (pin, internalNav, etc.) and only updates product
       newUrl.searchParams.set('product', productUID);

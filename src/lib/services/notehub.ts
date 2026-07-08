@@ -1,5 +1,5 @@
 import * as NotehubJs from '@blues-inc/notehub-js';
-import { NOTEHUB_PAT } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { convertTimeframeToSeconds } from '$lib/util/dates';
 import type { DeviceEnvVars } from './DeviceEnvVarModel';
 import { AIRNOTE_V3_PRODUCT_UID } from '$lib/constants';
@@ -36,7 +36,8 @@ export async function getDeviceInfo(deviceUID: string) {
     return null;
   }
 
-  notehubJsClient.authentications.personalAccessToken.accessToken = NOTEHUB_PAT;
+  notehubJsClient.authentications.personalAccessToken.accessToken =
+    env.NOTEHUB_PAT;
   return await deviceApiInstance.getDevice(AIRNOTE_PROJECT_UID, deviceUID);
 }
 
@@ -49,7 +50,8 @@ export async function getDeviceEnvironmentVariables(deviceUID: string) {
     return null;
   }
 
-  notehubJsClient.authentications.personalAccessToken.accessToken = NOTEHUB_PAT;
+  notehubJsClient.authentications.personalAccessToken.accessToken =
+    env.NOTEHUB_PAT;
   return await deviceApiInstance.getDeviceEnvironmentVariables(
     AIRNOTE_PROJECT_UID,
     deviceUID
@@ -89,7 +91,8 @@ async function deleteDeviceEnvironmentVariable(deviceUID: string, key: string) {
     );
   }
 
-  notehubJsClient.authentications.personalAccessToken.accessToken = NOTEHUB_PAT;
+  notehubJsClient.authentications.personalAccessToken.accessToken =
+    env.NOTEHUB_PAT;
   return await deviceApiInstance.deleteDeviceEnvironmentVariable(
     AIRNOTE_PROJECT_UID,
     deviceUID,
@@ -201,6 +204,7 @@ export async function getEvents(
       'when,best_location,best_lat,best_lon,serial_number,body.aqi,body.humidity,body.pm01_0,body.pm02_5,body.pm10_0,body.pressure,body.temperature,body.voltage,body.charging';
   }
 
-  notehubJsClient.authentications.personalAccessToken.accessToken = NOTEHUB_PAT;
+  notehubJsClient.authentications.personalAccessToken.accessToken =
+    env.NOTEHUB_PAT;
   return await eventApiInstance.getEvents(AIRNOTE_PROJECT_UID, opts);
 }
