@@ -148,18 +148,19 @@ export async function updateDeviceEnvironmentVariablesByPin(
     );
   }
 
-  // If the air_mins environment variable is set to the default, don't save the value so
-  // the device defaults to the project-level air_mins. Also, delete the environment variable
-  // on the device in case it already exists.
+  // If the legacy _air_mins environment variable is set to the default, don't save the
+  // value so the device defaults to the project-level _air_mins. Also, delete the
+  // environment variable on the device in case it already exists. V3 Airnotes have a
+  // different default, so their air_mins value is always saved as-is.
   const isV3 = productUID === AIRNOTE_V3_PRODUCT_UID;
-  const airMinsKey = isV3 ? 'air_mins' : '_air_mins';
 
   if (
-    environmentVariables[airMinsKey] &&
-    environmentVariables[airMinsKey].toString().includes('high:30')
+    !isV3 &&
+    environmentVariables['_air_mins'] &&
+    environmentVariables['_air_mins'].toString().includes('high:30')
   ) {
-    delete environmentVariables[airMinsKey];
-    await deleteDeviceEnvironmentVariable(deviceUID, airMinsKey);
+    delete environmentVariables['_air_mins'];
+    await deleteDeviceEnvironmentVariable(deviceUID, '_air_mins');
   }
 
   return await putDeviceEnvironmentVariablesByPin(

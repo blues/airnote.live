@@ -16,7 +16,9 @@
   import {
     APP_UID,
     AIRNOTE_V3_PRODUCT_UID,
-    RADNOTE_PRODUCT_UID
+    RADNOTE_PRODUCT_UID,
+    DEFAULT_SAMPLE_FREQUENCY_MINS,
+    AIRNOTE_V3_DEFAULT_SAMPLE_FREQUENCY_MINS
   } from '$lib/constants';
   import { getCurrentDeviceFromUrl } from '$lib/services/device';
   import DeviceSettings from './DeviceSettings.svelte';
@@ -83,6 +85,7 @@
   // Make deviceDisplayOptions reactive to productUID changes
   let deviceDisplayOptions: DeviceDisplayOption[] = [];
   let hasSetDefaultDisplayValue = false;
+  let hasSetDefaultSampleFrequency = false;
 
   $: {
     // Reset the options array
@@ -201,6 +204,16 @@
             break;
         }
       }
+      hasSetDefaultSampleFrequency = true;
+    } else if (!hasSetDefaultSampleFrequency) {
+      /* The device has no air_mins of its own, so show the interval it actually
+        falls back to rather than leaving the store at its legacy default. */
+      sampleFrequencyFull.set(
+        isV3
+          ? AIRNOTE_V3_DEFAULT_SAMPLE_FREQUENCY_MINS
+          : DEFAULT_SAMPLE_FREQUENCY_MINS
+      );
+      hasSetDefaultSampleFrequency = true;
     }
     if (airIndoorsVar) indoorDevice.set(airIndoorsVar === '0' ? false : true);
     if (airStatusVar) {
