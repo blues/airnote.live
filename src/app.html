@@ -4,6 +4,31 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%sveltekit.assets%/favicon.png" />
     <meta name="viewport" content="width=device-width" />
+    <!--
+      Google Consent Mode v2 default state. Must run before Cookiebot and
+      before gtag.js (loaded by src/lib/components/analytics.svelte) so Google
+      tags start denied; Cookiebot updates the state once the visitor chooses.
+      Without this, Cookiebot's scan flags "GCM consent parameters set as
+      Default: At risk".
+    -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('consent', 'default', {
+        ad_personalization: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'denied',
+        personalization_storage: 'denied',
+        security_storage: 'granted',
+        wait_for_update: 500
+      });
+      gtag('set', 'ads_data_redaction', true);
+      gtag('set', 'url_passthrough', false);
+    </script>
     <script
       id="Cookiebot"
       src="https://consent.cookiebot.com/uc.js"
